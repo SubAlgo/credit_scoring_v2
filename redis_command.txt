@@ -1,0 +1,5 @@
+redis-cli
+
+keys * <-- get all key
+
+get {{key}} <-- get value by key

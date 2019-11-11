@@ -1,0 +1,46 @@
+##redis-cli
+
+## Sign Up
+## customer sign up
+POST http://localhost:8000/auth/signup
+Content-Type: application/json
+
+{
+  "email": "kk@gmail.com",
+  "password": "12345678",
+  "name": "s1",
+  "surname": "ss1",
+  "birth": "05/05/1990",
+  "phone": "0918651111",
+  "marriedStatusID": 1,
+  "genderID": 1
+}
+
+###
+
+## Sign In
+## customer sign up
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "kk@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+## Sign out
+POST http://localhost:8000/auth/signout
+Content-Type: application/json
+X-Token: A3RemUxT_WLp38McAHGO6q9672ihLZu0gSBq8-n1WRY
+
+{
+}
+
+###
+
+GET http://localhost:8000/hello
+X-Token: A3RemUxT_WLp38McAHGO6q9672ihLZu0gSBq8-n1WRY
+
+###
