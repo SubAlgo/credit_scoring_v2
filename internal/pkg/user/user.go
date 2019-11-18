@@ -27,6 +27,7 @@ type SignUpArgs struct {
 	RoleId          int
 }
 
+// insert new customer and create new worker
 func Insert(ctx context.Context, arg *SignUpArgs) (id int64, err error) {
 	err = dbctx.QueryRow(ctx,
 		`insert into users 
@@ -50,6 +51,7 @@ func Insert(ctx context.Context, arg *SignUpArgs) (id int64, err error) {
 	return
 }
 
+// get user role for store in context
 func GetUserRole(ctx context.Context, userID int64) (roleID int, err error) {
 	err = dbctx.QueryRow(ctx, `
 			select roleID

@@ -1,0 +1,33 @@
+## Sign Up
+
+## Sign In
+## customer sign up
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "kk@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+## Sign In
+## customer sign up
+POST http://localhost:8000/user/update_profile
+Content-Type: application/json
+X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
+
+{
+  "name": "Hoe",
+  "surname": "Gaarden",
+  "birthday": "05/07/1990",
+  "genderStatus": 1,
+  "marriedStatusID": 1,
+  "facebook": "tai",
+  "ig": "taiIG",
+  "line": "taiLine",
+  "religion": "-"
+}
+
+###
