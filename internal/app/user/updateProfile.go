@@ -7,11 +7,7 @@ import (
 	"strings"
 )
 
-type processResponse struct {
-	Message string `json:"message"`
-}
-
-func updateProfile(ctx context.Context, req userStruct) (res processResponse, err error) {
+func updateProfile(ctx context.Context, req UserStruct) (res processResponse, err error) {
 	req.UserID = auth.GetUserID(ctx)
 
 	if req.UserID == 0 {

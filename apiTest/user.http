@@ -1,7 +1,4 @@
-## Sign Up
-
 ## Sign In
-## customer sign up
 POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
@@ -12,14 +9,13 @@ Content-Type: application/json
 
 ###
 
-## Sign In
-## customer sign up
+## Update profile
 POST http://localhost:8000/user/update_profile
 Content-Type: application/json
 X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
 
 {
-  "name": "Hoe",
+  "name": "Hoe1",
   "surname": "Gaarden",
   "birthday": "05/07/1990",
   "genderStatus": 1,
@@ -28,6 +24,21 @@ X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
   "ig": "taiIG",
   "line": "taiLine",
   "religion": "-"
+}
+
+###
+
+## Update home address
+POST http://localhost:8000/user/update_home_address
+Content-Type: application/json
+X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
+
+{
+  "address1": "263 หมู่20",
+  "subDistrict": "ขามเรียง",
+  "district": "กันทรวิชัย",
+  "provinceCode": "44",
+  "zipCode": "44150"
 }
 
 ###

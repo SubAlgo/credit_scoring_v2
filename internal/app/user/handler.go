@@ -16,6 +16,7 @@ func Handler() http.Handler {
 
 	mux.Handle("/", http.NotFoundHandler())
 	mux.HandleFunc("/update_profile", updateProfileHandler)
+	mux.HandleFunc("/update_home_address", updateHomdeAddressHandler)
 
 	return mux
 
@@ -23,11 +24,22 @@ func Handler() http.Handler {
 
 func updateProfileHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	var req userStruct
+	var req UserStruct
 	err := t.DecodeRequest(w, r, &req)
 	if err != nil {
 		return
 	}
 	res, err := updateProfile(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func updateHomdeAddressHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req UserStruct
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := updateHomeAddress(ctx, req)
 	t.EncodeResult(w, res, err)
 }
