@@ -24,7 +24,6 @@ type signInResponse struct {
 }
 
 func signIn(ctx context.Context, req signInRequest) (res signInResponse, err error) {
-	fmt.Println(req.Username)
 	req.Username = strings.TrimSpace(req.Username)
 	req.Username = strings.ToLower(req.Username)
 

@@ -10,30 +10,30 @@ type processResponse struct {
 }
 
 type UserStruct struct {
-	UserID            int64  `json:"userID"`
-	Name              string `json:"name"`
-	Surname           string `json:"surname"`
-	GenderStatus      int    `json:"genderStatus"`
-	Birthday          string `json:"birthday"`
-	MarriedStatusID   int    `json:"marriedStatusID"`
-	Phone             string `json:"phone"`
-	Religion          string `json:"religion"`
-	Facebook          string `json:"facebook"`
-	IG                string `json:"ig"`
-	Line              string `json:"line"`
-	Address1          string `json:"address1"`
-	Address2          string `json:"address2"`
-	SubDistrict       string `json:"subDistrict"`
-	District          string `json:"district"`
-	ProvinceCode      string `json:"provinceCode"`
-	ZipCode           string `json:"zipCode"`
-	OfficeName        string `json:"officeName"`
-	Address1Office    string `json:"address1Office"`
-	Address2Office    string `json:"address2Office"`
-	SubDistrictOffice string `json:"subDistrictOffice"`
-	DistrictOffice    string `json:"districtOffice"`
-	ProvinceOffice    string `json:"provinceOffice"`
-	ZipCodeOffice     string `json:"zipCodeOffice"`
+	UserID             int64  `json:"userID"`
+	Name               string `json:"name"`
+	Surname            string `json:"surname"`
+	GenderStatus       int    `json:"genderStatus"`
+	Birthday           string `json:"birthday"`
+	MarriedStatusID    int    `json:"marriedStatusID"`
+	Phone              string `json:"phone"`
+	Religion           string `json:"religion"`
+	Facebook           string `json:"facebook"`
+	IG                 string `json:"ig"`
+	Line               string `json:"line"`
+	Address1           string `json:"address1"`
+	Address2           string `json:"address2"`
+	SubDistrict        string `json:"subDistrict"`
+	District           string `json:"district"`
+	ProvinceCode       string `json:"provinceCode"`
+	ZipCode            string `json:"zipCode"`
+	OfficeName         string `json:"officeName"`
+	Address1Office     string `json:"address1Office"`
+	Address2Office     string `json:"address2Office"`
+	SubDistrictOffice  string `json:"subDistrictOffice"`
+	DistrictOffice     string `json:"districtOffice"`
+	ProvinceCodeOffice string `json:"provinceCodeOffice"`
+	ZipCodeOffice      string `json:"zipCodeOffice"`
 }
 
 // update user profile
@@ -66,5 +66,30 @@ func (u *UserStruct) updateHomeAddress(ctx context.Context) (err error) {
 			zipCode_home = $7
 		where id = $1
 	`, u.UserID, u.Address1, u.Address2, u.SubDistrict, u.District, u.ProvinceCode, u.ZipCode)
+	return
+}
+
+// update office address
+func (u *UserStruct) updateOfficeAddress(ctx context.Context) (err error) {
+	_, err = dbctx.Exec(ctx, `
+		update users
+		set office_name = $2,
+			address1_office = $3,
+			address2_office = $4,
+			subDistrict_office = $5,
+			district_office = $6,
+			provinceCode_office = $7,
+			zipCode_office = $8
+		where id = $1
+	`, u.UserID, u.OfficeName, u.Address1Office, u.Address2Office, u.SubDistrictOffice, u.DistrictOffice, u.ProvinceCodeOffice, u.ZipCodeOffice)
+	return
+}
+
+func setPassword(ctx context.Context, userID int64, hashedPassword string) (err error) {
+	_, err = dbctx.Exec(ctx, `
+		update users
+		set password = $2
+		where id = $1
+	`, userID, hashedPassword)
 	return
 }

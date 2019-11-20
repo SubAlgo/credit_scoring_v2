@@ -45,7 +45,7 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	if req.Password == "" {
 		return res, ErrPasswordRequired
 	}
-	if n := utf8.RuneCountInString(req.Password); n < 8 || n > 20 {
+	if n := utf8.RuneCountInString(req.Password); n < 6 || n > 20 {
 		return res, ErrPasswordInvalid
 	}
 

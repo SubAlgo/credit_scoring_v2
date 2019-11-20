@@ -49,7 +49,7 @@ func errorToMessage(err error) string {
 	case ErrPasswordRequires:
 		return "กรุณากำหนดระหัสผ่าน"
 	case ErrPasswordInvalid:
-		return "พาสเวิร์ดต้องมีความยาว 8 - 20 ตัวอักษร"
+		return "พาสเวิร์ดต้องมีความยาว 6 - 20 ตัวอักษร"
 
 	case ErrNameRequired:
 		return "กรุณาระบุชื่อของท่าน"

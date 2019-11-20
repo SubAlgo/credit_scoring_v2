@@ -19,12 +19,30 @@ var (
 )
 
 var (
-	ErrAddress1Required     = errors.New("updateHomeAddress: address1 invalid")
-	ErrAddress2Required     = errors.New("updateHomeAddress: address2 invalid")
-	ErrSubDistrictRequired  = errors.New("updateHomeAddress: sub district invalid")
-	ErrDistrictRequired     = errors.New("updateHomeAddress: district invalid")
-	ErrProvinceCodeRequired = errors.New("updateHomeAddress: province code invalid")
-	ErrZipcodeRequired      = errors.New("updateHomeAddress: zipCode invalid")
+	ErrAddress1Required          = errors.New("updateHomeAddress: address1 invalid")
+	ErrAddress2Required          = errors.New("updateHomeAddress: address2 invalid")
+	ErrSubDistrictRequired       = errors.New("updateHomeAddress: sub district invalid")
+	ErrDistrictRequired          = errors.New("updateHomeAddress: district invalid")
+	ErrProvinceCodeRequired      = errors.New("updateHomeAddress: province code invalid")
+	ErrZipcodeRequired           = errors.New("updateHomeAddress: zipCode invalid")
+	ErrUpdateDataBaseHomeAddress = errors.New("updateHomeAddress: update database error")
+)
+
+var (
+	ErrProvinceCodeInvalid         = errors.New("updateOfficeAddress: province code invalid")
+	ErrZipcodeOfficeRequired       = errors.New("updateOfficeAddress: zipcode invalid")
+	ErrUpdateDataBaseOfficeAddress = errors.New("updateOfficeAddress: update database")
+)
+
+// changePassword
+var (
+	ErrConfirmPasswordNotMatch = errors.New("changePassword: new password not match with confirm password")
+	ErrPasswordRequired        = errors.New("changePassword: password required")
+	ErrPasswordInvalid         = errors.New("changePassword: password invalid")
+	ErrGetHashedPassword       = errors.New("changePassword: get hashed password error")
+	ErrOldPasswordInvalid      = errors.New("changePassword: old password invalid")
+	ErrHashingPassword         = errors.New("changePassword: hashing password")
+	ErrChangePassword          = errors.New("changePassword: update database")
 )
 
 func errorToStatusCode(err error) int {
@@ -35,7 +53,9 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrAddress1Required, ErrAddress2Required, ErrSubDistrictRequired, ErrDistrictRequired, ErrProvinceCodeRequired, ErrZipcodeRequired:
 		return http.StatusBadRequest
-	case ErrUpdateProfile:
+	case ErrZipcodeOfficeRequired, ErrConfirmPasswordNotMatch, ErrPasswordRequired, ErrPasswordInvalid, ErrOldPasswordInvalid:
+		return http.StatusBadRequest
+	case ErrUpdateProfile, ErrUpdateDataBaseHomeAddress, ErrUpdateDataBaseOfficeAddress, ErrGetHashedPassword, ErrHashingPassword, ErrChangePassword:
 		return http.StatusInternalServerError
 	default:
 		return http.StatusInternalServerError
@@ -59,6 +79,18 @@ func errorToMessage(err error) string {
 		return "กรุณาเลือกจังหวัดที่อยู่ของท่าน"
 	case ErrZipcodeRequired:
 		return "กรุณาระบุรหัสไปรษณีที่อยู่ของท่าน"
+	case ErrZipcodeOfficeRequired:
+		return "กรุณาระบุรหัสไปรษณีของสถานที่ทำงานของท่าน"
+	case ErrProvinceCodeInvalid:
+		return "ระบุรหัสจังหวัดไม่ถูกต้อง"
+	case ErrConfirmPasswordNotMatch:
+		return "ยืนยันรหัสผ่านที่ต้องการเปลี่ยนไม่ถูกต้อง"
+	case ErrPasswordRequired:
+		return "กรุณาระบุรหัสผ่านที่ต้องการเปลี่ยน"
+	case ErrPasswordInvalid:
+		return "รหัสผ่านต้องมีความยาวระหว่าง 6-20 ตัวอักษร"
+	case ErrOldPasswordInvalid:
+		return "ระบุรหัสผ่านเดิมไม่ถูกต้อง"
 	default:
 		return "internal server error"
 	}

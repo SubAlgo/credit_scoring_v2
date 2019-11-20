@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "username": "kk@gmail.com",
-  "password": "12345678"
+  "password": "123456"
 }
 
 ###
@@ -31,7 +31,7 @@ X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
 ## Update home address
 POST http://localhost:8000/user/update_home_address
 Content-Type: application/json
-X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
+X-Token: aZjGC7lDKHnatBPs27FRtHu1-7LhdyCMyxcX7GXyTb4
 
 {
   "address1": "263 หมู่20",
@@ -39,6 +39,32 @@ X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
   "district": "กันทรวิชัย",
   "provinceCode": "44",
   "zipCode": "44150"
+}
+
+###
+
+## Update office address
+POST http://localhost:8000/user/update_office_address
+Content-Type: application/json
+X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
+
+{
+  "officeName": "subAlgo cop.",
+  "provinceCodeOffice": "44",
+  "zipCodeOffice": "441"
+}
+
+###
+
+## change password
+POST http://localhost:8000/user/change_password
+Content-Type: application/json
+X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
+
+{
+  "oldPassword": "",
+  "newPassword": "",
+  "confirmPassword": ""
 }
 
 ###

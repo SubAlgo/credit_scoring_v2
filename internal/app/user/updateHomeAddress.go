@@ -42,7 +42,7 @@ func updateHomeAddress(ctx context.Context, req UserStruct) (res processResponse
 	err = req.updateHomeAddress(ctx)
 
 	if err != nil {
-		return res, err
+		return res, ErrUpdateDataBaseHomeAddress
 	}
 
 	res.Message = "บันทึกข้อมูลการเปลี่ยนแปลงที่อยู่สำเร็จ"

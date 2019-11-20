@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/acoshift/pgsql"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
@@ -60,6 +61,19 @@ func GetUserRole(ctx context.Context, userID int64) (roleID int, err error) {
 	`, userID).Scan(&roleID)
 	if err == sql.ErrNoRows {
 		return 0, ErrNotFound
+	}
+	return
+}
+
+// get hash password
+func GetHashPassword(ctx context.Context, userID int64) (hashedPassword string, err error) {
+	err = dbctx.QueryRow(ctx, `
+			select password
+			from users
+			where id = $1
+	`, userID).Scan(&hashedPassword)
+	if err != nil {
+		fmt.Println(err)
 	}
 	return
 }
