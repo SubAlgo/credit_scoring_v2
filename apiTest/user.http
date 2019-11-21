@@ -68,3 +68,24 @@ X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
 }
 
 ###
+
+## get_profile
+POST http://localhost:8000/user/get_profile
+Content-Type: application/json
+X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
+
+{
+}
+
+###
+
+## get_profile_by_id
+POST http://localhost:8000/user/get_profile_by_id
+Content-Type: application/json
+X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
+
+{
+  "userID": 3
+}
+
+###

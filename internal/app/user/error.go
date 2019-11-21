@@ -45,6 +45,14 @@ var (
 	ErrChangePassword          = errors.New("changePassword: update database")
 )
 
+// get profile
+var (
+	ErrGetProfile       = errors.New("getProfile: get profile error")
+	ErrGetProfileNoRows = errors.New("getProfile: sql not row")
+	ErrUserIdRequired   = errors.New("getProfileByID: userID required")
+	ErrNotPermission    = errors.New("getProfileByID: permission not allow")
+)
+
 func errorToStatusCode(err error) int {
 	switch err {
 	case ErrUserNotLogin:
@@ -57,6 +65,12 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrUpdateProfile, ErrUpdateDataBaseHomeAddress, ErrUpdateDataBaseOfficeAddress, ErrGetHashedPassword, ErrHashingPassword, ErrChangePassword:
 		return http.StatusInternalServerError
+	case ErrGetProfile, ErrGetProfileNoRows:
+		return http.StatusInternalServerError
+	case ErrUserIdRequired:
+		return http.StatusBadRequest
+	case ErrNotPermission:
+		return http.StatusNotAcceptable
 	default:
 		return http.StatusInternalServerError
 	}
@@ -91,6 +105,12 @@ func errorToMessage(err error) string {
 		return "รหัสผ่านต้องมีความยาวระหว่าง 6-20 ตัวอักษร"
 	case ErrOldPasswordInvalid:
 		return "ระบุรหัสผ่านเดิมไม่ถูกต้อง"
+	case ErrUserIdRequired:
+		return "user id required"
+	case ErrGetProfileNoRows:
+		return "ไม่พบข้อมูลของผู้ใช้รายนี้"
+	case ErrNotPermission:
+		return "ท่านไม่สามารถใช้ฟังค์ชั่นนี้ได้"
 	default:
 		return "internal server error"
 	}

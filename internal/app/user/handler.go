@@ -19,6 +19,8 @@ func Handler() http.Handler {
 	mux.HandleFunc("/update_home_address", updateHomeAddressHandler)
 	mux.HandleFunc("/update_office_address", updateOfficeAddressHandler)
 	mux.HandleFunc("/change_password", changePasswordHandler)
+	mux.HandleFunc("/get_profile", getProfileHandler)
+	mux.HandleFunc("/get_profile_by_id", getProfileByIDHandler)
 
 	return mux
 
@@ -65,5 +67,27 @@ func changePasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := changePassword(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func getProfileHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getProfileRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getProfile(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func getProfileByIDHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getProfileRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getProfileByID(ctx, req)
 	t.EncodeResult(w, res, err)
 }

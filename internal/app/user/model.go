@@ -5,37 +5,6 @@ import (
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
 
-type processResponse struct {
-	Message string `json:"message"`
-}
-
-type UserStruct struct {
-	UserID             int64  `json:"userID"`
-	Name               string `json:"name"`
-	Surname            string `json:"surname"`
-	GenderStatus       int    `json:"genderStatus"`
-	Birthday           string `json:"birthday"`
-	MarriedStatusID    int    `json:"marriedStatusID"`
-	Phone              string `json:"phone"`
-	Religion           string `json:"religion"`
-	Facebook           string `json:"facebook"`
-	IG                 string `json:"ig"`
-	Line               string `json:"line"`
-	Address1           string `json:"address1"`
-	Address2           string `json:"address2"`
-	SubDistrict        string `json:"subDistrict"`
-	District           string `json:"district"`
-	ProvinceCode       string `json:"provinceCode"`
-	ZipCode            string `json:"zipCode"`
-	OfficeName         string `json:"officeName"`
-	Address1Office     string `json:"address1Office"`
-	Address2Office     string `json:"address2Office"`
-	SubDistrictOffice  string `json:"subDistrictOffice"`
-	DistrictOffice     string `json:"districtOffice"`
-	ProvinceCodeOffice string `json:"provinceCodeOffice"`
-	ZipCodeOffice      string `json:"zipCodeOffice"`
-}
-
 // update user profile
 func (u *UserStruct) updateProfile(ctx context.Context) (err error) {
 	_, err = dbctx.Exec(ctx, `
@@ -91,5 +60,51 @@ func setPassword(ctx context.Context, userID int64, hashedPassword string) (err 
 		set password = $2
 		where id = $1
 	`, userID, hashedPassword)
+	return
+}
+
+// get user profile
+func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
+	var up userProfile
+	err = dbctx.QueryRow(ctx, `
+		select 	email, name, surname, genderID, marriedID, religion, birthday, phone, child,
+				facebook, ig, line, 
+				address1_home, address2_home, subDistrict_home, district_home, provinceCode_home, zipCode_home,
+				office_name, address1_office, address2_office, subDistrict_office, district_office, provinceCode_office, zipCode_office
+		from users
+		where id = $1
+	`, userID).Scan(&up.email, &up.name, &up.surname, &up.genderID, &up.marriedID, &up.religion, &up.birthday, &up.phone, &up.child,
+		&up.facebook, &up.ig, &up.line,
+		&up.address1Home, &up.address2Home, &up.subDistrictHome, &up.districtHome, &up.provinceHome, &up.zipCodeHome,
+		&up.officeName, &up.address1Office, &up.address2Office, &up.subDistrictOffice, &up.districtOffice, &up.provinceOffice, &up.zipCodeOffice)
+
+	if err != nil {
+		return err
+	}
+
+	u.Email = up.email.String
+	u.Name = up.name.String
+	u.Surname = up.surname.String
+	u.GenderStatus = int(up.genderID.Int64)
+	u.Religion = up.religion.String
+	u.Phone = up.phone.String
+	u.Birthday = up.birthday.String
+	u.MarriedStatusID = int(up.marriedID.Int64)
+	u.Facebook = up.facebook.String
+	u.IG = up.ig.String
+	u.Line = up.line.String
+	u.Address1 = up.address1Home.String
+	u.Address2 = up.address2Home.String
+	u.SubDistrict = up.subDistrictHome.String
+	u.District = up.districtHome.String
+	u.ProvinceCode = up.provinceHome.String
+	u.ZipCode = up.zipCodeHome.String
+	u.OfficeName = up.officeName.String
+	u.Address1Office = up.address1Office.String
+	u.Address2Office = up.address2Office.String
+	u.SubDistrictOffice = up.subDistrictOffice.String
+	u.DistrictOffice = up.districtOffice.String
+	u.ProvinceCodeOffice = up.provinceOffice.String
+	u.ZipCodeOffice = up.zipCodeOffice.String
 	return
 }
