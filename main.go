@@ -3,6 +3,7 @@ package main // import "github.com/subalgo/credit_scoring_v2"
 import (
 	"database/sql"
 	"github.com/go-redis/redis"
+	"github.com/subalgo/credit_scoring_v2/internal/app/admin"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/app/user"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
@@ -37,6 +38,7 @@ func main() {
 	auth.RedisClient = redisClient
 	mux := http.NewServeMux()
 	mux.Handle("/", http.NotFoundHandler())
+	mux.Handle("/admin/", http.StripPrefix("/admin", admin.Handler()))
 	mux.Handle("/auth/", http.StripPrefix("/auth", auth.Handler()))
 	mux.Handle("/user/", http.StripPrefix("/user", user.Handler()))
 

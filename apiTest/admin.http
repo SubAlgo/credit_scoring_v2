@@ -1,0 +1,62 @@
+## Sign In
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+
+## create admin
+## customer sign up
+POST http://localhost:8000/admin/create_new_worker
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "12345678",
+  "name": "admin_name",
+  "surname": "admin_surname",
+  "birth": "05/05/1990",
+  "phone": "0918652222",
+  "marriedStatusID": 1,
+  "genderID": 1,
+  "roleID": 1
+}
+
+###
+
+## create super admin
+## customer sign up
+POST http://localhost:8000/admin/create_new_worker
+Content-Type: application/json
+
+{
+  "email": "superadmin@gmail.com",
+  "password": "12345678",
+  "name": "superAdmin_name",
+  "surname": "superAdmin_surname",
+  "birth": "05/05/1990",
+  "phone": "0918650000",
+  "marriedStatusID": 1,
+  "genderID": 1,
+  "roleID": 1
+}
+
+###
+
+## Sign Up
+## customer sign up
+POST http://localhost:8000/admin/change_user_role
+Content-Type: application/json
+X-Token: dQ1Ltdqy4SZe2FmUQoOtLOZVWpoAyR37Y92dBIJpqZ0
+
+{
+  "userID": 6,
+  "roleID": 3
+}
+
+###

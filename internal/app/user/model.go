@@ -67,13 +67,15 @@ func setPassword(ctx context.Context, userID int64, hashedPassword string) (err 
 func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	var up userProfile
 	err = dbctx.QueryRow(ctx, `
-		select 	email, name, surname, genderID, marriedID, religion, birthday, phone, child,
+		select 	email, name, surname, genderID, genderStatus.title, marriedID, marriedStatus.title, religion, birthday, phone, child,
 				facebook, ig, line, 
 				address1_home, address2_home, subDistrict_home, district_home, provinceCode_home, zipCode_home,
 				office_name, address1_office, address2_office, subDistrict_office, district_office, provinceCode_office, zipCode_office
 		from users
-		where id = $1
-	`, userID).Scan(&up.email, &up.name, &up.surname, &up.genderID, &up.marriedID, &up.religion, &up.birthday, &up.phone, &up.child,
+		left join marriedStatus on users.marriedID = marriedStatus.id
+		left join genderStatus on users.genderID = genderStatus.id
+		where users.id = $1
+	`, userID).Scan(&up.email, &up.name, &up.surname, &up.genderID, &up.genderStatus, &up.marriedID, &up.marriedStatus, &up.religion, &up.birthday, &up.phone, &up.child,
 		&up.facebook, &up.ig, &up.line,
 		&up.address1Home, &up.address2Home, &up.subDistrictHome, &up.districtHome, &up.provinceHome, &up.zipCodeHome,
 		&up.officeName, &up.address1Office, &up.address2Office, &up.subDistrictOffice, &up.districtOffice, &up.provinceOffice, &up.zipCodeOffice)
@@ -81,15 +83,17 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	if err != nil {
 		return err
 	}
-
+	u.UserID = userID
 	u.Email = up.email.String
 	u.Name = up.name.String
 	u.Surname = up.surname.String
-	u.GenderStatus = int(up.genderID.Int64)
+	u.GenderID = int(up.genderID.Int64)
+	u.GenderStatus = up.genderStatus.String
 	u.Religion = up.religion.String
 	u.Phone = up.phone.String
 	u.Birthday = up.birthday.String
 	u.MarriedStatusID = int(up.marriedID.Int64)
+	u.MarriedStatus = up.marriedStatus.String
 	u.Facebook = up.facebook.String
 	u.IG = up.ig.String
 	u.Line = up.line.String

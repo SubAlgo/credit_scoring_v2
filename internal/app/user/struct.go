@@ -14,9 +14,11 @@ type UserStruct struct {
 	Email              string `json:"email"`
 	Name               string `json:"name"`
 	Surname            string `json:"surname"`
-	GenderStatus       int    `json:"genderStatus"`
+	GenderID           int    `json:"genderID"`
+	GenderStatus       string `json:"genderStatus"`
 	Birthday           string `json:"birthday"`
 	MarriedStatusID    int    `json:"marriedStatusID"`
+	MarriedStatus      string `json:"marriedStatus"`
 	Phone              string `json:"phone"`
 	Religion           string `json:"religion"`
 	Facebook           string `json:"facebook"`
@@ -42,7 +44,9 @@ type userProfile struct {
 	name              NullString
 	surname           NullString
 	genderID          NullInt
+	genderStatus      NullString
 	marriedID         NullInt
+	marriedStatus     NullString
 	religion          NullString
 	phone             NullString
 	birthday          NullString
