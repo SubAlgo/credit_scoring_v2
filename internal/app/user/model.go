@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
+	userPK "github.com/subalgo/credit_scoring_v2/internal/pkg/user"
 )
 
 // update user profile
@@ -110,5 +111,6 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	u.DistrictOffice = up.districtOffice.String
 	u.ProvinceCodeOffice = up.provinceOffice.String
 	u.ZipCodeOffice = up.zipCodeOffice.String
+	u.Age, err = userPK.GetAge(ctx, userID)
 	return
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/subalgo/credit_scoring_v2/internal/app/admin"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
+	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaire"
 	"github.com/subalgo/credit_scoring_v2/internal/app/user"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	"log"
@@ -41,6 +42,7 @@ func main() {
 	mux.Handle("/admin/", http.StripPrefix("/admin", admin.Handler()))
 	mux.Handle("/auth/", http.StripPrefix("/auth", auth.Handler()))
 	mux.Handle("/user/", http.StripPrefix("/user", user.Handler()))
+	mux.Handle("/questionnaire/", http.StripPrefix("/questionnaire", questionnaire.Handler()))
 
 	h := chain(
 		dbctx.Middleware(db),

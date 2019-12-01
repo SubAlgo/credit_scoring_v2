@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/acoshift/pgsql"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
+	"time"
 )
 
 var (
@@ -75,5 +76,34 @@ func GetHashPassword(ctx context.Context, userID int64) (hashedPassword string, 
 	if err != nil {
 		fmt.Println(err)
 	}
+	return
+}
+
+func GetAge(ctx context.Context, userID int64) (age int, err error) {
+	var birthday string
+	err = dbctx.QueryRow(ctx, `
+		select birthday
+		from users
+		where id = $1
+	`, userID).Scan(&birthday)
+
+	layOut := "02/01/2006"
+	dobTime, err := time.Parse(layOut, birthday) //แปลง format input to date type
+	if err != nil {
+		return 0, err
+	}
+
+	birthMonth := monthToInt(dobTime.Month().String())
+	nowMonth := monthToInt(time.Now().Month().String())
+
+	defMonth := nowMonth - birthMonth
+	var minusAge int
+	if defMonth < 0 {
+		minusAge = -1
+	} else {
+		minusAge = 0
+	}
+
+	age = (time.Now().Year() - dobTime.Year()) + minusAge
 	return
 }

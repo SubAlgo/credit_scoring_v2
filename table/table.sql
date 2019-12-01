@@ -484,8 +484,8 @@ create table questionnaire (
     approveTotal float, --อนุมัติทั้งหมด (บาท)
     interest float, --อัตราดอกเบี้ย
 
-    verifyComment varchar,
-    approveComment varchar,
+    verifyComment varchar, --หมายเหตุการตรวจสอบ
+    approveComment varchar, --หมายเหตุการอนุมัติ
 
     creditGrade    varchar, --[A,B,C,D,F]
     creditRisk  varchar, --[1,2,3,4,5]

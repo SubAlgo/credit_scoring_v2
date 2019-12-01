@@ -22,7 +22,6 @@ func getProfileByID(ctx context.Context, req getProfileRequest) (res UserStruct,
 		if userRole == 4 {
 			return res, ErrNotPermission
 		}
-	
 	*/
 
 	err = res.getProfile(ctx, req.UserID)

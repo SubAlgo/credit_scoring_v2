@@ -1,0 +1,42 @@
+## Sign In
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "kk@gmail.com",
+  "password": "123456"
+}
+
+###
+
+## Update profile
+POST http://localhost:8000/questionnaire/answer
+Content-Type: application/json
+X-Token: mW6iyhfxk_EhWeBszQ3J_R-1pGVhGi7ypVj2G8ePGWY
+
+{
+  "suggestScore": 5,
+  "suggestGiveScore": 5,
+  "income": 35000,
+  "loan": 100000,
+  "debtPerMonth": 12000,
+  "totalDebt": 50000,
+  "saving": 10000,
+  "mortgageSecurities": 0,
+  "ageCode": "1",
+  "jobCode": "1",
+  "eduCode": "1",
+  "timeJobCode": "1",
+  "freChangeNameCode": "1",
+  "timeOfPhoneNumberCode": "1",
+  "timeOfNameInHouseParticularCode": "5",
+  "payDebtHistoryCode": "5",
+  "statusInHouseParticularCode": "5",
+  "haveGuarantorCode": "5",
+  "iamGuarantorCode": "5",
+  "incomeTrendCode": "5",
+  "loanObjectCode": "5",
+  "provinceCode": "52"
+}
+
+###

@@ -14,6 +14,7 @@ type UserStruct struct {
 	Email              string `json:"email"`
 	Name               string `json:"name"`
 	Surname            string `json:"surname"`
+	Age                int    `json:"age"`
 	GenderID           int    `json:"genderID"`
 	GenderStatus       string `json:"genderStatus"`
 	Birthday           string `json:"birthday"`
@@ -77,9 +78,9 @@ func (ns *NullString) Scan(value interface{}) error {
 		return err
 	}
 
-	// if nil then change String to "-" and Valid "true"
 	if reflect.TypeOf(value) == nil {
-		*ns = NullString{"-", true}
+		ns.String, ns.Valid = "-", true
+		//*ns = NullString{"-*", true}
 	} else {
 		*ns = NullString{s.String, true}
 	}

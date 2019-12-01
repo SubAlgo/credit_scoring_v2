@@ -51,6 +51,7 @@ var (
 	ErrGetProfileNoRows = errors.New("getProfile: sql not row")
 	ErrUserIdRequired   = errors.New("getProfileByID: userID required")
 	ErrNotPermission    = errors.New("getProfileByID: permission not allow")
+	ErrPkgGetAge        = errors.New("getProfile: package user.GetAge")
 )
 
 func errorToStatusCode(err error) int {
@@ -65,7 +66,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrUpdateProfile, ErrUpdateDataBaseHomeAddress, ErrUpdateDataBaseOfficeAddress, ErrGetHashedPassword, ErrHashingPassword, ErrChangePassword:
 		return http.StatusInternalServerError
-	case ErrGetProfile, ErrGetProfileNoRows:
+	case ErrGetProfile, ErrGetProfileNoRows, ErrPkgGetAge:
 		return http.StatusInternalServerError
 	case ErrUserIdRequired:
 		return http.StatusBadRequest

@@ -17,7 +17,6 @@ func getProfile(ctx context.Context, req getProfileRequest) (res UserStruct, err
 	}
 
 	err = res.getProfile(ctx, userID)
-
 	if err == sql.ErrNoRows {
 		return res, ErrGetProfileNoRows
 	}
