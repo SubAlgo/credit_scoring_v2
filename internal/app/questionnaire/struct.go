@@ -33,6 +33,14 @@ type QuestionnaireStruct struct {
 	SuggestGiveScore int    `json:"suggestGiveScore"`
 
 	//-- ข้อมูลตัวเลขกรอกมือ
+	IncomeInput             interface{} `json:"incomeInput"`
+	LoanInput               interface{} `json:"loanInput"`
+	DebtPerMonthInput       interface{} `json:"debtPerMonthInput"`
+	TotalDebtInput          interface{} `json:"totalDebtInput"`
+	SavingInput             interface{} `json:"savingInput"`
+	MortgageSecuritiesInput interface{} `json:"mortgageSecuritiesInput"`
+
+	//-- ข้อมูลตัวเลขกรอกมือ
 	Income             float64 `json:"income"`
 	Loan               float64 `json:"loan"`
 	DebtPerMonth       float64 `json:"debtPerMonth"`
@@ -244,5 +252,99 @@ func (n *NullTime) Scan(value interface{}) error {
 	} else {
 		*n = NullTime{s.Time, true}
 	}
+	return nil
+}
+
+func (s *QuestionnaireStruct) checkNumType() error {
+
+	// check is nil
+	{
+		if s.IncomeInput == nil {
+			return ErrIsNilIncomeInput
+		}
+
+		if s.LoanInput == nil {
+			return ErrIsNilLoanInput
+		}
+
+		if s.DebtPerMonthInput == nil {
+			return ErrIsNilDebtPerMonthInput
+		}
+
+		if s.TotalDebtInput == nil {
+			return ErrIsNilTotalDebtInput
+		}
+
+		if s.SavingInput == nil {
+			return ErrIsNilSavingInput
+		}
+
+		if s.MortgageSecuritiesInput == nil {
+			return ErrIsNilMortgageSecuritiesInput
+		}
+
+	}
+
+	tyIncome := reflect.TypeOf(s.IncomeInput).Kind()
+	tyLoan := reflect.TypeOf(s.LoanInput).Kind()
+	tyDebtPerMonth := reflect.TypeOf(s.DebtPerMonthInput).Kind()
+	tyTotalDebt := reflect.TypeOf(s.TotalDebtInput).Kind()
+	tySaving := reflect.TypeOf(s.SavingInput).Kind()
+	tyMortgageSecurities := reflect.TypeOf(s.DebtPerMonthInput).Kind()
+
+	// check is string
+	{
+		if tyIncome == reflect.String {
+			return ErrIncomeMustBeNumber
+		}
+
+		if tyLoan == reflect.String {
+			return ErrLoanMustBeNumber
+		}
+
+		if tyDebtPerMonth == reflect.String {
+			return ErrDebtPerMonthMustBeNumber
+		}
+
+		if tyTotalDebt == reflect.String {
+			return ErrTotalDebtMustBeNumber
+		}
+
+		if tySaving == reflect.String {
+			return ErrSavingMustBeNumber
+		}
+
+		if tyMortgageSecurities == reflect.String {
+			return ErrMortgageSecuritiesMustBeNumber
+		}
+	}
+
+	// check is float
+	{
+		if tyIncome == reflect.Float64 {
+			s.Income = reflect.ValueOf(s.IncomeInput).Float()
+		}
+
+		if tyLoan == reflect.Float64 {
+			s.Loan = reflect.ValueOf(s.LoanInput).Float()
+		}
+
+		if tyDebtPerMonth == reflect.Float64 {
+			s.DebtPerMonth = reflect.ValueOf(s.DebtPerMonthInput).Float()
+		}
+
+		if tyTotalDebt == reflect.Float64 {
+			s.TotalDebt = reflect.ValueOf(s.TotalDebtInput).Float()
+		}
+
+		if tySaving == reflect.Float64 {
+			s.Saving = reflect.ValueOf(s.SavingInput).Float()
+		}
+
+		if tyMortgageSecurities == reflect.Float64 {
+			s.MortgageSecurities = reflect.ValueOf(s.MortgageSecuritiesInput).Float()
+		}
+	}
+
 	return nil
 }

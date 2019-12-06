@@ -53,12 +53,28 @@ func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
 			return ErrInvalidInputAge
 		}
 
-		if p.income == 0 {
+		if p.income <= 0 {
 			return ErrInvalidInputIncome
 		}
 
-		if p.loan == 0 {
+		if p.loan <= 0 {
 			return ErrInvalidInputLoan
+		}
+
+		if p.debtPerMonth < 0 {
+			return ErrInvalidInputDebtPerMonth
+		}
+
+		if p.totalDebt < 0 {
+			return ErrInvalidInputTotalDebt
+		}
+
+		if p.saving < 0 {
+			return ErrInvalidInputSaving
+		}
+
+		if p.mortgageSecurities < 0 {
+			return ErrInvalidInputMortgageSecurities
 		}
 
 		if p.jobCode == "" {

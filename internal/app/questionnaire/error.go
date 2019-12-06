@@ -35,11 +35,29 @@ var (
 	ErrInvalidInputProvinceCode                = errors.New("questionnaire: ProvinceCode not input")
 )
 
+// func (s *QuestionnaireStruct) checkNumType()
+var (
+	ErrIsNilIncomeInput             = errors.New("IncomeInput  is nil")
+	ErrIsNilLoanInput               = errors.New("LoanInput is nil")
+	ErrIsNilDebtPerMonthInput       = errors.New("DebtPerMonthInput is nil")
+	ErrIsNilTotalDebtInput          = errors.New("TotalDebtInput is nil")
+	ErrIsNilSavingInput             = errors.New("SavingInput is nil")
+	ErrIsNilMortgageSecuritiesInput = errors.New("MortgageSecuritiesInput is nil")
+
+	ErrIncomeMustBeNumber             = errors.New("income must be number")
+	ErrLoanMustBeNumber               = errors.New("loan must be number")
+	ErrDebtPerMonthMustBeNumber       = errors.New("debt per month must be number")
+	ErrTotalDebtMustBeNumber          = errors.New("total debt must be number")
+	ErrSavingMustBeNumber             = errors.New("saving must be number")
+	ErrMortgageSecuritiesMustBeNumber = errors.New("MortgageSecurities must be number")
+)
+
 var (
 	ErrGetLoanerAge     = errors.New("func prepare: get loaner age")
 	ErrGetProvinceScore = errors.New("func prepare: get province score")
 )
 
+// error get score from DB
 var (
 	ErrGetAgeScoreFromDB                         = errors.New("error get age score from DB")
 	ErrGetJobScoreFromDB                         = errors.New("error get job score from DB")
@@ -61,11 +79,16 @@ var (
 )
 
 var (
-	ErrAnswerPrepareData = errors.New("questionnaire answer prepare data error")
+	ErrAnswerPrepareData   = errors.New("questionnaire answer prepare data error")
+	ErrQuestionnaireInsert = errors.New("questionnaire insert questionnaire error")
 )
 
 func errorToStatusCode(err error) int {
 	switch err {
+	case ErrIncomeMustBeNumber, ErrLoanMustBeNumber, ErrDebtPerMonthMustBeNumber, ErrTotalDebtMustBeNumber, ErrSavingMustBeNumber, ErrMortgageSecuritiesMustBeNumber:
+		return http.StatusBadRequest
+	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput:
+		return http.StatusBadRequest
 	case ErrSignInRequired, ErrPermissionDeny:
 		return http.StatusUnauthorized
 	case ErrGetLoanerAge:
@@ -80,7 +103,64 @@ func errorToMessage(err error) string {
 	switch err {
 	case ErrSignInRequired:
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
+	case ErrInvalidInputAge:
+		return "กรุณาระบุช่วงอายุของท่าน"
+	case ErrInvalidInputLoanerID:
+		return ""
+	case ErrInvalidInputIncome:
+		return "กรุณาระบุรายได้ของท่าน และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputLoan:
+		return "กรุณาระบุวงเงินที่ท่านต้องการกู้ และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputDebtPerMonth:
+		return "กรุณาระบุภาระหนี้สินที่ท่านต้องชำระต่อเดือนในปัจจุบัน และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputTotalDebt:
+		return "กรุณาระบุภาระหนี้สินรวมทั้งหมดของท่านในปัจจุบัน และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputSaving:
+		return "กรุณาระบุจำนวนเงินออมของท่าน และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputMortgageSecurities:
+		return "กรุณาระบุมูลค่าหลักทรัพย์ค้ำประกันของท่าน และต้องมีค่ามากกว่า 0"
+	case ErrInvalidInputJob:
+		return "กรุณาระบุอาชีพของท่าน"
+	case ErrInvalidInputEdu:
+		return "กรุณาระบุระดับการศึกษาของท่าน"
+	case ErrInvalidInputTimeJob:
+		return "กรุณาระบุช่วงระยะเวลาที่ท่านทำงานในอาชีพปัจจุบัน"
+	case ErrInvalidInputFreChangeName:
+		return "กรุณาระบุจำนวนครั้งที่ท่านได้เปลี่ยนชื่อ"
+	case ErrInvalidInputTimeOfPhoneNumber:
+		return "กรุณาระบุระยะเวลาการใช้งานของเบอร์โทรศัพท์ของท่าน"
+	case ErrInvalidInputTimeOfStayInHouseParticular:
+		return "กรุณาระบุระยะเวลาที่ท่านอาศัยอยู่ในทะเบียนบ้านปัจจุบัน"
+	case ErrInvalidInputPayDebtHistory:
+		return "กรุณาระบุข้อมูลประวัติการชำระหนี้"
+	case ErrInvalidInputStatusInHouseParticular:
+		return "กรุณาระบุสถานะในทะเบียนบ้านของท่าน"
+	case ErrInvalidInputHaveGuarantor:
+		return "กรุณาระบุข้อมูลการมีผู้ค้ำประกันของท่าน"
+	case ErrInvalidInputIamGuarantor:
+		return "กรุณาระบุข้อมูลว่าท่านได้มีการค้ำประกันในผู้อื่นหรือไม่"
+	case ErrInvalidInputIncomeTrend:
+		return "กรุณาระบุข้อมูลแนวโน้มรายได้ของท่านในอนาคต"
+	case ErrInvalidInputLoanObject:
+		return "กรุณาระบุข้อมูลวัตถุประสงค์ในการกู้ของท่าน"
+	case ErrInvalidInputProvinceCode:
+		return "กรุณาเลือกจังหวัดที่ท่านอาศัยอยู่ในปัจจุบัน"
 
+	case ErrIncomeMustBeNumber:
+		return "รายได้ต้องเป็นตัวเลขเท่านั้น"
+
+	case ErrLoanMustBeNumber:
+		return "วงเงินที่ต้องการกู้ ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
+	case ErrDebtPerMonthMustBeNumber:
+		return "หนี้สินที่ต้องชำระต่อเดือน ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
+	case ErrTotalDebtMustBeNumber:
+		return "จำนวนหนี้สินทั้งหมด ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
+	case ErrSavingMustBeNumber:
+		return "จำนวนเงินออม ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
+	case ErrMortgageSecuritiesMustBeNumber:
+		return "มูลค่าหลักทรัพย์ค้ำประกัน ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
+	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput:
+		return "is nil"
 	default:
 		return "internal server error"
 	}

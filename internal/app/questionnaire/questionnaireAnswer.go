@@ -2,10 +2,12 @@ package questionnaire
 
 import (
 	"context"
+	"fmt"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
+	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
 
-func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res QuestionnaireStruct, err error) {
+func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res processResponse, err error) {
 	req.LoanerID = auth.GetUserID(ctx)
 	roleID := auth.GetUserRole(ctx)
 
@@ -16,6 +18,16 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res Que
 		return res, ErrPermissionDeny
 	}
 
+	// set status id
+	req.StatusID = 1
+
+	// check input data type
+	err = req.checkNumType()
+	if err != nil {
+		return res, err
+	}
+
+	//prepare data
 	var p prepareArgs
 	{
 		p.SuggestScore = req.SuggestScore
@@ -47,54 +59,69 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res Que
 
 	err = p.prepareData(ctx)
 	if err != nil {
-		return res, ErrAnswerPrepareData
+		return res, err
 	}
 
-	req.IncomePerDebt = p.incomePerDebtCode
-	req.TotalDebtPerYearIncome = p.totalDebtPerYearIncomeCode
-	req.SavingPerLoan = p.savingPerLoanCode
-	req.MortgageSecuritiesPerLoan = p.mortgageSecuritiesPerLoanCode
+	// set data from prepare to req
+	{
+		req.IncomePerDebt = p.incomePerDebtCode
+		req.TotalDebtPerYearIncome = p.totalDebtPerYearIncomeCode
+		req.SavingPerLoan = p.savingPerLoanCode
+		req.MortgageSecuritiesPerLoan = p.mortgageSecuritiesPerLoanCode
 
-	req.CreditGrade = p.creditGrade
-	req.CreditRisk = p.creditRisk
-	req.RiskLevel = p.riskLevel
-	req.MatrixIndex = p.matrixIndex
+		req.CreditGrade = p.creditGrade
+		req.CreditRisk = p.creditRisk
+		req.RiskLevel = p.riskLevel
+		req.MatrixIndex = p.matrixIndex
+	}
 
-	res = *req
+	var id int64
 
-	req.StatusID = 1
-
-	/*
-		var id int64
-		err = dbctx.QueryRow(ctx, `
-			insert into questionnaire
-				(userID, suggest, suggestScore, suggestGiveScore,
+	err = dbctx.QueryRow(ctx, `
+				insert into questionnaire
+				(loanerID, suggest, suggestScore, suggestGiveScore,
 				income, loan, debtPerMonth, totalDebt, saving, mortgageSecurities,
 				age, job, edu, timeJob, freChangeName, timeOfPhoneNumber, timeOfNameInHouseParticular, payDebtHistory, statusInHouseParticular,
 				incomePerDebt, totalDebtPerYearIncome, savingPerLoan, mortgageSecuritiesPerLoan,
 				haveGuarantor, iamGuarantor, incomeTrend, loanObject, provinceCode,
+
+				incomeW, loanW, debtPerMonthW, totalDebtW, savingW, mortgageSecuritiesW,
+				ageW, jobW, eduW, timeJobW, freChangeNameW, timeOfPhoneNumberW, timeOfNameInHouseParticularW, payDebtHistoryW, statusInHouseParticularW,
+				incomePerDebtW, totalDebtPerYearIncomeW, savingPerLoanW, mortgageSecuritiesPerLoanW,
+				haveGuarantorW, iamGuarantorW, incomeTrendW, loanObjectW, provinceCodeW,
+
 				creditGrade, creditRisk, riskLevel, matrixIndex,
 				statusID
 				)
-			values
-				($1,$2, 0, 0,
-				$3, $4, $5, $6, $7, $8,
-				$9, $10, $11, $12, $13, $14, $15, $16, $17,
-				$18, $19, $20, $21,
-				$22, $23, $24, $25, $26,
-				$27, $28, $29, $30,
-				$31
-				)
-			returning id
-			`, req.LoanerID, req.Suggest,
-			req.Income, req.Loan, req.DebtPerMonth, req.TotalDebt, req.Saving, req.MortgageSecurities,
-			req.AgeCode, req.JobCode, req.EduCode, req.TimeJobCode, req.FreChangeNameCode, req.TimeOfPhoneNumberCode, req.TimeOfNameInHouseParticularCode, req.PayDebtHistoryCode, req.StatusInHouseParticularCode,
-			req.IncomePerDebt, req.TotalDebtPerYearIncome, req.SavingPerLoan, req.MortgageSecuritiesPerLoan,
-			req.HaveGuarantorCode, req.IamGuarantorCode, req.IncomeTrendCode, req.LoanObjectCode, req.ProvinceCode,
-			req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex,
-			1).Scan(&id)
+				values
+				($1,$2, $3, $4,
+				$5, $6, $7, $8,$9, $10,
+				$11, $12, $13, $14, $15, $16, $17,$18, $19,
+				$20, $21,$22, $23,
+				$24, $25, $26,$27, $28,
 
-	*/
+				$5, $6, $7, $8,$9, $10,
+				$11, $12, $13, $14, $15, $16, $17,$18, $19,
+				$20, $21,$22, $23,
+				$24, $25, $26,$27, $28,
+
+				$29, $30, $31, $32,
+				$33
+				)
+				returning id
+				`, req.LoanerID, req.Suggest, req.SuggestScore, req.SuggestGiveScore,
+		req.Income, req.Loan, req.DebtPerMonth, req.TotalDebt, req.Saving, req.MortgageSecurities,
+		req.AgeCode, req.JobCode, req.EduCode, req.TimeJobCode, req.FreChangeNameCode, req.TimeOfPhoneNumberCode, req.TimeOfNameInHouseParticularCode, req.PayDebtHistoryCode, req.StatusInHouseParticularCode,
+		req.IncomePerDebt, req.TotalDebtPerYearIncome, req.SavingPerLoan, req.MortgageSecuritiesPerLoan,
+		req.HaveGuarantorCode, req.IamGuarantorCode, req.IncomeTrendCode, req.LoanObjectCode, req.ProvinceCode,
+		req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex,
+		req.StatusID).Scan(&id)
+	if err != nil {
+		fmt.Println(err)
+		return res, ErrQuestionnaireInsert
+	}
+
+	res.Message = "บันทึกข้อมูลสำเร็จ"
 
 	return
 }
