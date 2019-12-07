@@ -46,3 +46,77 @@ X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
 }
 
 ###
+
+## Update profile
+POST http://localhost:8000/questionnaire/update
+Content-Type: application/json
+X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
+
+{
+  "suggest": "One man",
+  "incomeInput": 30000,
+  "loanInput": 2000000,
+  "debtPerMonthInput": 0,
+  "totalDebtInput": 0,
+  "savingInput": 0,
+  "mortgageSecuritiesInput": 0,
+  "income": 0,
+  "loan": 0,
+  "debtPerMonth": 0,
+  "totalDebt": 0,
+  "saving": 0,
+  "mortgageSecurities": 0,
+  "ageCode": "5",
+  "jobCode": "10",
+  "eduCode": "1",
+  "timeJobCode": "1",
+  "freChangeNameCode": "1",
+  "timeOfPhoneNumberCode": "1",
+  "timeOfNameInHouseParticularCode": "5",
+  "payDebtHistoryCode": "5",
+  "statusInHouseParticularCode": "5",
+  "haveGuarantorCode": "5",
+  "iamGuarantorCode": "5",
+  "incomeTrendCode": "5",
+  "loanObjectCode": "5",
+  "provinceCode": "52"
+}
+
+####
+
+## send questionnaire to verify
+POST http://localhost:8000/questionnaire/send
+Content-Type: application/json
+X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
+
+{
+  "suggest": "One man",
+  "incomeInput": 30000,
+  "loanInput": 1000000,
+  "debtPerMonthInput": 0,
+  "totalDebtInput": 0,
+  "savingInput": 0,
+  "mortgageSecuritiesInput": 0,
+  "income": 0,
+  "loan": 0,
+  "debtPerMonth": 0,
+  "totalDebt": 0,
+  "saving": 20000,
+  "mortgageSecurities": 1000,
+  "ageCode": "5",
+  "jobCode": "10",
+  "eduCode": "5",
+  "timeJobCode": "5",
+  "freChangeNameCode": "5",
+  "timeOfPhoneNumberCode": "1",
+  "timeOfNameInHouseParticularCode": "5",
+  "payDebtHistoryCode": "5",
+  "statusInHouseParticularCode": "5",
+  "haveGuarantorCode": "5",
+  "iamGuarantorCode": "5",
+  "incomeTrendCode": "5",
+  "loanObjectCode": "5",
+  "provinceCode": "52"
+}
+
+###

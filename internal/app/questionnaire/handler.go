@@ -16,6 +16,8 @@ func Handler() http.Handler {
 
 	mux.Handle("/", http.NotFoundHandler())
 	mux.HandleFunc("/answer", questionnaireAnswerHandler)
+	mux.HandleFunc("/update", questionnaireLoanerUpdateHandler)
+	mux.HandleFunc("/send", questionnaireLoanerSendHandler)
 
 	return mux
 }
@@ -28,5 +30,27 @@ func questionnaireAnswerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireAnswer(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireLoanerUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req QuestionnaireStruct
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireLoanerUpdate(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireLoanerSendHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req QuestionnaireStruct
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireLoanerSend(ctx, &req)
 	t.EncodeResult(w, res, err)
 }

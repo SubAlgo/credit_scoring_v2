@@ -6,8 +6,11 @@ import (
 )
 
 var (
-	ErrSignInRequired = errors.New("user: not login")
-	ErrPermissionDeny = errors.New("questionnaire: user not permission")
+	ErrSignInRequired         = errors.New("user: not login")
+	ErrPermissionDeny         = errors.New("questionnaire: user not permission")
+	ErrGetQuestionStatus      = errors.New("can not get questionnaire status")
+	ErrThisStatusCanNotUpdate = errors.New("this status loaner can not be update")
+	ErrThisStatusCanNotBeSend = errors.New("this status loaner can not be send to verify")
 )
 
 // error invalid input
@@ -79,8 +82,9 @@ var (
 )
 
 var (
-	ErrAnswerPrepareData   = errors.New("questionnaire answer prepare data error")
-	ErrQuestionnaireInsert = errors.New("questionnaire insert questionnaire error")
+	ErrAnswerPrepareData         = errors.New("questionnaire answer prepare data error")
+	ErrQuestionnaireInsert       = errors.New("questionnaire insert questionnaire error")
+	ErrQuestionnaireLoanerUpdate = errors.New("questionnaire loaner update data error")
 )
 
 func errorToStatusCode(err error) int {
@@ -91,8 +95,10 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrSignInRequired, ErrPermissionDeny:
 		return http.StatusUnauthorized
-	case ErrGetLoanerAge:
+	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate:
 		return http.StatusInternalServerError
+	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
+		return http.StatusNotAcceptable
 
 	default:
 		return http.StatusInternalServerError
@@ -161,6 +167,10 @@ func errorToMessage(err error) string {
 		return "มูลค่าหลักทรัพย์ค้ำประกัน ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
 	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput:
 		return "is nil"
+	case ErrThisStatusCanNotUpdate:
+		return "แบบสอบถามของท่านไม่อยู่ในสถานะที่จะแก้ไขได้"
+	case ErrThisStatusCanNotBeSend:
+		return "แบบสอบถามของท่านไม่อยู่ในสถานะที่จะส่งเพื่อตรวจสอบได้ เนื่องจากท่านอาจได้ส่งข้อมูลเรียบร้อยแล้ว หรือ ท่านยังไม่ได้่ทำแบบสอบถาม"
 	default:
 		return "internal server error"
 	}
