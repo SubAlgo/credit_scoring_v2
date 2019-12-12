@@ -1,0 +1,21 @@
+## Sign In
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+## worker verify questionniare
+POST http://localhost:8000/questionnaire/get_questionnaire_data
+Content-Type: application/json
+X-Token: Z4Y-HgwwXd2K8-125meWYhHVgRm5Nhzu4FsGE0o80FE
+
+{
+  "loanerID": 4
+}
+
+###

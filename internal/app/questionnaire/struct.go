@@ -7,13 +7,20 @@ import (
 )
 
 type QuestionnaireStruct struct {
-	ID        int64     `json:"id"`
-	LoanerID  int64     `json:"loanerID"`
-	UpdatedBy int64     `json:"updatedBy"`
-	ApproveBy int64     `json:"approveBy"`
-	SendAt    time.Time `json:"sendAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	StatusID  int       `json:"statusID"`
+	ID            int64  `json:"id"`
+	LoanerID      int64  `json:"loanerID"`
+	LoanerName    string `json:"loanerName"`
+	WorkerID      int64
+	UpdatedBy     int64     `json:"updatedBy"`
+	UpdatedByName string    `json:"updatedByName"`
+	ApproveBy     int64     `json:"approveBy"`
+	ApproveName   string    `json:"approveName"`
+	SendAt        time.Time `json:"sendAt"`
+	SendAtStr     string    `json:"send_at_str"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+	UpdateAtStr   string    `json:"update_at_str"`
+
+	StatusID int `json:"statusID"`
 
 	ApproveRate  float64 `json:"approveRate"`
 	ApproveTotal float64 `json:"approveTotal"`
@@ -39,6 +46,14 @@ type QuestionnaireStruct struct {
 	TotalDebtInput          interface{} `json:"totalDebtInput"`
 	SavingInput             interface{} `json:"savingInput"`
 	MortgageSecuritiesInput interface{} `json:"mortgageSecuritiesInput"`
+
+	//-- ข้อมูลตัวเลขกรอกมือ
+	IncomeInputW             interface{} `json:"incomeInputW"`
+	LoanInputW               interface{} `json:"loanInputW"`
+	DebtPerMonthInputW       interface{} `json:"debtPerMonthInputW"`
+	TotalDebtInputW          interface{} `json:"totalDebtInputW"`
+	SavingInputW             interface{} `json:"savingInputW"`
+	MortgageSecuritiesInputW interface{} `json:"mortgageSecuritiesInputW"`
 
 	//-- ข้อมูลตัวเลขกรอกมือ
 	Income             float64 `json:"income"`
@@ -79,33 +94,34 @@ type QuestionnaireStruct struct {
 	MortgageSecuritiesW float64 `json:"mortgageSecuritiesW"`
 
 	//-- ข้อมูลตัวเลือก (option)
-	AgeCodeW                         string `json:"ageW"`
-	JobCodeW                         string `json:"JobW"`
-	EduCodeW                         string `json:"eduW"`
-	TimeJobCodeW                     string `json:"timeJobW"`
-	FreChangeNameCodeW               string `json:"freChangeNameW"`
-	TimeOfPhoneNumberCodeW           string `json:"timeOfPhoneNumberW"`
-	TimeOfNameInHouseParticularCodeW string `json:"timeOfNameInHouseParticularW"`
-	PayDebtHistoryCodeW              string `json:"payDebtHistoryW"`
-	StatusInHouseParticularCodeW     string `json:"statusInHouseParticularW"`
+	AgeCodeW                         string `json:"ageCodeW"`
+	JobCodeW                         string `json:"JobCodeW"`
+	EduCodeW                         string `json:"eduCodeW"`
+	TimeJobCodeW                     string `json:"timeJobCodeW"`
+	FreChangeNameCodeW               string `json:"freChangeNameCodeW"`
+	TimeOfPhoneNumberCodeW           string `json:"timeOfPhoneNumberCodeW"`
+	TimeOfNameInHouseParticularCodeW string `json:"timeOfNameInHouseParticularCodeW"`
+	PayDebtHistoryCodeW              string `json:"payDebtHistoryCodeW"`
+	StatusInHouseParticularCodeW     string `json:"statusInHouseParticularCodeW"`
 
 	IncomePerDebtW             string
 	TotalDebtPerYearIncomeW    string
 	SavingPerLoanW             string
 	MortgageSecuritiesPerLoanW string
 
-	HaveGuarantorCodeW string `json:"haveGuarantorW"`
-	IamGuarantorCodeW  string `json:"iamGuarantorW"`
-	IncomeTrendCodeW   string `json:"incomeTrendW"`
-	LoanObjectCodeW    string `json:"loanObjectW"`
+	HaveGuarantorCodeW string `json:"haveGuarantorCodeW"`
+	IamGuarantorCodeW  string `json:"iamGuarantorCodeW"`
+	IncomeTrendCodeW   string `json:"incomeTrendCodeW"`
+	LoanObjectCodeW    string `json:"loanObjectCodeW"`
 	ProvinceCodeW      string `json:"provinceCodeW"`
 }
 
-type questionnaire struct {
-	ID        NullInt
-	LoanerID  NullInt
-	UpdatedBy NullInt
-	ApproveBy NullInt
+type questionnaireCheckNull struct {
+	ID          NullInt
+	LoanerID    NullInt
+	UpdatedBy   NullInt
+	ApproveBy   NullInt
+	ApproveName NullString
 
 	StatusID  NullInt
 	SendAt    NullTime
@@ -343,6 +359,100 @@ func (s *QuestionnaireStruct) checkNumType() error {
 
 		if tyMortgageSecurities == reflect.Float64 {
 			s.MortgageSecurities = reflect.ValueOf(s.MortgageSecuritiesInput).Float()
+		}
+	}
+
+	return nil
+}
+
+func (s *QuestionnaireStruct) checkNumTypeForWorker() error {
+
+	// check is nil
+	{
+		if s.IncomeInputW == nil {
+			return ErrIsNilIncomeInput
+		}
+
+		if s.LoanInputW == nil {
+			return ErrIsNilLoanInput
+		}
+
+		if s.DebtPerMonthInputW == nil {
+			return ErrIsNilDebtPerMonthInput
+		}
+
+		if s.TotalDebtInputW == nil {
+			return ErrIsNilTotalDebtInput
+		}
+
+		if s.SavingInputW == nil {
+			return ErrIsNilSavingInput
+		}
+
+		if s.MortgageSecuritiesInputW == nil {
+			return ErrIsNilMortgageSecuritiesInput
+		}
+
+	}
+
+	tyIncome := reflect.TypeOf(s.IncomeInputW).Kind()
+	tyLoan := reflect.TypeOf(s.LoanInputW).Kind()
+	tyDebtPerMonth := reflect.TypeOf(s.DebtPerMonthInputW).Kind()
+	tyTotalDebt := reflect.TypeOf(s.TotalDebtInputW).Kind()
+	tySaving := reflect.TypeOf(s.SavingInputW).Kind()
+	tyMortgageSecurities := reflect.TypeOf(s.DebtPerMonthInputW).Kind()
+
+	// check is string
+	{
+		if tyIncome == reflect.String {
+			return ErrIncomeMustBeNumber
+		}
+
+		if tyLoan == reflect.String {
+			return ErrLoanMustBeNumber
+		}
+
+		if tyDebtPerMonth == reflect.String {
+			return ErrDebtPerMonthMustBeNumber
+		}
+
+		if tyTotalDebt == reflect.String {
+			return ErrTotalDebtMustBeNumber
+		}
+
+		if tySaving == reflect.String {
+			return ErrSavingMustBeNumber
+		}
+
+		if tyMortgageSecurities == reflect.String {
+			return ErrMortgageSecuritiesMustBeNumber
+		}
+	}
+
+	// check is float
+	{
+		if tyIncome == reflect.Float64 {
+			s.IncomeW = reflect.ValueOf(s.IncomeInputW).Float()
+		}
+
+		if tyLoan == reflect.Float64 {
+			s.LoanW = reflect.ValueOf(s.LoanInputW).Float()
+		}
+
+		if tyDebtPerMonth == reflect.Float64 {
+			s.DebtPerMonthW = reflect.ValueOf(s.DebtPerMonthInputW).Float()
+		}
+
+		if tyTotalDebt == reflect.Float64 {
+			s.TotalDebtW = reflect.ValueOf(s.TotalDebtInputW).Float()
+		}
+
+		if tySaving == reflect.Float64 {
+			s.SavingW = reflect.ValueOf(s.SavingInputW).Float()
+		}
+
+		if tyMortgageSecurities == reflect.Float64 {
+			s.MortgageSecuritiesW = reflect.ValueOf(s.MortgageSecuritiesInputW).Float()
 		}
 	}
 

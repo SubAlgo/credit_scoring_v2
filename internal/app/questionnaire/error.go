@@ -6,11 +6,13 @@ import (
 )
 
 var (
-	ErrSignInRequired         = errors.New("user: not login")
-	ErrPermissionDeny         = errors.New("questionnaire: user not permission")
-	ErrGetQuestionStatus      = errors.New("can not get questionnaire status")
-	ErrThisStatusCanNotUpdate = errors.New("this status loaner can not be update")
-	ErrThisStatusCanNotBeSend = errors.New("this status loaner can not be send to verify")
+	ErrSignInRequired                         = errors.New("user: not login")
+	ErrPermissionDeny                         = errors.New("questionnaire: user not permission")
+	ErrGetQuestionStatus                      = errors.New("can not get questionnaire status")
+	ErrThisStatusCanNotUpdate                 = errors.New("this status loaner can not be update")
+	ErrThisStatusCanNotBeSend                 = errors.New("this status loaner can not be send to verify")
+	ErrMissingLoanerID                        = errors.New("missing loaner id")
+	ErrQuestionnaireSelectDataMissingLoanerID = errors.New("questionnaire select data missing loaner id")
 )
 
 // error invalid input
@@ -40,7 +42,7 @@ var (
 
 // func (s *QuestionnaireStruct) checkNumType()
 var (
-	ErrIsNilIncomeInput             = errors.New("IncomeInput  is nil")
+	ErrIsNilIncomeInput             = errors.New("IncomeInput is nil")
 	ErrIsNilLoanInput               = errors.New("LoanInput is nil")
 	ErrIsNilDebtPerMonthInput       = errors.New("DebtPerMonthInput is nil")
 	ErrIsNilTotalDebtInput          = errors.New("TotalDebtInput is nil")
@@ -82,20 +84,27 @@ var (
 )
 
 var (
-	ErrAnswerPrepareData         = errors.New("questionnaire answer prepare data error")
-	ErrQuestionnaireInsert       = errors.New("questionnaire insert questionnaire error")
-	ErrQuestionnaireLoanerUpdate = errors.New("questionnaire loaner update data error")
+	ErrAnswerPrepareData                 = errors.New("questionnaire answer prepare data error")
+	ErrQuestionnaireInsert               = errors.New("questionnaire insert questionnaire error")
+	ErrQuestionnaireLoanerUpdate         = errors.New("questionnaire loaner update data error")
+	ErrQuestionnaireWorkerVerifyUpdate   = errors.New("questionnaire worker verify update db error")
+	ErrQuestionnaireSelectData           = errors.New("questionnaire select data ")
+	ErrQuestionnaireStatusIDNotAvailable = errors.New("questionnaire required status id")
+	ErrApproveRateNotAvailable           = errors.New("questionnaire approve rate not available")
+	ErrQuestionnaireInterestNotAvailable = errors.New("questionnaire interest rate not available")
+	ErrGetLoan                           = errors.New("questionnaire get loan data")
+	ErrQuestionnaireApprove              = errors.New("questionnaire approve update db")
 )
 
 func errorToStatusCode(err error) int {
 	switch err {
-	case ErrIncomeMustBeNumber, ErrLoanMustBeNumber, ErrDebtPerMonthMustBeNumber, ErrTotalDebtMustBeNumber, ErrSavingMustBeNumber, ErrMortgageSecuritiesMustBeNumber:
+	case ErrIncomeMustBeNumber, ErrLoanMustBeNumber, ErrDebtPerMonthMustBeNumber, ErrTotalDebtMustBeNumber, ErrSavingMustBeNumber, ErrMortgageSecuritiesMustBeNumber, ErrQuestionnaireSelectDataMissingLoanerID:
 		return http.StatusBadRequest
-	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput:
+	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput, ErrQuestionnaireStatusIDNotAvailable, ErrApproveRateNotAvailable, ErrQuestionnaireInterestNotAvailable:
 		return http.StatusBadRequest
 	case ErrSignInRequired, ErrPermissionDeny:
 		return http.StatusUnauthorized
-	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate:
+	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData:
 		return http.StatusInternalServerError
 	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
 		return http.StatusNotAcceptable
@@ -111,46 +120,48 @@ func errorToMessage(err error) string {
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
 	case ErrInvalidInputAge:
 		return "กรุณาระบุช่วงอายุของท่าน"
+	case ErrMissingLoanerID:
+		return "กรุณาระบุระหัสของผู้ขอสินเชื่อ"
 	case ErrInvalidInputLoanerID:
-		return ""
+		return "need loaner id"
 	case ErrInvalidInputIncome:
-		return "กรุณาระบุรายได้ของท่าน และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุรายได้ และข้อมูลต้องมีค่ามากกว่า 0"
 	case ErrInvalidInputLoan:
-		return "กรุณาระบุวงเงินที่ท่านต้องการกู้ และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุจำนวนสินเชื่อที่ต้องการ และข้อมูลต้องมีค่ามากกว่า 0"
 	case ErrInvalidInputDebtPerMonth:
-		return "กรุณาระบุภาระหนี้สินที่ท่านต้องชำระต่อเดือนในปัจจุบัน และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุภาระหนี้สินที่ต้องชำระต่อเดือนในปัจจุบัน โดยข้อมูลไม่สามารถมีค่าน้อยกว่า 0"
 	case ErrInvalidInputTotalDebt:
-		return "กรุณาระบุภาระหนี้สินรวมทั้งหมดของท่านในปัจจุบัน และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุภาระหนี้สินรวมทั้งหมดของในปัจจุบัน โดยข้อมูลไม่สามารถมีค่าน้อยกว่า 0"
 	case ErrInvalidInputSaving:
-		return "กรุณาระบุจำนวนเงินออมของท่าน และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุจำนวนเงินออม โดยข้อมูลไม่สามารถมีค่าน้อยกว่า 0"
 	case ErrInvalidInputMortgageSecurities:
-		return "กรุณาระบุมูลค่าหลักทรัพย์ค้ำประกันของท่าน และต้องมีค่ามากกว่า 0"
+		return "กรุณาระบุมูลค่าหลักทรัพย์ค้ำประกัน โดยข้อมูลไม่สามารถมีค่าน้อยกว่า 0"
 	case ErrInvalidInputJob:
-		return "กรุณาระบุอาชีพของท่าน"
+		return "กรุณาระบุข้อมูลอาชีพ"
 	case ErrInvalidInputEdu:
-		return "กรุณาระบุระดับการศึกษาของท่าน"
+		return "กรุณาระบุข้อมูลระดับการศึกษา"
 	case ErrInvalidInputTimeJob:
-		return "กรุณาระบุช่วงระยะเวลาที่ท่านทำงานในอาชีพปัจจุบัน"
+		return "กรุณาระบุข้อมูลระยะประสบการณ์ของอาชีพที่ทำในปัจจุบัน"
 	case ErrInvalidInputFreChangeName:
-		return "กรุณาระบุจำนวนครั้งที่ท่านได้เปลี่ยนชื่อ"
+		return "กรุณาระบุข้อมูลจำนวนครั้งในการเปลี่ยนชื่อ"
 	case ErrInvalidInputTimeOfPhoneNumber:
-		return "กรุณาระบุระยะเวลาการใช้งานของเบอร์โทรศัพท์ของท่าน"
+		return "กรุณาระบุข้อมูลช่วงจำนวนปีที่ใช้งานเบอร์โทรศัพท์หมายเลขปัจจุบัน"
 	case ErrInvalidInputTimeOfStayInHouseParticular:
-		return "กรุณาระบุระยะเวลาที่ท่านอาศัยอยู่ในทะเบียนบ้านปัจจุบัน"
+		return "กรุณาระบุข้อมูลระยะเวลาที่อาศัยอยู่ในทะเบียนบ้านปัจจุบัน"
 	case ErrInvalidInputPayDebtHistory:
 		return "กรุณาระบุข้อมูลประวัติการชำระหนี้"
 	case ErrInvalidInputStatusInHouseParticular:
-		return "กรุณาระบุสถานะในทะเบียนบ้านของท่าน"
+		return "กรุณาระบุข้อมูลสถานะในทะเบียนบ้าน"
 	case ErrInvalidInputHaveGuarantor:
-		return "กรุณาระบุข้อมูลการมีผู้ค้ำประกันของท่าน"
+		return "กรุณาระบุข้อมูลการมีผู้ค้ำประกัน"
 	case ErrInvalidInputIamGuarantor:
-		return "กรุณาระบุข้อมูลว่าท่านได้มีการค้ำประกันในผู้อื่นหรือไม่"
+		return "กรุณาระบุข้อมูลสถานะการค้ำประกันให้บุคคลอื่น"
 	case ErrInvalidInputIncomeTrend:
-		return "กรุณาระบุข้อมูลแนวโน้มรายได้ของท่านในอนาคต"
+		return "กรุณาระบุข้อมูลความคิดเห็นต่อแนวโน้มรายได้ในอนาคตของตัวผู้ขอสินเชื่อ"
 	case ErrInvalidInputLoanObject:
-		return "กรุณาระบุข้อมูลวัตถุประสงค์ในการกู้ของท่าน"
+		return "กรุณาระบุข้อมูลวัตถุประสงค์ในการขอสินเชื่อ"
 	case ErrInvalidInputProvinceCode:
-		return "กรุณาเลือกจังหวัดที่ท่านอาศัยอยู่ในปัจจุบัน"
+		return "กรุณาเลือกจังหวัดที่ผู้ขอสินเชื่ออาศัยอยู่ในปัจจุบัน"
 
 	case ErrIncomeMustBeNumber:
 		return "รายได้ต้องเป็นตัวเลขเท่านั้น"
@@ -165,12 +176,36 @@ func errorToMessage(err error) string {
 		return "จำนวนเงินออม ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
 	case ErrMortgageSecuritiesMustBeNumber:
 		return "มูลค่าหลักทรัพย์ค้ำประกัน ต้องกรอกข้อมูลเป็นตัวเลขเท่านั้น"
-	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput:
-		return "is nil"
+	case ErrIsNilIncomeInput:
+		return "IncomeInput is nil value"
+	case ErrIsNilLoanInput:
+		return "LoanInput is nil value"
+	case ErrIsNilDebtPerMonthInput:
+		return "DebtPerMonthInput is nil value"
+	case ErrIsNilTotalDebtInput:
+		return "TotalDebtInput is nil value"
+	case ErrIsNilSavingInput:
+		return "SavingInput is nil value"
+	case ErrIsNilMortgageSecuritiesInput:
+		return "MortgageSecuritiesInput is nil value"
 	case ErrThisStatusCanNotUpdate:
 		return "แบบสอบถามของท่านไม่อยู่ในสถานะที่จะแก้ไขได้"
 	case ErrThisStatusCanNotBeSend:
 		return "แบบสอบถามของท่านไม่อยู่ในสถานะที่จะส่งเพื่อตรวจสอบได้ เนื่องจากท่านอาจได้ส่งข้อมูลเรียบร้อยแล้ว หรือ ท่านยังไม่ได้่ทำแบบสอบถาม"
+	case ErrQuestionnaireWorkerVerifyUpdate:
+		return "internal server error (verify update db)"
+	case ErrQuestionnaireSelectData:
+		return "เกิดข้อผิดพลาดในการดึงข้อมูล"
+	case ErrQuestionnaireSelectDataMissingLoanerID:
+		return "questionnaire select data -> กรุณาระบุรหัสผู้กู้"
+	case ErrQuestionnaireStatusIDNotAvailable:
+		return "status id not available"
+	case ErrApproveRateNotAvailable:
+		return "อัตราการอนุมัติสินเชื่อต้องมีค่าระหว่าง 1 - 100 เท่านั้น"
+	case ErrQuestionnaireInterestNotAvailable:
+		return "อัตราดอกเบี้ยต้องมีค่าไม่น้อยกว่า 0"
+	case ErrQuestionnaireApprove:
+		return "internal server error (approve)"
 	default:
 		return "internal server error"
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
+	"time"
 )
 
 func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res processResponse, err error) {
@@ -77,9 +78,13 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 
 	var id int64
 
+	updateAt := time.Now()
+	var defaultFloatValue float64 = 0
+	defaultStringValue := "-"
 	err = dbctx.QueryRow(ctx, `
 				insert into questionnaire
-				(loanerID, suggest, suggestScore, suggestGiveScore,
+				(loanerID, updatedBy,
+				suggest, suggestScore, suggestGiveScore,
 				income, loan, debtPerMonth, totalDebt, saving, mortgageSecurities,
 				age, job, edu, timeJob, freChangeName, timeOfPhoneNumber, timeOfNameInHouseParticular, payDebtHistory, statusInHouseParticular,
 				incomePerDebt, totalDebtPerYearIncome, savingPerLoan, mortgageSecuritiesPerLoan,
@@ -91,10 +96,13 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 				haveGuarantorW, iamGuarantorW, incomeTrendW, loanObjectW, provinceCodeW,
 
 				creditGrade, creditRisk, riskLevel, matrixIndex,
-				statusID
+				statusID, updatedAt, sendAt,
+				approveRate, approveTotal, interest,
+				verifyComment, approveComment
 				)
 				values
-				($1,$2, $3, $4,
+				($1, $1,
+				$2, $3, $4,
 				$5, $6, $7, $8,$9, $10,
 				$11, $12, $13, $14, $15, $16, $17,$18, $19,
 				$20, $21,$22, $23,
@@ -106,8 +114,9 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 				$24, $25, $26,$27, $28,
 
 				$29, $30, $31, $32,
-				$33
-				)
+				$33, $34, $34,
+				$35, $35, $35,
+				$36, $36)
 				returning id
 				`, req.LoanerID, req.Suggest, req.SuggestScore, req.SuggestGiveScore,
 		req.Income, req.Loan, req.DebtPerMonth, req.TotalDebt, req.Saving, req.MortgageSecurities,
@@ -115,7 +124,9 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 		req.IncomePerDebt, req.TotalDebtPerYearIncome, req.SavingPerLoan, req.MortgageSecuritiesPerLoan,
 		req.HaveGuarantorCode, req.IamGuarantorCode, req.IncomeTrendCode, req.LoanObjectCode, req.ProvinceCode,
 		req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex,
-		req.StatusID).Scan(&id)
+		req.StatusID, updateAt,
+		defaultFloatValue,
+		defaultStringValue).Scan(&id)
 	if err != nil {
 		fmt.Println(err)
 		return res, ErrQuestionnaireInsert

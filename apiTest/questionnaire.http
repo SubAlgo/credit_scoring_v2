@@ -12,11 +12,10 @@ Content-Type: application/json
 ## Update profile
 POST http://localhost:8000/questionnaire/answer
 Content-Type: application/json
-X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
+X-Token: YT3EGuBak9IXScZSfGbVzDF7GDayp5zPgaUIeCPmBd0
 
 {
-  "suggestScore": 5,
-  "suggestGiveScore": 5,
+  "suggest": "",
   "incomeInput": 25000,
   "loanInput": 1000000,
   "debtPerMonthInput": 0,
@@ -50,7 +49,7 @@ X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
 ## Update profile
 POST http://localhost:8000/questionnaire/update
 Content-Type: application/json
-X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
+X-Token: MNOaav8UyaBnwn1bkCTe4wy05IBjodiRd1Zj9lPGk1o
 
 {
   "suggest": "One man",
@@ -87,7 +86,7 @@ X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
 ## send questionnaire to verify
 POST http://localhost:8000/questionnaire/send
 Content-Type: application/json
-X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
+X-Token: MNOaav8UyaBnwn1bkCTe4wy05IBjodiRd1Zj9lPGk1o
 
 {
   "suggest": "One man",
@@ -116,7 +115,7 @@ X-Token: EZb0SIG3aWbHgnF22qsbDyE2n18LYbMRVcIkb33X7zo
   "iamGuarantorCode": "5",
   "incomeTrendCode": "5",
   "loanObjectCode": "5",
-  "provinceCode": "52"
+  "provinceCode": "ถ/"
 }
 
 ###

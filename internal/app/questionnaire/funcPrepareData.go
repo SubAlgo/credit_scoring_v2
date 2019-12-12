@@ -47,6 +47,14 @@ type prepareArgs struct {
 }
 
 func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
+	/*
+		จัดเตรียมข้อมูล,​เช็คค่าว่าง
+		และ คำนวณค่าของ
+			IncomePerDebt,
+			TotalDebtPerYearIncome,
+			SavingPerLoan,
+			MortgageSecuritiesPerLoan
+	*/
 	// check input
 	{
 		if p.ageCode == "" {

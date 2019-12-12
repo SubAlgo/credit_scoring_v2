@@ -1,0 +1,110 @@
+## Sign In
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+
+## worker verify questionniare
+POST http://localhost:8000/questionnaire/verify
+Content-Type: application/json
+X-Token: VCEOpzBt5VfO1i-N6xj0Qi8rkFCGaMUjvlWJV-0aa0E
+
+{
+  "loanerID": 4,
+  "suggest": "One man",
+  "suggestScore": 2,
+  "suggestGiveScore": 3,
+  "incomeInputW": 3000,
+  "loanInputW": 1000000,
+  "debtPerMonthInputW": 11100,
+  "totalDebtInputW": 22002,
+  "savingInputW": 333,
+  "mortgageSecuritiesInputW": 444,
+  "incomeW": 0,
+  "loanW": 0,
+  "debtPerMonthW": 0,
+  "totalDebtW": 0,
+  "savingW": 20000,
+  "mortgageSecuritiesW": 1000,
+  "ageCodeW": "5",
+  "jobCodeW": "10",
+  "eduCodeW": "5",
+  "timeJobCodeW": "5",
+  "freChangeNameCodeW": "5",
+  "timeOfPhoneNumberCodeW": "1",
+  "timeOfNameInHouseParticularCodeW": "5",
+  "payDebtHistoryCodeW": "5",
+  "statusInHouseParticularCodeW": "5",
+  "haveGuarantorCodeW": "5",
+  "iamGuarantorCodeW": "5",
+  "incomeTrendCodeW": "5",
+  "loanObjectCodeW": "5",
+  "provinceCodeW": "52"
+}
+
+###
+
+## worker verify questionniare
+POST http://localhost:8000/questionnaire/worker_send
+Content-Type: application/json
+X-Token: Z4Y-HgwwXd2K8-125meWYhHVgRm5Nhzu4FsGE0o80FE
+
+{
+  "loanerID": 4,
+  "verifyComment": "vComment",
+  "suggest": "One man",
+  "suggestScore": 2,
+  "suggestGiveScore": 3,
+  "incomeInputW": 3000,
+  "loanInputW": 1000000,
+  "debtPerMonthInputW": 11100,
+  "totalDebtInputW": 22002,
+  "savingInputW": 333,
+  "mortgageSecuritiesInputW": 444,
+  "incomeW": 0,
+  "loanW": 0,
+  "debtPerMonthW": 0,
+  "totalDebtW": 0,
+  "savingW": 20000,
+  "mortgageSecuritiesW": 1000,
+  "ageCodeW": "5",
+  "jobCodeW": "10",
+  "eduCodeW": "5",
+  "timeJobCodeW": "5",
+  "freChangeNameCodeW": "5",
+  "timeOfPhoneNumberCodeW": "1",
+  "timeOfNameInHouseParticularCodeW": "5",
+  "payDebtHistoryCodeW": "5",
+  "statusInHouseParticularCodeW": "5",
+  "haveGuarantorCodeW": "5",
+  "iamGuarantorCodeW": "5",
+  "incomeTrendCodeW": "5",
+  "loanObjectCodeW": "5",
+  "provinceCodeW": "52"
+}
+
+###
+
+
+
+
+## worker verify questionniare
+POST http://localhost:8000/questionnaire/approve
+Content-Type: application/json
+X-Token: Z4Y-HgwwXd2K8-125meWYhHVgRm5Nhzu4FsGE0o80FE
+
+{
+  "loanerID": 4,
+  "statusID": 5,
+  "approveRate": 50,
+  "approveComment": "test",
+  "interest": 5
+}
+
+###

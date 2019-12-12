@@ -19,6 +19,12 @@ func Handler() http.Handler {
 	mux.HandleFunc("/update", questionnaireLoanerUpdateHandler)
 	mux.HandleFunc("/send", questionnaireLoanerSendHandler)
 
+	mux.HandleFunc("/verify", questionnaireWorkerVerifyHandler)
+	mux.HandleFunc("/worker_send", questionnaireWorkerSendHandler)
+	mux.HandleFunc("/approve", questionnaireWorkerApproveHandler)
+
+	mux.HandleFunc("/get_questionnaire_data", questionnaireGetDataHandler)
+
 	return mux
 }
 
@@ -52,5 +58,49 @@ func questionnaireLoanerSendHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireLoanerSend(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireWorkerVerifyHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req QuestionnaireStruct
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireWorkerVerify(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireWorkerSendHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req QuestionnaireStruct
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireWorkerSend(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetDataHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getDataArgs
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetData(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireWorkerApproveHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req approveArgs
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireWorkerApprove(ctx, &req)
 	t.EncodeResult(w, res, err)
 }
