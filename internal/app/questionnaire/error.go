@@ -96,6 +96,11 @@ var (
 	ErrQuestionnaireApprove              = errors.New("questionnaire approve update db")
 )
 
+// get list
+var (
+	ErrQuestionnaireGetListNewLoaner = errors.New("questionnaire get list new loaner")
+)
+
 func errorToStatusCode(err error) int {
 	switch err {
 	case ErrIncomeMustBeNumber, ErrLoanMustBeNumber, ErrDebtPerMonthMustBeNumber, ErrTotalDebtMustBeNumber, ErrSavingMustBeNumber, ErrMortgageSecuritiesMustBeNumber, ErrQuestionnaireSelectDataMissingLoanerID:
@@ -118,6 +123,8 @@ func errorToMessage(err error) string {
 	switch err {
 	case ErrSignInRequired:
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
+	case ErrPermissionDeny:
+		return "ท่านไม่มีสิทธิเข้าใช้งานการใช้งานนี้ได้"
 	case ErrInvalidInputAge:
 		return "กรุณาระบุช่วงอายุของท่าน"
 	case ErrMissingLoanerID:
@@ -206,6 +213,8 @@ func errorToMessage(err error) string {
 		return "อัตราดอกเบี้ยต้องมีค่าไม่น้อยกว่า 0"
 	case ErrQuestionnaireApprove:
 		return "internal server error (approve)"
+	case ErrQuestionnaireGetListNewLoaner:
+		return "internal server error (questionnaireGetListNewLoaner)"
 	default:
 		return "internal server error"
 	}

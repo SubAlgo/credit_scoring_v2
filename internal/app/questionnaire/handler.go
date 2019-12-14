@@ -25,6 +25,10 @@ func Handler() http.Handler {
 
 	mux.HandleFunc("/get_questionnaire_data", questionnaireGetDataHandler)
 
+	mux.HandleFunc("/get_list_new_loaner", questionnaireGetListNewLoanerHandler)
+	mux.HandleFunc("/get_list_in_verify", questionnaireGetListInVerifyHandler)
+	mux.HandleFunc("/get_list_wait_approve", questionnaireGetListWaitApproveHandler)
+
 	return mux
 }
 
@@ -102,5 +106,38 @@ func questionnaireWorkerApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireWorkerApprove(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListNewLoanerHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListNewLoaner(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListInVerifyHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListInVerify(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListWaitApproveHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListWaitApprove(ctx, req)
 	t.EncodeResult(w, res, err)
 }

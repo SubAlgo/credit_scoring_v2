@@ -31,13 +31,10 @@ type processResponse struct {
 
 func createNewWorker(ctx context.Context, req createNewWorkerRequest) (res processResponse, err error) {
 	userRole := auth.GetUserRole(ctx)
-	_ = userRole
-	/*
-		if userRole != 1 {
-			return res, ErrPermissionNotAllow
-		}
 
-	*/
+	if userRole != 1 {
+		return res, ErrPermissionNotAllow
+	}
 
 	req.Email = strings.TrimSpace(req.Email)
 	req.Email = strings.ToLower(req.Email)
