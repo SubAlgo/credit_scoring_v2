@@ -18,6 +18,9 @@ func Handler() http.Handler {
 	mux.HandleFunc("/create_new_worker", createNewWorkerHandler)
 	mux.HandleFunc("/change_user_role", changeUserRoleHandler)
 
+	mux.HandleFunc("/get_list_admin", getListAdminHandler)
+	mux.HandleFunc("/get_list_employee", getListEmployeeHandler)
+	mux.HandleFunc("/get_list_all_worker", getListAllWorkerHandler)
 	return mux
 }
 
@@ -40,5 +43,39 @@ func changeUserRoleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := changeUserRole(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+//get list
+func getListAdminHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getUserListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getListAdmin(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func getListEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getUserListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getListEmployee(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func getListAllWorkerHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getUserListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getListAllWorker(ctx, req)
 	t.EncodeResult(w, res, err)
 }

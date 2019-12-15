@@ -60,3 +60,33 @@ X-Token: dQ1Ltdqy4SZe2FmUQoOtLOZVWpoAyR37Y92dBIJpqZ0
 }
 
 ###
+
+## Get admin list
+POST http://localhost:8000/admin/get_list_admin
+Content-Type: application/json
+X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+
+{
+}
+
+###
+
+## Get employee lsit
+POST http://localhost:8000/admin/get_list_employee
+Content-Type: application/json
+X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+
+{
+}
+
+###
+
+## Get all worker list
+POST http://localhost:8000/admin/get_list_all_worker
+Content-Type: application/json
+X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+
+{
+}
+
+###

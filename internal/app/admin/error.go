@@ -27,6 +27,8 @@ var (
 	ErrPermissionNotAllow = errors.New("admin: permission not allow")
 	ErrParamMissing       = errors.New("admin: param missing")
 	ErrUpdateUserRole     = errors.New("admin: update user role")
+
+	ErrGetListEmployee = errors.New("admin: get list employee")
 )
 
 func errorToStatusCode(err error) int {
@@ -38,7 +40,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
-	case ErrHashPassword, ErrSomething, ErrUpdateUserRole:
+	case ErrHashPassword, ErrSomething, ErrUpdateUserRole, ErrGetListEmployee:
 		return http.StatusInternalServerError
 	case ErrPermissionNotAllow:
 		return http.StatusServiceUnavailable
@@ -87,6 +89,8 @@ func errorToMessage(err error) string {
 
 	case ErrSomething:
 		return "Internal server error"
+	case ErrGetListEmployee:
+		return "Internal server error (getListEmployee)"
 	default:
 		return "Internal Server Error"
 	}
