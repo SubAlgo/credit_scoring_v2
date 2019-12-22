@@ -6,14 +6,21 @@ POST http://localhost:8000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "kk@gmail.com",
+  "email": "test@gmail.com",
   "password": "12345678",
+  "passwordConfirm": "12345678",
   "name": "s1",
   "surname": "ss1",
+  "phone": "0918652376",
   "birth": "05/05/1990",
-  "phone": "0918651111",
+  "genderID": 1,
   "marriedStatusID": 1,
-  "genderID": 1
+  "religion": "พุทธ",
+  "Address": "",
+  "subDistrict": "ขามเรียง",
+  "district": "กันทรวิชัย",
+  "provinceCode": "81",
+  "zipcode": "44150"
 }
 
 ###

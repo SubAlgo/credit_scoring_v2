@@ -2,29 +2,37 @@ package auth
 
 import (
 	"context"
-	"fmt"
+	"github.com/acoshift/pgsql"
 	"github.com/asaskevich/govalidator"
+	//_ "github.com/lib/pq"
+	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/password"
-	"github.com/subalgo/credit_scoring_v2/internal/pkg/user"
 	"strconv"
 	"strings"
 	"unicode/utf8"
 )
 
 type signUpRequest struct {
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	PasswordConfirm string `json:"passwordConfirm"`
 	Name            string `json:"name"`
 	Surname         string `json:"surname"`
-	Email           string `json:"email"`
 	Phone           string `json:"phone"`
-	Password        string `json:"password"`
-	Birthday        string `json:"birth"`
+	Birthday        string `json:"birth"` //format 01/01/1990
 	GenderID        int    `json:"genderID"`
 	MarriedStatusID int    `json:"marriedStatusID"`
 	Religion        string `json:"religion"`
+	Address         string `json:"address"`
+	SubDistrict     string `json:"subDistrict"`
+	District        string `json:"district"`
+	ProvinceCode    string `json:"provinceCode"`
+	Zipcode         string `json:"zipcode"`
 }
 
 type signUpResponse struct {
-	ID int64 `json:"id"`
+	Message string `json:"message"`
+	ID      int64  `json:"id"`
 }
 
 // singUp loaner sing up 
@@ -49,9 +57,17 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 		return res, ErrPasswordInvalid
 	}
 
+	if req.Password != req.PasswordConfirm {
+		return res, ErrPasswordNotMatch
+	}
+
 	hashedPassword, err := password.Hash(req.Password)
 	if err != nil {
 		return res, ErrHashPassword
+	}
+
+	if r := strings.TrimSpace(req.Religion); r == "" {
+		req.Religion = "-"
 	}
 
 	req.Name = strings.TrimSpace(req.Name)
@@ -73,31 +89,69 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 		return res, ErrPhoneMustBeInt
 	}
 
-	arg := user.SignUpArgs{
-		Name:            req.Name,
-		Surname:         req.Surname,
-		Email:           req.Email,
-		Phone:           req.Phone,
-		HashPassword:    hashedPassword,
-		Birthday:        req.Birthday,
-		GenderID:        req.GenderID,
-		MarriedStatusID: req.MarriedStatusID,
-		Religion:        req.Religion,
-		RoleId:          roleID}
-
-	res.ID, err = user.Insert(ctx, &arg)
-	if err == user.ErrEmailDuplicated {
-		return res, ErrEmailNotAvailable
+	switch req.MarriedStatusID {
+	case 1, 2, 3, 4:
+	default:
+		return res, ErrMarriedStatusIDInvalid
 	}
 
-	if err == user.ErrPhoneDuplicated {
-		return res, ErrPhoneNotAvailable
-	}
-	if err != nil {
-		fmt.Println(err)
-		return res, ErrSomething
+	switch req.GenderID {
+	case 1, 2:
+	default:
+		return res, ErrGenderIDInvalid
 	}
 
+	if r := strings.TrimSpace(req.Address); r == "" {
+		req.Address = "-"
+	}
+
+	if r := strings.TrimSpace(req.SubDistrict); r == "" {
+		return res, ErrSubDistrictRequired
+	}
+
+	if r := strings.TrimSpace(req.District); r == "" {
+		return res, ErrDistrictRequired
+	}
+
+	if r := strings.TrimSpace(req.ProvinceCode); r == "" {
+		return res, ErrProvinceCodeRequired
+	}
+
+	if r := strings.TrimSpace(req.Zipcode); r == "" {
+		return res, ErrZipcodeRequired
+	}
+
+	// insert to DB
+	{
+		err = dbctx.QueryRow(ctx,
+			`insert into users 
+				(email, password, name, surname, birthday, 
+				phone, genderId , marriedId, religion, address1_home, 
+				subDistrict_home, district_home, provinceCode_home, zipCode_home,
+				roleId)
+			values
+				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+			returning id
+		`, req.Email, hashedPassword, req.Name, req.Surname, req.Birthday,
+			req.Phone, req.GenderID, req.MarriedStatusID, req.Religion, req.Address,
+			req.SubDistrict, req.District, req.ProvinceCode, req.Zipcode, roleID).Scan(&res.ID)
+
+		if pgsql.IsUniqueViolation(err, "users_email_idx") {
+			return res, ErrEmailDuplicated
+		}
+
+		if pgsql.IsUniqueViolation(err, "users_phone_idx") {
+			return res, ErrPhoneDuplicated
+		}
+
+		if pgsql.IsForeignKeyViolation(err, "users_provincecode_home_fkey") {
+			return res, ErrProvinceCodeInvalid
+		}
+
+		if err != nil {
+			return res, err
+		}
+	}
+	res.Message = "การลงทะเบียนสำเร็จ"
 	return
-
 }
