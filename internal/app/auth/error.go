@@ -33,6 +33,7 @@ var (
 	ErrZipcodeRequired        = errors.New("auth: zipcode required")
 	ErrProvinceCodeInvalid    = errors.New("auth: province code invalid")
 	ErrUsernameRequired       = errors.New("auth: required email or phone number")
+	ErrBirthdayFormat         = errors.New("auth: birthday format error")
 )
 
 func errorToStatusCode(err error) int {
@@ -42,7 +43,7 @@ func errorToStatusCode(err error) int {
 
 	case ErrUsernameRequired, ErrTokenRequired, ErrPasswordNotMatch, ErrEmailDuplicated, ErrPhoneDuplicated, ErrSubDistrictRequired, ErrDistrictRequired, ErrProvinceCodeRequired, ErrGenderIDInvalid:
 		return http.StatusBadRequest
-	case ErrMarriedStatusIDInvalid, ErrZipcodeRequired, ErrProvinceCodeInvalid:
+	case ErrMarriedStatusIDInvalid, ErrZipcodeRequired, ErrProvinceCodeInvalid, ErrBirthdayFormat:
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
@@ -97,6 +98,8 @@ func errorToMessage(err error) string {
 		return "กรุณาระบุรหัสไปรษณีย์สำหรับที่อยู่ของท่าน"
 	case ErrProvinceCodeInvalid:
 		return "ท่านระบุข้อมูลจังหวัดไม่ถูกต้อง"
+	case ErrBirthdayFormat:
+		return "format birthday not available [dd/mm/yyyy]"
 
 	case ErrTokenRequired:
 		return "token required"

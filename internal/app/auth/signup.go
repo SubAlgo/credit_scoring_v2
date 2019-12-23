@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/acoshift/pgsql"
 	"github.com/asaskevich/govalidator"
+	"regexp"
+
 	//_ "github.com/lib/pq"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/password"
@@ -87,6 +89,11 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	_, err = strconv.ParseInt(req.Phone, 10, 64)
 	if err != nil {
 		return res, ErrPhoneMustBeInt
+	}
+
+	re := regexp.MustCompile(`(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/([12]\d{3})`)
+	if re.MatchString(req.Birthday) == false {
+		return res, ErrBirthdayFormat
 	}
 
 	switch req.MarriedStatusID {
