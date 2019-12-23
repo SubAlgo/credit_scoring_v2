@@ -12,7 +12,7 @@ Content-Type: application/json
   "name": "s1",
   "surname": "ss1",
   "phone": "0918652376",
-  "birth": "05/05/1990",
+  "birth": "05/05/19",
   "genderID": 1,
   "marriedStatusID": 1,
   "religion": "พุทธ",

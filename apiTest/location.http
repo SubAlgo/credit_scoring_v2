@@ -1,0 +1,9 @@
+## customer sign up
+POST http://localhost:8000/location/get_location_option
+Content-Type: application/json
+
+{
+  "zipcode": "51120"
+}
+
+###

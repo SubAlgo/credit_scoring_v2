@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/acoshift/pgsql"
 	"github.com/asaskevich/govalidator"
-	"regexp"
+	"time"
 
 	//_ "github.com/lib/pq"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
@@ -91,10 +91,20 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 		return res, ErrPhoneMustBeInt
 	}
 
-	re := regexp.MustCompile(`(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/([12]\d{3})`)
-	if re.MatchString(req.Birthday) == false {
-		return res, ErrBirthdayFormat
+	// check birthday format
+	{
+		_, err = time.Parse("02/01/2006", req.Birthday)
+		if err != nil {
+			return res, ErrBirthdayFormat
+		}
 	}
+	/*
+		re := regexp.MustCompile(`(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/([12]\d{3})`)
+		if re.MatchString(req.Birthday) == false {
+			return res, ErrBirthdayFormat
+		}
+
+	*/
 
 	switch req.MarriedStatusID {
 	case 1, 2, 3, 4:
