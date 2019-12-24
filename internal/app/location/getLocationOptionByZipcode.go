@@ -10,16 +10,18 @@ type getLocationOPRequest struct {
 }
 
 type subDistrict struct {
-	Text string `json:"text"`
+	Text  string `json:"text"`
+	Value string `json:"value"`
 }
 
 type district struct {
-	Text string `json:"text"`
+	Text  string `json:"text"`
+	Value string `json:"value"`
 }
 
 type province struct {
-	Text         string `json:"text"`
-	ProvinceCode string `json:"provinceCode"`
+	Text  string `json:"text"`
+	Value string `json:"value"`
 }
 
 type getLocationOPResponse struct {
@@ -33,9 +35,9 @@ func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (
 	// Create SubDistrictList
 	{
 		subDistrictRows, err := dbctx.Query(ctx, `
-								select subDistrict from location where zipCode = $1 group by subDistrict
+								select subDistrict, subDistrict from location where zipCode = $1 group by subDistrict
 							`, req.Zipcode)
-		
+
 		defer subDistrictRows.Close()
 
 		if err != nil {
@@ -46,7 +48,7 @@ func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (
 
 		for subDistrictRows.Next() {
 			var x subDistrict
-			err = subDistrictRows.Scan(&x.Text)
+			err = subDistrictRows.Scan(&x.Text, &x.Value)
 			if err != nil {
 				return res, err //ErrMakeSubDistrictList
 			}
@@ -58,7 +60,7 @@ func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (
 	// Create DistrictList
 	{
 		districtRows, err := dbctx.Query(ctx, `
-								select district from location where zipCode = $1 group by district
+								select district, district from location where zipCode = $1 group by district
 							`, req.Zipcode)
 
 		defer districtRows.Close()
@@ -71,7 +73,7 @@ func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (
 
 		for districtRows.Next() {
 			var x district
-			err = districtRows.Scan(&x.Text)
+			err = districtRows.Scan(&x.Text, &x.Value)
 			if err != nil {
 				return res, err //ErrMakeSubDistrictList
 			}
@@ -99,7 +101,7 @@ func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (
 
 		for provinceRows.Next() {
 			var x province
-			err = provinceRows.Scan(&x.ProvinceCode, &x.Text)
+			err = provinceRows.Scan(&x.Value, &x.Text)
 			if err != nil {
 				return res, ErrMakeSubDistrictList
 			}

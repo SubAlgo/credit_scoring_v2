@@ -3,7 +3,7 @@ POST http://localhost:8000/location/get_location_option
 Content-Type: application/json
 
 {
-  "zipcode": "51120"
+  "zipcode": "51120dfd"
 }
 
 ###
