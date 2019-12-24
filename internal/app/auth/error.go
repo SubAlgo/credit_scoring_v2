@@ -56,6 +56,8 @@ func errorToStatusCode(err error) int {
 
 func errorToMessage(err error) string {
 	switch err {
+	case ErrUsernameRequired:
+		return "กรุณาระบุ อีเมล หรือ เบอร์โทรศัพท์"
 	case ErrEmailInvalid:
 		return "รูปแบบอีเมลไม่ถูกต้อง"
 	case ErrPasswordRequires:
