@@ -70,16 +70,16 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	err = dbctx.QueryRow(ctx, `
 		select 	email, name, surname, genderID, genderStatus.title, marriedID, marriedStatus.title, religion, birthday, phone, child,
 				facebook, ig, line, 
-				address1_home, address2_home, subDistrict_home, district_home, provinceCode_home, zipCode_home,
-				office_name, address1_office, address2_office, subDistrict_office, district_office, provinceCode_office, zipCode_office
+				address1_home, address2_home, subDistrict_home, district_home, provinceCode_home, (select p.title from provinces as p where p.code = users.provinceCode_home), zipCode_home,
+				office_name, address1_office, address2_office, subDistrict_office, district_office, provinceCode_office, (select p.title from provinces as p where p.code = users.provinceCode_office), zipCode_office
 		from users
 		left join marriedStatus on users.marriedID = marriedStatus.id
 		left join genderStatus on users.genderID = genderStatus.id
 		where users.id = $1
 	`, userID).Scan(&up.email, &up.name, &up.surname, &up.genderID, &up.genderStatus, &up.marriedID, &up.marriedStatus, &up.religion, &up.birthday, &up.phone, &up.child,
 		&up.facebook, &up.ig, &up.line,
-		&up.address1Home, &up.address2Home, &up.subDistrictHome, &up.districtHome, &up.provinceHome, &up.zipCodeHome,
-		&up.officeName, &up.address1Office, &up.address2Office, &up.subDistrictOffice, &up.districtOffice, &up.provinceOffice, &up.zipCodeOffice)
+		&up.address1Home, &up.address2Home, &up.subDistrictHome, &up.districtHome, &up.provinceHome, &up.provinceHomeTitle, &up.zipCodeHome,
+		&up.officeName, &up.address1Office, &up.address2Office, &up.subDistrictOffice, &up.districtOffice, &up.provinceOffice, &up.provinceTitleOffice, &up.zipCodeOffice)
 
 	if err != nil {
 		return err
@@ -103,6 +103,7 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	u.SubDistrict = up.subDistrictHome.String
 	u.District = up.districtHome.String
 	u.ProvinceCode = up.provinceHome.String
+	u.ProvinceTitle = up.provinceHomeTitle.String
 	u.ZipCode = up.zipCodeHome.String
 	u.OfficeName = up.officeName.String
 	u.Address1Office = up.address1Office.String
@@ -110,6 +111,7 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	u.SubDistrictOffice = up.subDistrictOffice.String
 	u.DistrictOffice = up.districtOffice.String
 	u.ProvinceCodeOffice = up.provinceOffice.String
+	u.ProvinceTitleOffice = up.provinceTitleOffice.String
 	u.ZipCodeOffice = up.zipCodeOffice.String
 	u.Age, err = userPK.GetAge(ctx, userID)
 	return

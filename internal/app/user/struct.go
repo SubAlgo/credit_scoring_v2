@@ -10,64 +10,68 @@ type processResponse struct {
 }
 
 type UserStruct struct {
-	UserID             int64  `json:"userID"`
-	Email              string `json:"email"`
-	Name               string `json:"name"`
-	Surname            string `json:"surname"`
-	Age                int    `json:"age"`
-	GenderID           int    `json:"genderID"`
-	GenderStatus       string `json:"genderStatus"`
-	Birthday           string `json:"birthday"`
-	MarriedStatusID    int    `json:"marriedStatusID"`
-	MarriedStatus      string `json:"marriedStatus"`
-	Phone              string `json:"phone"`
-	Religion           string `json:"religion"`
-	Facebook           string `json:"facebook"`
-	IG                 string `json:"ig"`
-	Line               string `json:"line"`
-	Address1           string `json:"address1"`
-	Address2           string `json:"address2"`
-	SubDistrict        string `json:"subDistrict"`
-	District           string `json:"district"`
-	ProvinceCode       string `json:"provinceCode"`
-	ZipCode            string `json:"zipCode"`
-	OfficeName         string `json:"officeName"`
-	Address1Office     string `json:"address1Office"`
-	Address2Office     string `json:"address2Office"`
-	SubDistrictOffice  string `json:"subDistrictOffice"`
-	DistrictOffice     string `json:"districtOffice"`
-	ProvinceCodeOffice string `json:"provinceCodeOffice"`
-	ZipCodeOffice      string `json:"zipCodeOffice"`
+	UserID              int64  `json:"userID"`
+	Email               string `json:"email"`
+	Name                string `json:"name"`
+	Surname             string `json:"surname"`
+	Age                 int    `json:"age"`
+	GenderID            int    `json:"genderID"`
+	GenderStatus        string `json:"genderStatus"`
+	Birthday            string `json:"birthday"`
+	MarriedStatusID     int    `json:"marriedStatusID"`
+	MarriedStatus       string `json:"marriedStatus"`
+	Phone               string `json:"phone"`
+	Religion            string `json:"religion"`
+	Facebook            string `json:"facebook"`
+	IG                  string `json:"ig"`
+	Line                string `json:"line"`
+	Address1            string `json:"address1"`
+	Address2            string `json:"address2"`
+	SubDistrict         string `json:"subDistrict"`
+	District            string `json:"district"`
+	ProvinceCode        string `json:"provinceCode"`
+	ProvinceTitle       string `json:"provinceTitle"`
+	ZipCode             string `json:"zipCode"`
+	OfficeName          string `json:"officeName"`
+	Address1Office      string `json:"address1Office"`
+	Address2Office      string `json:"address2Office"`
+	SubDistrictOffice   string `json:"subDistrictOffice"`
+	DistrictOffice      string `json:"districtOffice"`
+	ProvinceCodeOffice  string `json:"provinceCodeOffice"`
+	ProvinceTitleOffice string `json:"provinceTitleOffice"`
+	ZipCodeOffice       string `json:"zipCodeOffice"`
 }
 
 type userProfile struct {
-	email             NullString
-	name              NullString
-	surname           NullString
-	genderID          NullInt
-	genderStatus      NullString
-	marriedID         NullInt
-	marriedStatus     NullString
-	religion          NullString
-	phone             NullString
-	birthday          NullString
-	child             NullInt
-	facebook          NullString
-	ig                NullString
-	line              NullString
-	address1Home      NullString
-	address2Home      NullString
-	subDistrictHome   NullString
-	districtHome      NullString
-	provinceHome      NullString
-	zipCodeHome       NullString
-	officeName        NullString
-	address1Office    NullString
-	address2Office    NullString
-	subDistrictOffice NullString
-	districtOffice    NullString
-	provinceOffice    NullString
-	zipCodeOffice     NullString
+	email               NullString
+	name                NullString
+	surname             NullString
+	genderID            NullInt
+	genderStatus        NullString
+	marriedID           NullInt
+	marriedStatus       NullString
+	religion            NullString
+	phone               NullString
+	birthday            NullString
+	child               NullInt
+	facebook            NullString
+	ig                  NullString
+	line                NullString
+	address1Home        NullString
+	address2Home        NullString
+	subDistrictHome     NullString
+	districtHome        NullString
+	provinceHome        NullString
+	provinceHomeTitle   NullString
+	zipCodeHome         NullString
+	officeName          NullString
+	address1Office      NullString
+	address2Office      NullString
+	subDistrictOffice   NullString
+	districtOffice      NullString
+	provinceOffice      NullString
+	provinceTitleOffice NullString
+	zipCodeOffice       NullString
 }
 
 type NullString sql.NullString
