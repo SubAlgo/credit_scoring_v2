@@ -103,7 +103,6 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 		if re.MatchString(req.Birthday) == false {
 			return res, ErrBirthdayFormat
 		}
-
 	*/
 
 	switch req.MarriedStatusID {
@@ -122,11 +121,11 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 		req.Address = "-"
 	}
 
-	if r := strings.TrimSpace(req.SubDistrict); r == "" {
+	if r := strings.TrimSpace(req.SubDistrict); r == "-" || r == "" {
 		return res, ErrSubDistrictRequired
 	}
 
-	if r := strings.TrimSpace(req.District); r == "" {
+	if r := strings.TrimSpace(req.District); r == "-" || r == "" {
 		return res, ErrDistrictRequired
 	}
 
@@ -135,7 +134,7 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	}
 
 	if r := strings.TrimSpace(req.Zipcode); r == "" {
-		return res, ErrZipcodeRequired
+		//return res, ErrZipcodeRequired
 	}
 
 	// insert to DB
