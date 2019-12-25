@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	userPK "github.com/subalgo/credit_scoring_v2/internal/pkg/user"
+	"strconv"
+	"strings"
 )
 
 // update user profile
@@ -20,7 +22,7 @@ func (u *UserStruct) updateProfile(ctx context.Context) (err error) {
 			genderID = $9,
 			religion = $10
 		where id = $1
-	`, u.UserID, u.Name, u.Surname, u.Birthday, u.MarriedStatusID, u.Facebook, u.IG, u.Line, u.GenderStatus, u.Religion)
+	`, u.UserID, u.Name, u.Surname, u.Birthday, u.MarriedStatusID, u.Facebook, u.IG, u.Line, u.GenderID, u.Religion)
 	return
 }
 
@@ -114,5 +116,44 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	u.ProvinceTitleOffice = up.provinceTitleOffice.String
 	u.ZipCodeOffice = up.zipCodeOffice.String
 	u.Age, err = userPK.GetAge(ctx, userID)
+
+	//สร้างวันเกิด format thai
+	{
+		bDay := strings.Split(u.Birthday, "/")
+
+		yearInt, _ := strconv.ParseInt(bDay[2], 10, 64)
+		yearInt = yearInt + 543
+		yearStr := strconv.FormatInt(yearInt, 10)
+		var monthText string
+
+		switch bDay[1] {
+		case "01":
+			monthText = "มกราคม"
+		case "02":
+			monthText = "กุมภาพันธ์"
+		case "03":
+			monthText = "มีนาคม"
+		case "04":
+			monthText = "เมษายน"
+		case "05":
+			monthText = "พฤษภาคม"
+		case "06":
+			monthText = "มิถุนาคม"
+		case "07":
+			monthText = "กรกฎาคม"
+		case "08":
+			monthText = "สิงหาคม"
+		case "09":
+			monthText = "กันยายน"
+		case "10":
+			monthText = "ตุลาคม"
+		case "11":
+			monthText = "พฤศจิกายน"
+		case "12":
+			monthText = "ธันวาคม"
+		}
+		u.BirthdayTH = bDay[0] + " " + monthText + " " + yearStr
+	}
+
 	return
 }

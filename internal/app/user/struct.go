@@ -18,6 +18,7 @@ type UserStruct struct {
 	GenderID            int    `json:"genderID"`
 	GenderStatus        string `json:"genderStatus"`
 	Birthday            string `json:"birthday"`
+	BirthdayTH          string `json:"birthdayTH"`
 	MarriedStatusID     int    `json:"marriedStatusID"`
 	MarriedStatus       string `json:"marriedStatus"`
 	Phone               string `json:"phone"`

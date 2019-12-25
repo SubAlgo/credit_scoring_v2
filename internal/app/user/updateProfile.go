@@ -17,7 +17,7 @@ func updateProfile(ctx context.Context, req UserStruct) (res processResponse, er
 	req.Name = strings.TrimSpace(req.Name)
 	req.Surname = strings.TrimSpace(req.Surname)
 	req.Birthday = strings.TrimSpace(req.Birthday)
-	req.Phone = strings.TrimSpace(req.Phone)
+	//req.Phone = strings.TrimSpace(req.Phone)
 	req.Facebook = strings.TrimSpace(req.Facebook)
 	req.IG = strings.TrimSpace(req.IG)
 	req.Line = strings.TrimSpace(req.Line)

@@ -12,7 +12,7 @@ Content-Type: application/json
 ## Update profile
 POST http://localhost:8000/user/update_profile
 Content-Type: application/json
-X-Token: g6cf3mlEWkMEdUci_rdkw7mW_90QuHbWgYA4k82OEqU
+X-Token: jnEeqiiCOqCqtAc0OpmxwgJ-aq77lSqMWCZQf6l7Wk0
 
 {
   "name": "Hoe1",
