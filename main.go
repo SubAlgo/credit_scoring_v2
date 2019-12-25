@@ -7,6 +7,7 @@ import (
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/app/location"
 	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaire"
+	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaireOption"
 	"github.com/subalgo/credit_scoring_v2/internal/app/user"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	"log"
@@ -44,6 +45,7 @@ func main() {
 	mux.Handle("/auth/", http.StripPrefix("/auth", auth.Handler()))
 	mux.Handle("/user/", http.StripPrefix("/user", user.Handler()))
 	mux.Handle("/questionnaire/", http.StripPrefix("/questionnaire", questionnaire.Handler()))
+	mux.Handle("/questionnaireOption/", http.StripPrefix("/questionnaireOption", questionnaireOption.Handler()))
 	mux.Handle("/location/", http.StripPrefix("/location", location.Handler()))
 
 	h := chain(
