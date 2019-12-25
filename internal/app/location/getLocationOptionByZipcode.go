@@ -32,6 +32,17 @@ type getLocationOPResponse struct {
 
 func getLocationOptionByZipcode(ctx context.Context, req getLocationOPRequest) (res getLocationOPResponse, err error) {
 
+	// check zipcode
+	{
+		var countZipcode int
+		err = dbctx.QueryRow(ctx, `
+							select count(zipcode) from location where zipcode = $1
+		`, req.Zipcode).Scan(&countZipcode)
+		if countZipcode == 0 {
+			return res, ErrZipcodeInvalid
+		}
+	}
+
 	// Create SubDistrictList
 	{
 		subDistrictRows, err := dbctx.Query(ctx, `
