@@ -40,7 +40,7 @@ Content-Type: application/json
 ## Sign out
 POST http://localhost:8000/auth/signout
 Content-Type: application/json
-X-Token: h6rY76Rong4Ur2QA-tNlerqfjwG1s730DzLb4ta_YwY
+X-Token: -B_0_LVu66QlMdb2xp-Vdk_bmHC4j2sS1K9ugfMSLH0
 
 {
 }

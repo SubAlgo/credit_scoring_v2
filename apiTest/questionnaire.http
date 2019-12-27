@@ -3,8 +3,18 @@ POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
 {
-  "username": "kk@gmail.com",
-  "password": "123456"
+  "username": "korn@gmail.com",
+  "password": ""
+}
+
+###
+
+## Sign In
+POST http://localhost:8000/questionnaire/check_status
+Content-Type: application/json
+X-Token: -B_0_LVu66QlMdb2xp-Vdk_bmHC4j2sS1K9ugfMSLH0
+
+{
 }
 
 ###

@@ -62,6 +62,11 @@ var (
 	ErrGetProvinceScore = errors.New("func prepare: get province score")
 )
 
+// get questionnaire get status
+var (
+	ErrQuestionnaireGetStatus = errors.New("questionnaireCheckStatus: get status error")
+)
+
 // error get score from DB
 var (
 	ErrGetAgeScoreFromDB                         = errors.New("error get age score from DB")
@@ -109,7 +114,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrSignInRequired, ErrPermissionDeny:
 		return http.StatusUnauthorized
-	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData:
+	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData, ErrQuestionnaireGetStatus:
 		return http.StatusInternalServerError
 	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
 		return http.StatusNotAcceptable
@@ -215,6 +220,8 @@ func errorToMessage(err error) string {
 		return "internal server error (approve)"
 	case ErrQuestionnaireGetListNewLoaner:
 		return "internal server error (questionnaireGetListNewLoaner)"
+	case ErrQuestionnaireGetStatus:
+		return "internal server error (get questionnaire status)"
 	default:
 		return "internal server error"
 	}
