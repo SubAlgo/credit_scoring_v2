@@ -152,6 +152,7 @@ create unique index ageOption_code_idx on ageOption (code);
 
 insert into ageOption (code, title, score, criteria_no)
     values
+        ('0', '--กรุณาระบุช่วงอายุของท่าน--', 0, 1)
         ('1', 'มากกว่า 60 ปี', 1, 1),
         ('2', '51-60 ปี', 2, 1),
         ('3', '20-30 ปี', 3, 1),
@@ -171,7 +172,7 @@ create unique index jobOption_code_idx on jobOption (code);
 
 insert into jobOption (code, title, score, criteria_no)
     values
-        ('0', '--กรุณาระบุอาชีพของท่าน--', 1, 1),
+        ('0', '--กรุณาระบุอาชีพ--', 1, 1),
         ('1', 'ว่างงาน', 1, 1),
         ('2', 'นักเรียน/นิสิต/นักศึกษา', 1, 1),
         ('3', 'มีรายได้ไม่แน่นอน', 2, 1),
@@ -206,7 +207,7 @@ create unique index eduOption_code_idx on eduOption (code);
 
 insert into eduOption (code, title, score, criteria_no)
     values
-        ('0', '--กรุณาระบุระดับการศึกษาของท่าน--', 1, 1),
+        ('0', '--กรุณาระบุระดับการศึกษา--', 1, 1),
         ('1', 'สำเร็จการศึกษาระดับต่ำกว่า ม.6 หรือ ปวช.', 1, 1),
         ('2', 'สำเร็จการศึกษาระดับ ม.6 หรือ ปวช.', 1, 1),
         ('3', 'สำเร็จการศึกษาระดับ ปวส. / ปวท./อนุปริญญา', 1, 1),
@@ -246,7 +247,7 @@ create unique index freChangeNameOption_code_idx on freChangeNameOption (code);
 
 insert into freChangeNameOption (code, title, score, criteria_no)
     values
-        ('0', '--กรุณาระบุจำนวนครั้งที่ท่านเคยเปลี่ยนชื่อ--', 1, 1),
+        ('0', '--จำนวนครั้งที่เคยเปลี่ยนชื่อ--', 1, 1),
         ('1', 'มากกว่า 3 ครั้ง', 1, 1),
         ('2', '3 ครั้ง', 2, 1),
         ('3', '2 ครั้ง', 3, 1),
