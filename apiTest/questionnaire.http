@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "username": "korn@gmail.com",
-  "password": ""
+  "password": "korn0112"
 }
 
 ###
@@ -126,6 +126,16 @@ X-Token: MNOaav8UyaBnwn1bkCTe4wy05IBjodiRd1Zj9lPGk1o
   "incomeTrendCode": "5",
   "loanObjectCode": "5",
   "provinceCode": "ถ/"
+}
+
+###
+
+## send questionnaire to verify
+POST http://localhost:8000/questionnaire/get_questionnaire_data
+Content-Type: application/json
+X-Token: SS5PzHZE45cMhqlOcu2q8ySUjxuX7T2Kw2zjbqh-iUs
+
+{
 }
 
 ###

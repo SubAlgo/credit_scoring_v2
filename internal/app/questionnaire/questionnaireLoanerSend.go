@@ -3,6 +3,7 @@ package questionnaire
 import (
 	"context"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
+	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
 
 func questionnaireLoanerSend(ctx context.Context, req *QuestionnaireStruct) (res processResponse, err error) {
@@ -14,6 +15,13 @@ func questionnaireLoanerSend(ctx context.Context, req *QuestionnaireStruct) (res
 	}
 	if roleID != 4 {
 		return res, ErrPermissionDeny
+	}
+
+	// check status id
+	{
+		err = dbctx.QueryRow(ctx, `
+			select statusID from questionnaire where loanerID = $1
+		`, req.LoanerID).Scan(&req.StatusID)
 	}
 
 	//check questionnaire status
