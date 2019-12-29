@@ -95,7 +95,7 @@ type QuestionnaireStruct struct {
 
 	//-- ข้อมูลตัวเลือก (option)
 	AgeCodeW                         string `json:"ageCodeW"`
-	JobCodeW                         string `json:"JobCodeW"`
+	JobCodeW                         string `json:"jobCodeW"`
 	EduCodeW                         string `json:"eduCodeW"`
 	TimeJobCodeW                     string `json:"timeJobCodeW"`
 	FreChangeNameCodeW               string `json:"freChangeNameCodeW"`

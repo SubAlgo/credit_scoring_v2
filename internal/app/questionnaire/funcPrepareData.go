@@ -85,55 +85,59 @@ func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
 			return ErrInvalidInputMortgageSecurities
 		}
 
-		if p.jobCode == "" {
+		if p.ageCode == "" || p.ageCode == "0" {
+			return ErrInvalidInputAge
+		}
+
+		if p.jobCode == "" || p.jobCode == "0" {
 			return ErrInvalidInputJob
 		}
 
-		if p.eduCode == "" {
+		if p.eduCode == "" || p.eduCode == "0" {
 			return ErrInvalidInputEdu
 		}
 
-		if p.timeJobCode == "" {
+		if p.timeJobCode == "" || p.timeJobCode == "0" {
 			return ErrInvalidInputTimeJob
 		}
 
-		if p.freChangeNameCode == "" {
+		if p.freChangeNameCode == "" || p.freChangeNameCode == "0" {
 			return ErrInvalidInputFreChangeName
 		}
 
-		if p.timeOfPhoneNumberCode == "" {
+		if p.timeOfPhoneNumberCode == "" || p.timeOfPhoneNumberCode == "0" {
 			return ErrInvalidInputTimeOfPhoneNumber
 		}
 
-		if p.timeOfNameInHouseParticularCode == "" {
+		if p.timeOfNameInHouseParticularCode == "" || p.timeOfNameInHouseParticularCode == "0" {
 			return ErrInvalidInputTimeOfStayInHouseParticular
 		}
 
-		if p.payDebtHistoryCode == "" {
+		if p.payDebtHistoryCode == "" || p.payDebtHistoryCode == "0" {
 			return ErrInvalidInputPayDebtHistory
 		}
 
-		if p.statusInHouseParticularCode == "" {
+		if p.statusInHouseParticularCode == "" || p.statusInHouseParticularCode == "0" {
 			return ErrInvalidInputStatusInHouseParticular
 		}
 
-		if p.haveGuarantorCode == "" {
+		if p.haveGuarantorCode == "" || p.haveGuarantorCode == "0" {
 			return ErrInvalidInputHaveGuarantor
 		}
 
-		if p.iamGuarantorCode == "" {
+		if p.iamGuarantorCode == "" || p.iamGuarantorCode == "0" {
 			return ErrInvalidInputIamGuarantor
 		}
 
-		if p.incomeTrendCode == "" {
+		if p.incomeTrendCode == "" || p.incomeTrendCode == "0" {
 			return ErrInvalidInputIncomeTrend
 		}
 
-		if p.loanObjectCode == "" {
+		if p.loanObjectCode == "" || p.loanObjectCode == "0" {
 			return ErrInvalidInputLoanObject
 		}
 
-		if p.provinceCode == "" {
+		if p.provinceCode == "" || p.provinceCode == "0" {
 			return ErrInvalidInputProvinceCode
 		}
 	}

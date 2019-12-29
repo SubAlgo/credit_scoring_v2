@@ -82,7 +82,7 @@ func questionnaireWorkerVerify(ctx context.Context, req *QuestionnaireStruct) (r
 		req.RiskLevel = p.riskLevel
 		req.MatrixIndex = p.matrixIndex
 	}
-	
+
 	err = req.updateByWorker(ctx)
 
 	if err != nil {

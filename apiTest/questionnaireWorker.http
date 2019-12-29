@@ -92,8 +92,6 @@ X-Token: Z4Y-HgwwXd2K8-125meWYhHVgRm5Nhzu4FsGE0o80FE
 ###
 
 
-
-
 ## worker verify questionniare
 POST http://localhost:8000/questionnaire/approve
 Content-Type: application/json
@@ -108,3 +106,14 @@ X-Token: Z4Y-HgwwXd2K8-125meWYhHVgRm5Nhzu4FsGE0o80FE
 }
 
 ###
+
+## worker verify questionniare
+POST http://localhost:8000/questionnaire/get_list_new_loaner
+Content-Type: application/json
+X-Token: Z72Bwt2bsfR77Y0TT3KTHRIONGNL9eoYztgv6ZnT6R4
+
+{
+}
+
+###
+

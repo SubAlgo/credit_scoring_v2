@@ -3,8 +3,8 @@ POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
 {
-  "username": "kk@gmail.com",
-  "password": "123456"
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
 }
 
 ###
@@ -82,10 +82,10 @@ X-Token: mjGtbWUpOY6sMp1MfOkI68BqOloO6-ulpClhx392VQU
 ## get_profile_by_id
 POST http://localhost:8000/user/get_profile_by_id
 Content-Type: application/json
-X-Token: mjGtbWUpOY6sMp1MfOkI68BqOloO6-ulpClhx392VQU
+X-Token: UYVsyg_VOwlcuuDvOr0xniWfoN1NVwmAvBjXjDoX4ig
 
 {
-  "userID": 6
+  "userID":
 }
 
 ###

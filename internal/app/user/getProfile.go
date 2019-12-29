@@ -11,6 +11,7 @@ type getProfileRequest struct {
 }
 
 func getProfile(ctx context.Context, req getProfileRequest) (res UserStruct, err error) {
+
 	userID := auth.GetUserID(ctx)
 	if userID == 0 {
 		return res, ErrUserNotLogin
