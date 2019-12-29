@@ -4,23 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
 
-type checkQuestionnaireStatusRequest struct {
-	LoanerID int64 `json:"loanerID"`
-}
-
-type checkQuestionnaireStatusResponse struct {
-	StatusID    int    `json:"statusID"`
-	StatusTitle string `json:"statusTitle"`
-}
-
-func questionnaireCheckStatus(ctx context.Context, req checkQuestionnaireStatusRequest) (res checkQuestionnaireStatusResponse, err error) {
-	userID := auth.GetUserID(ctx)
-
-	if userID == 0 {
+func questionnaireCheckStatusByID(ctx context.Context, req checkQuestionnaireStatusRequest) (res checkQuestionnaireStatusResponse, err error) {
+	
+	if req.LoanerID == 0 {
 		return res, ErrSignInRequired
 	}
 
@@ -29,7 +18,7 @@ func questionnaireCheckStatus(ctx context.Context, req checkQuestionnaireStatusR
 			from questionnaire as q
 			left join questionnaireStatus as qs on q.statusID = qs.id
 			where q.loanerID = $1
-	`, userID).Scan(&res.StatusID, &res.StatusTitle)
+	`, req.LoanerID).Scan(&res.StatusID, &res.StatusTitle)
 
 	if err == sql.ErrNoRows {
 		res.StatusID = 0

@@ -16,6 +16,8 @@ func Handler() http.Handler {
 
 	mux.Handle("/", http.NotFoundHandler())
 	mux.HandleFunc("/check_status", questionnaireCheckStatusHandler)
+	mux.HandleFunc("/check_status_by_id", questionnaireCheckStatusByIDHandler)
+
 	mux.HandleFunc("/answer", questionnaireAnswerHandler)
 	mux.HandleFunc("/update", questionnaireLoanerUpdateHandler)
 	mux.HandleFunc("/send", questionnaireLoanerSendHandler)
@@ -151,5 +153,16 @@ func questionnaireCheckStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireCheckStatus(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireCheckStatusByIDHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req checkQuestionnaireStatusRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireCheckStatusByID(ctx, req)
 	t.EncodeResult(w, res, err)
 }
