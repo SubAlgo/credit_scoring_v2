@@ -9,85 +9,88 @@ import (
 
 //อัพเดต ผลการอนุมัติ
 type approveArgs struct {
-	LoanerID       int64 `json:"loanerID"`
-	Loan           float64
-	StatusID       int     `json:"statusID"`
-	ApproveComment string  `json:"approveComment"`
+	LoanerID       int64   `json:"loanerID"`
+	Loan           float64 `json:"loan"`
 	ApproveRate    float64 `json:"approveRate"`
-	ApproveTotal   float64 `json:"approveTotal"`
-	Interest       float64 `json:"interest"`
-	WorkerID       int64
+	ApproveTotal   float64
+	InterestRate   float64 `json:"interestRate"`
+	LoanerPayback  float64
+	ApproveComment string `json:"approveComment"`
 }
 
 func questionnaireWorkerApprove(ctx context.Context, req *approveArgs) (res processResponse, err error) {
-	req.WorkerID = auth.GetUserID(ctx)
-	roleID := auth.GetUserRole(ctx)
 
-	if req.WorkerID == 0 {
-		return res, ErrSignInRequired
+	questionnaireStatusID := 5
+
+	// check signIn
+	var workerID int64
+	{
+		workerID = auth.GetUserID(ctx)
+		roleID := auth.GetUserRole(ctx)
+
+		if workerID == 0 {
+			return res, ErrSignInRequired
+		}
+
+		if roleID != 1 {
+			return res, ErrPermissionDeny
+		}
 	}
 
-	switch roleID {
-	case 1:
+	// check input data
+	{
+		if req.LoanerID == 0 {
+			return res, ErrMissingLoanerID
+		}
 
-	default:
-		return res, ErrPermissionDeny
-	}
+		if req.ApproveRate > 100 || req.ApproveRate < 1 {
+			return res, ErrApproveRateNotAvailable
+		}
 
-	if req.LoanerID == 0 {
-		return res, ErrMissingLoanerID
-	}
-
-	switch req.StatusID {
-	case 5, 6:
-
-	default:
-		return res, ErrQuestionnaireStatusIDNotAvailable
-	}
-
-	if req.ApproveRate > 100 || req.ApproveRate < 1 {
-		return res, ErrApproveRateNotAvailable
+		if req.InterestRate < 0 {
+			return res, ErrQuestionnaireInterestNotAvailable
+		}
 	}
 
 	req.ApproveComment = strings.TrimSpace(req.ApproveComment)
 	if req.ApproveComment == "" {
 		req.ApproveComment = "-"
 	}
-
-	if req.ApproveRate <= 0 && req.StatusID == 5 {
-		req.ApproveRate = 100
-	}
-
-	if req.Interest <= 0 {
-		return res, ErrQuestionnaireInterestNotAvailable
-	}
-
+	var loan float64
 	err = dbctx.QueryRow(ctx, `
-			select loan from questionnaire where loanerID = $1
-	`, req.LoanerID).Scan(&req.Loan)
+				select loanW from questionnaire where loanerID = $1
+	`, req.LoanerID).Scan(&loan)
 
 	if err != nil {
 		return res, ErrGetLoan
 	}
 
-	req.ApproveTotal = req.Loan * req.ApproveRate / 100
+	if req.Loan != loan {
+		return res, ErrLoanMustBeNumber
+	}
+
+	req.ApproveTotal = req.Loan * (req.ApproveRate / 100)
+
+	req.LoanerPayback = req.ApproveTotal + (req.ApproveTotal * (req.InterestRate / 100))
 
 	_, err = dbctx.Exec(ctx, `
-		update questionnaire
-		set approveBy = $2,
-			statusID = $3,
-			approveTotal = $4,
-			approveRate = $5,
-			approveComment = $6,
-			interest = $7
-		where loanerID = $1 
-	`, req.LoanerID, req.WorkerID, req.StatusID, req.ApproveTotal, req.ApproveRate, req.ApproveComment, req.Interest)
+			update questionnaire
+			set approveBy = $2,
+				statusID = $3,
+				approveRate = $4,
+				approveTotal = $5,
+				approveComment = $6,
+				interest = $7,
+				loanerPayback = $8
+			where loanerID = $1
+		`, req.LoanerID, workerID, questionnaireStatusID, req.ApproveRate, req.ApproveTotal, req.ApproveComment, req.InterestRate, req.LoanerPayback)
 
 	if err != nil {
 		return res, ErrQuestionnaireApprove
 	}
 
 	res.Message = "บันทึกผลการอนุมัติสินเช่ือสำเร็จ"
+
 	return
 
 }

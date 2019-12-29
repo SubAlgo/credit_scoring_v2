@@ -495,6 +495,7 @@ create table questionnaire (
     approveRate float, --อนุมัติเปอร์เซนต์
     approveTotal float, --อนุมัติทั้งหมด (บาท)
     interest float, --อัตราดอกเบี้ย
+    loanerPayback float, --จำนวนเงินที่ผู้กู้ต้องชำระคืน
 
     verifyComment varchar, --หมายเหตุการตรวจสอบ
     approveComment varchar, --หมายเหตุการอนุมัติ
