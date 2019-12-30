@@ -1,0 +1,30 @@
+## Sign In
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
+}
+
+###
+
+## Sign out
+POST http://localhost:8000/auth/signout
+Content-Type: application/json
+X-Token: Wkzg3cyQtqbRy8v5QjsNf0sEMzrSW2Iq-17GvcV9Na4
+{
+}
+
+###
+
+## Get data by loaner
+POST http://localhost:8000/province/get_province_list_by_geo_id
+Content-Type: application/json
+X-Token: AAa-0WiUvjjtRE4i-_ZUfg3a5qyLgRxUqru-zu7NdRo
+
+{
+  "geoID": 7
+}
+
+###

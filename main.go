@@ -6,6 +6,7 @@ import (
 	"github.com/subalgo/credit_scoring_v2/internal/app/admin"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/app/location"
+	"github.com/subalgo/credit_scoring_v2/internal/app/province"
 	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaire"
 	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaireOption"
 	"github.com/subalgo/credit_scoring_v2/internal/app/user"
@@ -47,6 +48,7 @@ func main() {
 	mux.Handle("/questionnaire/", http.StripPrefix("/questionnaire", questionnaire.Handler()))
 	mux.Handle("/questionnaireOption/", http.StripPrefix("/questionnaireOption", questionnaireOption.Handler()))
 	mux.Handle("/location/", http.StripPrefix("/location", location.Handler()))
+	mux.Handle("/province/", http.StripPrefix("/province", province.Handler()))
 
 	h := chain(
 		dbctx.Middleware(db),
