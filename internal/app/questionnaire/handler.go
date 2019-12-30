@@ -25,6 +25,7 @@ func Handler() http.Handler {
 	mux.HandleFunc("/verify", questionnaireWorkerVerifyHandler)
 	mux.HandleFunc("/worker_send", questionnaireWorkerSendHandler)
 	mux.HandleFunc("/approve", questionnaireWorkerApproveHandler)
+	mux.HandleFunc("/deny", questionnaireWorkerDenyHandler)
 
 	mux.HandleFunc("/get_questionnaire_data", questionnaireGetDataHandler)
 
@@ -109,6 +110,17 @@ func questionnaireWorkerApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireWorkerApprove(ctx, &req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireWorkerDenyHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req approveArgs
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireWorkerDeny(ctx, &req)
 	t.EncodeResult(w, res, err)
 }
 
