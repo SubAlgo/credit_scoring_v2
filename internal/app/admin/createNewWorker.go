@@ -31,7 +31,8 @@ type processResponse struct {
 
 func createNewWorker(ctx context.Context, req createNewWorkerRequest) (res processResponse, err error) {
 	userRole := auth.GetUserRole(ctx)
-
+	req.MarriedStatusID = 1
+	
 	if userRole != 1 {
 		return res, ErrPermissionNotAllow
 	}

@@ -22,7 +22,6 @@ Content-Type: application/json
   "surname": "admin_surname",
   "birth": "05/05/1990",
   "phone": "0918652222",
-  "marriedStatusID": 1,
   "genderID": 1,
   "roleID": 1
 }
