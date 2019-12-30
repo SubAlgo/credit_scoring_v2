@@ -9,26 +9,27 @@ import (
 
 //อัพเดต ผลการอนุมัติ
 type approveArgs struct {
-	LoanerID       int64   `json:"loanerID"`
-	Loan           float64 `json:"loan"`
-	ApproveRate    float64 `json:"approveRate"`
-	ApproveTotal   float64
-	InterestRate   float64 `json:"interestRate"`
-	LoanerPayback  float64
-	ApproveComment string `json:"approveComment"`
+	LoanerID              int64 `json:"loanerID"`
+	WorkerID              int64
+	QuestionnaireStatusID int
+	Loan                  float64 `json:"loan"`
+	ApproveRate           float64 `json:"approveRate"`
+	ApproveTotal          float64
+	InterestRate          float64 `json:"interestRate"`
+	LoanerPayback         float64
+	ApproveComment        string `json:"approveComment"`
 }
 
 func questionnaireWorkerApprove(ctx context.Context, req *approveArgs) (res processResponse, err error) {
 
-	questionnaireStatusID := 5
+	req.QuestionnaireStatusID = 5
 
 	// check signIn
-	var workerID int64
 	{
-		workerID = auth.GetUserID(ctx)
+		req.WorkerID = auth.GetUserID(ctx)
 		roleID := auth.GetUserRole(ctx)
 
-		if workerID == 0 {
+		if req.WorkerID == 0 {
 			return res, ErrSignInRequired
 		}
 
@@ -73,18 +74,8 @@ func questionnaireWorkerApprove(ctx context.Context, req *approveArgs) (res proc
 
 	req.LoanerPayback = req.ApproveTotal + (req.ApproveTotal * (req.InterestRate / 100))
 
-	_, err = dbctx.Exec(ctx, `
-			update questionnaire
-			set approveBy = $2,
-				statusID = $3,
-				approveRate = $4,
-				approveTotal = $5,
-				approveComment = $6,
-				interest = $7,
-				loanerPayback = $8
-			where loanerID = $1
-		`, req.LoanerID, workerID, questionnaireStatusID, req.ApproveRate, req.ApproveTotal, req.ApproveComment, req.InterestRate, req.LoanerPayback)
-
+	err = req.setApproveResult(ctx)
+	
 	if err != nil {
 		return res, ErrQuestionnaireApprove
 	}
