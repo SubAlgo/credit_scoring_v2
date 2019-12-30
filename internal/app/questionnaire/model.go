@@ -225,3 +225,19 @@ func (req *QuestionnaireStruct) updateByWorker(ctx context.Context) (err error) 
 		req.VerifyComment, req.StatusID)
 	return
 }
+
+func (ap *approveArgs) setApproveResult(ctx context.Context) (err error) {
+	_, err = dbctx.Exec(ctx, `
+			update questionnaire
+			set approveBy = $2,
+				statusID = $3,
+				approveRate = $4,
+				approveTotal = $5,
+				approveComment = $6,
+				interest = $7,
+				loanerPayback = $8
+			where loanerID = $1
+		`, ap.LoanerID, ap.WorkerID, ap.QuestionnaireStatusID, ap.ApproveRate, ap.ApproveTotal, ap.ApproveComment, ap.InterestRate, ap.LoanerPayback)
+
+	return
+}
