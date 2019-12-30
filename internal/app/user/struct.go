@@ -11,6 +11,7 @@ type processResponse struct {
 
 type UserStruct struct {
 	UserID              int64  `json:"userID"`
+	RoleID              int    `json:"roleID"`
 	Role                string `json:"role"`
 	Email               string `json:"email"`
 	Name                string `json:"name"`
