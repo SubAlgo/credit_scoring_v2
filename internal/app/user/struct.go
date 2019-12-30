@@ -11,6 +11,7 @@ type processResponse struct {
 
 type UserStruct struct {
 	UserID              int64  `json:"userID"`
+	Role                string `json:"role"`
 	Email               string `json:"email"`
 	Name                string `json:"name"`
 	Surname             string `json:"surname"`
@@ -44,6 +45,7 @@ type UserStruct struct {
 }
 
 type userProfile struct {
+	role                NullString
 	email               NullString
 	name                NullString
 	surname             NullString

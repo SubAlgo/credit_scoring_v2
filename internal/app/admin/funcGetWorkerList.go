@@ -8,7 +8,7 @@ import (
 func getWorkerList(ctx context.Context, roleID int) (res userList, err error) {
 
 	rows, err := dbctx.Query(ctx, `
-		select users.id, name, surname, email, roles.title
+		select users.id, name, surname, email, phone, roles.title
 		from users
 		left join roles on users.roleID = roles.id
 		where users.roleID = $1
@@ -35,7 +35,7 @@ func getWorkerList(ctx context.Context, roleID int) (res userList, err error) {
 	for rows.Next() {
 		var x userData
 		err = rows.Scan(
-			&x.ID, &x.Name, &x.Surname, &x.Email, &x.Role,
+			&x.ID, &x.Name, &x.Surname, &x.Email, &x.Phone, &x.Role,
 		)
 		x.No = i
 		i = i + 1
