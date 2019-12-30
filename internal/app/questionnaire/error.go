@@ -15,6 +15,10 @@ var (
 	ErrQuestionnaireSelectDataMissingLoanerID = errors.New("questionnaire select data missing loaner id")
 )
 
+var (
+	ErrQuestionnaireGetApproveResultDB = errors.New("get approve result: DB")
+)
+
 // error invalid input
 var (
 	ErrInvalidInputAge                         = errors.New("questionnaire: invalid input age")
@@ -222,6 +226,8 @@ func errorToMessage(err error) string {
 		return "internal server error (questionnaireGetListNewLoaner)"
 	case ErrQuestionnaireGetStatus:
 		return "internal server error (get questionnaire status)"
+	case ErrQuestionnaireGetApproveResultDB:
+		return "internal server error (get approve result db)"
 	default:
 		return "internal server error"
 	}

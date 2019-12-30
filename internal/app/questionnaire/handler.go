@@ -33,6 +33,8 @@ func Handler() http.Handler {
 	mux.HandleFunc("/get_list_in_verify", questionnaireGetListInVerifyHandler)
 	mux.HandleFunc("/get_list_wait_approve", questionnaireGetListWaitApproveHandler)
 
+	mux.HandleFunc("/get_approve_result", questionnaireGetApproveResultHandler)
+
 	return mux
 }
 
@@ -176,5 +178,16 @@ func questionnaireCheckStatusByIDHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	res, err := questionnaireCheckStatusByID(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetApproveResultHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getApproveResultRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetApproveResult(ctx, req)
 	t.EncodeResult(w, res, err)
 }
