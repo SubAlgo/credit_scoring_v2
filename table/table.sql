@@ -102,6 +102,26 @@ create unique index users_email_idx on users (email);
 create unique index users_citizenID_idx on users (citizenID);
 create unique index users_phone_idx on users (phone);
 
+-- permission access
+create table permissionAccess (
+    id int,
+    accessShowLoanerNewListAdmin boolean not null,
+	accessShowLoanerNewListWorker boolean not null,
+	accessShowLoanerInVerifyListAdmin boolean not null,
+	accessShowLoanerInVerifyListWorker boolean not null,
+	accessShowLoanerWaitApproveListAdmin boolean not null,
+	accessShowLoanerWaitApproveListWorker boolean not null,
+	verifyQuestionnaireByAdmin boolean not null,
+	verifyQuestionnaireByWorker boolean not null,
+	sendToApproveByAdmin boolean not null,
+	sendToApproveByWorker boolean not null,
+    primary key (id)
+);
+
+insert into permissionAccess (id, accessShowLoanerNewListAdmin, accessShowLoanerNewListWorker, accessShowLoanerInVerifyListAdmin, accessShowLoanerInVerifyListWorker, accessShowLoanerWaitApproveListAdmin, accessShowLoanerWaitApproveListWorker, verifyQuestionnaireByAdmin, verifyQuestionnaireByWorker, sendToApproveByAdmin, sendToApproveByWorker)
+    values
+        (1, true, true, true, true, true, true, true, true, true, true);
+
 /*
     questionnaire
  */

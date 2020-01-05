@@ -1,0 +1,28 @@
+
+## get_access_permission
+POST http://localhost:8000/permission_setting/get_access_permission
+Content-Type: application/json
+
+{}
+
+###
+
+## Update profile
+POST http://localhost:8000/permission_setting/update_access_permission
+Content-Type: application/json
+X-Token: YT3EGuBak9IXScZSfGbVzDF7GDayp5zPgaUIeCPmBd0
+
+{
+  "access_show_loaner_new_list_admin": true,
+  "access_show_loaner_new_list_worker": true,
+  "access_show_loaner_in_verify_list_admin": true,
+  "access_show_loaner_in_verify_list_worker": true,
+  "access_show_loaner_wait_approve_list_admin": true,
+  "access_show_loaner_wait_approve_list_worker": true,
+  "verify_questionnaire_by_admin": true,
+  "verify_questionnaire_by_worker": true,
+  "send_to_approve_by_admin": true,
+  "send_to_approve_by_worker": true
+}
+
+###
