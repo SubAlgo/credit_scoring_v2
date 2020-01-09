@@ -11,6 +11,7 @@ import (
 	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaire"
 	"github.com/subalgo/credit_scoring_v2/internal/app/questionnaireOption"
 
+	_ "github.com/lib/pq"
 	"github.com/subalgo/credit_scoring_v2/internal/app/user"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 	"log"
@@ -19,9 +20,12 @@ import (
 )
 
 func main() {
+	// connStr := "postgres://dbUser:dbPassword@dbHost/dbName?sslmode=<verify-full | disable>"
+
 	dbURL := os.Getenv("DB_URL")
+
 	if dbURL == "" {
-		dbURL = "postgres://localhost/credit_scoring_v2?sslmode=disable"
+		dbURL = "postgres://localhost:5432/credit_scoring_v2?sslmode=disable"
 	}
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -30,12 +34,14 @@ func main() {
 	defer db.Close()
 
 	redisAddr := os.Getenv("REDIS_ADDR")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
+	
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
 	}
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:       redisAddr,
-		Password:   "",
+		Password:   redisPassword,
 		MaxRetries: 3,
 	})
 
