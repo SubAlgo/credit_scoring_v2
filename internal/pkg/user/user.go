@@ -53,6 +53,14 @@ func Insert(ctx context.Context, arg *SignUpArgs) (id int64, err error) {
 	return
 }
 
+// delete user
+func Delete(ctx context.Context, userID int64) (err error) {
+	_, err = dbctx.Exec(ctx,
+		`delete from users where id = $1
+		`, userID)
+	return
+}
+
 // get user role for store in context
 func GetUserRole(ctx context.Context, userID int64) (roleID int, err error) {
 	err = dbctx.QueryRow(ctx, `

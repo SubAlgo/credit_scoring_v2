@@ -63,7 +63,7 @@ X-Token: dQ1Ltdqy4SZe2FmUQoOtLOZVWpoAyR37Y92dBIJpqZ0
 ## Get admin list
 POST http://localhost:8000/admin/get_list_admin
 Content-Type: application/json
-X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+X-Token: tQ-qgGaQH5UAyKeOdZaaWm4IJK2pXo0e1bn_NMbOsNs
 
 {
 }
@@ -73,7 +73,7 @@ X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
 ## Get employee lsit
 POST http://localhost:8000/admin/get_list_employee
 Content-Type: application/json
-X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+X-Token: tQ-qgGaQH5UAyKeOdZaaWm4IJK2pXo0e1bn_NMbOsNs
 
 {
 }
@@ -83,9 +83,20 @@ X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
 ## Get all worker list
 POST http://localhost:8000/admin/get_list_all_worker
 Content-Type: application/json
-X-Token: Y5A35VVbMVLdbylBJeTeOUi2QTpyRaMgHSmSrGD-Y-Q
+X-Token: dztji53prvNVnC5oWyB-Lz2eriyHVn1bHtxqSUHiZsQ
 
 {
+}
+
+###
+
+## Get all worker list
+POST http://localhost:8000/admin/delete_worker
+Content-Type: application/json
+X-Token: tQ-qgGaQH5UAyKeOdZaaWm4IJK2pXo0e1bn_NMbOsNs
+
+{
+  "worker_id": 25
 }
 
 ###

@@ -29,6 +29,10 @@ var (
 	ErrUpdateUserRole     = errors.New("admin: update user role")
 
 	ErrGetListEmployee = errors.New("admin: get list employee")
+
+	ErrGetWorkerRole          = errors.New("admin: error get worker")
+	ErrDisableDeleteSuperUser = errors.New("admin: can not delete super user")
+	ErrDeleteWorker           = errors.New("admin: error delete worker from DB")
 )
 
 func errorToStatusCode(err error) int {
@@ -40,7 +44,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
-	case ErrHashPassword, ErrSomething, ErrUpdateUserRole, ErrGetListEmployee:
+	case ErrHashPassword, ErrSomething, ErrUpdateUserRole, ErrGetListEmployee, ErrGetWorkerRole:
 		return http.StatusInternalServerError
 	case ErrPermissionNotAllow:
 		return http.StatusServiceUnavailable
@@ -91,6 +95,12 @@ func errorToMessage(err error) string {
 		return "Internal server error"
 	case ErrGetListEmployee:
 		return "Internal server error (getListEmployee)"
+	case ErrGetWorkerRole:
+		return "เกิดข้อผิดพลาดในการระบุข้อมูลพนักงานที่ต้องการลบ"
+	case ErrDisableDeleteSuperUser:
+		return "ไม่สามารถลบข้อมูลพนักงานระดับ super user ได้"
+	case ErrDeleteWorker:
+		return "เกิดข้อผิดพลาดในการลบข้อมูลพนักงาน"
 	default:
 		return "Internal Server Error"
 	}

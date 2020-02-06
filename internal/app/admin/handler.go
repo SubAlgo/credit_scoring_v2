@@ -21,6 +21,7 @@ func Handler() http.Handler {
 	mux.HandleFunc("/get_list_admin", getListAdminHandler)
 	mux.HandleFunc("/get_list_employee", getListEmployeeHandler)
 	mux.HandleFunc("/get_list_all_worker", getListAllWorkerHandler)
+	mux.HandleFunc("/delete_worker", deleteWorkerHandler)
 	return mux
 }
 
@@ -77,5 +78,16 @@ func getListAllWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := getListAllWorker(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func deleteWorkerHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req deleteWorkerRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := deleteWorker(ctx, req)
 	t.EncodeResult(w, res, err)
 }
