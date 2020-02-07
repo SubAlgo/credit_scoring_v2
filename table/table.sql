@@ -528,6 +528,7 @@ create table questionnaire (
     -- ส่วนผู้กู้กรอก
     --
     suggest varchar not null default '', --ผู้แนะนำ
+    suggestW varchar not null default '', --ผู้แนะนำ
     suggestScore int, --คะแนนของผู้แนะนำ
     suggestGiveScore int, --คะแนนที่ผู้แนะนำให้กับ user
 

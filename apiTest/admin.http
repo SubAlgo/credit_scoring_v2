@@ -96,7 +96,7 @@ Content-Type: application/json
 X-Token: tQ-qgGaQH5UAyKeOdZaaWm4IJK2pXo0e1bn_NMbOsNs
 
 {
-  "worker_id": 25
+  "workerID": 25
 }
 
 ###

@@ -7,7 +7,7 @@ import (
 )
 
 type deleteWorkerRequest struct {
-	WorkerID int64 `json:"worker_id"`
+	WorkerID int64 `json:"workerID"`
 }
 
 type deleteWorkerResponse struct {

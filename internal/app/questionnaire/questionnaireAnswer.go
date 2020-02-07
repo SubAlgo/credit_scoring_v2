@@ -84,7 +84,7 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 	err = dbctx.QueryRow(ctx, `
 				insert into questionnaire
 				(loanerID, updatedBy,
-				suggest, suggestScore, suggestGiveScore,
+				suggest, suggestW, suggestScore, suggestGiveScore,
 				income, loan, debtPerMonth, totalDebt, saving, mortgageSecurities,
 				age, job, edu, timeJob, freChangeName, timeOfPhoneNumber, timeOfNameInHouseParticular, payDebtHistory, statusInHouseParticular,
 				incomePerDebt, totalDebtPerYearIncome, savingPerLoan, mortgageSecuritiesPerLoan,
@@ -102,7 +102,7 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 				)
 				values
 				($1, $1,
-				$2, $3, $4,
+				$2, $2, $3, $4,
 				$5, $6, $7, $8,$9, $10,
 				$11, $12, $13, $14, $15, $16, $17,$18, $19,
 				$20, $21,$22, $23,
