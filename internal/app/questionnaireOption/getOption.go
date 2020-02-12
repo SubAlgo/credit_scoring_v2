@@ -26,7 +26,7 @@ func getOption(ctx context.Context, req getQuestionnaireOptionRequest) (res opti
 
 	// get age option
 	{
-		rows, err := dbctx.Query(ctx, `select code, title from ageOption order by code`)
+		rows, err := dbctx.Query(ctx, `select code, title from ageOption order by no`)
 
 		defer rows.Close()
 

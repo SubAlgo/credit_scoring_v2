@@ -89,6 +89,12 @@ func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
 			return ErrInvalidInputAge
 		}
 
+		/*
+			if p.ageCode == "6" {
+				return ErrYourAgeCanNotLowerThan20
+			}
+		*/
+
 		if p.jobCode == "" || p.jobCode == "0" {
 			return ErrInvalidInputJob
 		}

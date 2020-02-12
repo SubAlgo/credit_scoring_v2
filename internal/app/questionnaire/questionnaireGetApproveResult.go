@@ -17,16 +17,30 @@ type getApproveResultResponse struct {
 	ApproveComment string  `json:"approveComment"`
 }
 
+type nullHandle struct {
+	loan           NullFloat64
+	interest       NullFloat64
+	approveTotal   NullFloat64
+	loanerPayBack  NullFloat64
+	approveComment NullString
+}
+
 func questionnaireGetApproveResult(ctx context.Context, req getApproveResultRequest) (res getApproveResultResponse, err error) {
 	userID := auth.GetUserID(ctx)
 
 	if userID == 0 {
 		return res, ErrSignInRequired
 	}
-
+	var d nullHandle
 	err = dbctx.QueryRow(ctx, `
-			select loan, approveTotal, interest, approveTotal, loanerPayBack, approveComment from questionnaire where loanerID = $1
-	`, userID).Scan(&res.Loan, &res.ApproveTotal, &res.InterestRate, &res.ApproveTotal, &res.Payback, &res.ApproveComment)
+			select loan, approveTotal, interest, loanerPayBack, approveComment from questionnaire where loanerID = $1
+	`, userID).Scan(&d.loan, &d.approveTotal, &d.interest, &d.loanerPayBack, &d.approveComment)
+
+	res.Loan = d.loan.Float64
+	res.ApproveTotal = d.approveTotal.Float64
+	res.InterestRate = d.interest.Float64
+	res.Payback = d.loanerPayBack.Float64
+	res.ApproveComment = d.approveComment.String
 
 	if err != nil {
 		return res, ErrQuestionnaireGetApproveResultDB
