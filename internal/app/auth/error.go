@@ -6,6 +6,7 @@ import (
 )
 
 var (
+	ErrFormatCitizenID        = errors.New("sign up: citizen id format ")
 	ErrEmailRequired          = errors.New("auth: email required")
 	ErrPasswordRequires       = errors.New("auth: password required")
 	ErrPasswordNotMatch       = errors.New("auth: password not match")
@@ -34,11 +35,12 @@ var (
 	ErrProvinceCodeInvalid    = errors.New("auth: province code invalid")
 	ErrUsernameRequired       = errors.New("auth: required email or phone number")
 	ErrBirthdayFormat         = errors.New("auth: birthday format error")
+	ErrInsertUserData         = errors.New("auth: insert user data to database")
 )
 
 func errorToStatusCode(err error) int {
 	switch err {
-	case ErrEmailRequired, ErrEmailInvalid, ErrPasswordRequires, ErrPasswordInvalid, ErrNameRequired, ErrSurNameRequired, ErrPhoneLength, ErrPhoneMustBeInt, ErrEmailNotAvailable, ErrPhoneNotAvailable:
+	case ErrFormatCitizenID, ErrEmailRequired, ErrEmailInvalid, ErrPasswordRequires, ErrPasswordInvalid, ErrNameRequired, ErrSurNameRequired, ErrPhoneLength, ErrPhoneMustBeInt, ErrEmailNotAvailable, ErrPhoneNotAvailable:
 		return http.StatusBadRequest
 
 	case ErrUsernameRequired, ErrTokenRequired, ErrPasswordNotMatch, ErrEmailDuplicated, ErrPhoneDuplicated, ErrSubDistrictRequired, ErrDistrictRequired, ErrProvinceCodeRequired, ErrGenderIDInvalid:
@@ -47,7 +49,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
-	case ErrHashPassword, ErrSomething:
+	case ErrHashPassword, ErrSomething, ErrInsertUserData:
 		return http.StatusInternalServerError
 	default:
 		return http.StatusInternalServerError
@@ -56,6 +58,8 @@ func errorToStatusCode(err error) int {
 
 func errorToMessage(err error) string {
 	switch err {
+	case ErrFormatCitizenID:
+		return "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
 	case ErrUsernameRequired:
 		return "กรุณาระบุ อีเมล หรือ เบอร์โทรศัพท์"
 	case ErrEmailInvalid:
@@ -71,7 +75,7 @@ func errorToMessage(err error) string {
 	case ErrSurNameRequired:
 		return "กรุณาระบุนามสกุลของท่าน"
 	case ErrPhoneLength:
-		return "เบอร์โทรต้องมีความยาว 10 ตัว"
+		return "เบอร์โทรศัพท์ต้องเป็นตัวเลขความยาว 9-10 ตัวเลข"
 	case ErrPhoneMustBeInt:
 		return "เบอร์โทรต้องเป็นตัวเลขเท่านั้้น"
 	case ErrEmailNotAvailable:
@@ -107,6 +111,8 @@ func errorToMessage(err error) string {
 		return "token required"
 	case ErrNotSignIn:
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
+	case ErrInsertUserData:
+		return "เกิดข้อผิดพลาดในการบันทึกข้อมูลการสมัครใช้บริการ"
 
 	case ErrSomething:
 		return "Internal server error"

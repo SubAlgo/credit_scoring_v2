@@ -15,6 +15,7 @@ import (
 )
 
 type signUpRequest struct {
+	CitizenID       string `json:"citizenID"`
 	Email           string `json:"email"`
 	Password        string `json:"password"`
 	PasswordConfirm string `json:"passwordConfirm"`
@@ -37,9 +38,12 @@ type signUpResponse struct {
 	ID      int64  `json:"id"`
 }
 
-// singUp loaner sing up 
+// singUp loaner sing up
 func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err error) {
 	roleID := 4
+	if len(req.CitizenID) != 13 {
+		return res, ErrFormatCitizenID
+	}
 
 	req.Email = strings.TrimSpace(req.Email)
 	req.Email = strings.ToLower(req.Email)
@@ -138,6 +142,7 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	}
 
 	// insert to DB
+
 	{
 		err = dbctx.QueryRow(ctx,
 			`insert into users 
