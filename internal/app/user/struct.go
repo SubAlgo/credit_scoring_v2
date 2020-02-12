@@ -13,6 +13,7 @@ type UserStruct struct {
 	UserID              int64  `json:"userID"`
 	RoleID              int    `json:"roleID"`
 	Role                string `json:"role"`
+	CitizenID           string `json:"citizenID"`
 	Email               string `json:"email"`
 	Name                string `json:"name"`
 	Surname             string `json:"surname"`
