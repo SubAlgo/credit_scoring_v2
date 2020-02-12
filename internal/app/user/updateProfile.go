@@ -21,6 +21,7 @@ func updateProfile(ctx context.Context, req UserStruct) (res processResponse, er
 	req.Facebook = strings.TrimSpace(req.Facebook)
 	req.IG = strings.TrimSpace(req.IG)
 	req.Line = strings.TrimSpace(req.Line)
+	req.CitizenID = strings.TrimSpace(req.CitizenID)
 
 	if req.Name == "" {
 		return res, ErrNameRequired
