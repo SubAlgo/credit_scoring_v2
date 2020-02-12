@@ -103,6 +103,7 @@ var (
 	ErrQuestionnaireInterestNotAvailable = errors.New("questionnaire interest rate not available")
 	ErrGetLoan                           = errors.New("questionnaire get loan data")
 	ErrQuestionnaireApprove              = errors.New("questionnaire approve update db")
+	ErrYourAgeCanNotLowerThan20          = errors.New("questionnaire: age can not lower than 20")
 )
 
 // get list
@@ -120,6 +121,8 @@ func errorToStatusCode(err error) int {
 		return http.StatusUnauthorized
 	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData, ErrQuestionnaireGetStatus:
 		return http.StatusInternalServerError
+	case ErrYourAgeCanNotLowerThan20:
+		return http.StatusBadRequest
 	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
 		return http.StatusNotAcceptable
 
@@ -228,6 +231,8 @@ func errorToMessage(err error) string {
 		return "internal server error (get questionnaire status)"
 	case ErrQuestionnaireGetApproveResultDB:
 		return "internal server error (get approve result db)"
+	case ErrYourAgeCanNotLowerThan20:
+		return "ไม่สามารถอนุมัติสินเชื่อให้ผู้มีอายุต่ำกว่า 20ปีได้"
 	default:
 		return "internal server error"
 	}
