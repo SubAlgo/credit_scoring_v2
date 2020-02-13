@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 )
 
@@ -23,6 +24,7 @@ func getProfile(ctx context.Context, req getProfileRequest) (res UserStruct, err
 	}
 
 	if err != nil {
+		fmt.Println(err)
 		return res, ErrGetProfile
 	}
 

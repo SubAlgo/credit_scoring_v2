@@ -32,8 +32,8 @@ POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
 {
-  "username": "kk@gmail.com",
-  "password": "123456"
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
 }
 
 ###
@@ -41,9 +41,10 @@ Content-Type: application/json
 ## Sign out
 POST http://localhost:8000/auth/signout
 Content-Type: application/json
-X-Token: -B_0_LVu66QlMdb2xp-Vdk_bmHC4j2sS1K9ugfMSLH0
+X-Token: a-vmT6KyTwwYFKyfOYHW7-hJoKMdlRIV5sg8uPl4ghA
 
 {
+  "token": "a-vmT6KyTwwYFKyfOYHW7-hJoKMdlRIV5sg8uPl4ghA"
 }
 
 ###

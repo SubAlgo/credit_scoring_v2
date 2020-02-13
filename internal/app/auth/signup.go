@@ -144,18 +144,34 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	// insert to DB
 
 	{
+		child := 0
+		facebook := ""
+		ig := ""
+		line := ""
+		addressNull := "-"
+
 		err = dbctx.QueryRow(ctx,
 			`insert into users 
-				(email, password, name, surname, birthday, 
-				phone, genderId , marriedId, religion, address1_home, 
-				subDistrict_home, district_home, provinceCode_home, zipCode_home,
-				roleId)
+				(citizenID, email, password, name, surname, 
+				birthday, phone, genderId , marriedId, religion, 
+				child, facebook, ig, line, address1_home, 
+				address2_home, subDistrict_home, district_home, provinceCode_home, zipCode_home, 
+				office_name, address1_office, address2_office, subDistrict_office, district_office, 
+				provinceCode_office, zipCode_office, roleId)
 			values
-				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+				($1, $2, $3, $4, $5, 
+				$6, $7, $8, $9, $10, 
+				$11, $12, $13, $14, $15, 
+				$16, $17, $18, $19, $20,
+				$21, $22, $23, $24, $25,
+				$26, $27, $28)
 			returning id
-		`, req.Email, hashedPassword, req.Name, req.Surname, req.Birthday,
-			req.Phone, req.GenderID, req.MarriedStatusID, req.Religion, req.Address,
-			req.SubDistrict, req.District, req.ProvinceCode, req.Zipcode, roleID).Scan(&res.ID)
+		`, req.CitizenID, req.Email, hashedPassword, req.Name, req.Surname,
+			req.Birthday, req.Phone, req.GenderID, req.MarriedStatusID, req.Religion,
+			child, facebook, ig, line, req.Address,
+			addressNull, req.SubDistrict, req.District, req.ProvinceCode, req.Zipcode,
+			"-", req.Address, addressNull, req.SubDistrict, req.District,
+			req.ProvinceCode, req.Zipcode, roleID).Scan(&res.ID)
 
 		if pgsql.IsUniqueViolation(err, "users_email_idx") {
 			return res, ErrEmailDuplicated

@@ -3,7 +3,7 @@ POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
 {
-  "username": "superadmin@gmail.com",
+  "username": "korn@gmail.com",
   "password": "12345678"
 }
 
@@ -72,7 +72,7 @@ X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
 ## get_profile
 POST http://localhost:8000/user/get_profile
 Content-Type: application/json
-X-Token: mjGtbWUpOY6sMp1MfOkI68BqOloO6-ulpClhx392VQU
+X-Token: a-vmT6KyTwwYFKyfOYHW7-hJoKMdlRIV5sg8uPl4ghA
 
 {
 }
