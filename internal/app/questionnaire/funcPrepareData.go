@@ -2,6 +2,7 @@ package questionnaire
 
 import (
 	"context"
+	"math"
 )
 
 type prepareArgs struct {
@@ -150,10 +151,9 @@ func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
 
 	// cal code incomePerDebt, totalDebtPerYearIncome ,savingPerLoan, mortgageSecuritiesPerLoan
 	{
-		incomePerDebt := ((p.income - p.debtPerMonth) / p.debtPerMonth) * 100
-		totalDebtPerYearIncome := (p.totalDebt / (p.income * 12)) * 100
-		savingPerLoan := (p.saving / p.loan) * 100
-
+		incomePerDebt := math.Round(((p.income - p.debtPerMonth) / p.debtPerMonth) * 100)
+		totalDebtPerYearIncome := math.Round((p.totalDebt / (p.income * 12)) * 100)
+		savingPerLoan := math.Round((p.saving / p.loan) * 100)
 		{
 			if incomePerDebt > 80 {
 				p.incomePerDebtCode = "5"
