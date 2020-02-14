@@ -80,7 +80,7 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 		left join genderStatus on users.genderID = genderStatus.id
 		left join roles on users.roleID = roles.id
 		where users.id = $1
-	`, userID).Scan(&u.RoleID, &up.role, &u.CitizenID, &up.email, &up.name, &up.surname, &up.genderID, &up.genderStatus, &up.marriedID, &up.marriedStatus, &up.religion, &up.birthday, &up.phone, &up.child,
+	`, userID).Scan(&u.RoleID, &up.role, &up.citizenID, &up.email, &up.name, &up.surname, &up.genderID, &up.genderStatus, &up.marriedID, &up.marriedStatus, &up.religion, &up.birthday, &up.phone, &up.child,
 		&up.facebook, &up.ig, &up.line,
 		&up.address1Home, &up.address2Home, &up.subDistrictHome, &up.districtHome, &up.provinceHome, &up.provinceHomeTitle, &up.zipCodeHome,
 		&up.officeName, &up.address1Office, &up.address2Office, &up.subDistrictOffice, &up.districtOffice, &up.provinceOffice, &up.provinceTitleOffice, &up.zipCodeOffice)
@@ -90,6 +90,7 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 	}
 	u.UserID = userID
 	u.Role = up.role.String
+	u.CitizenID = up.citizenID.String
 	u.Email = up.email.String
 	u.Name = up.name.String
 	u.Surname = up.surname.String

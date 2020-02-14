@@ -48,6 +48,7 @@ type UserStruct struct {
 
 type userProfile struct {
 	role                NullString
+	citizenID           NullString
 	email               NullString
 	name                NullString
 	surname             NullString

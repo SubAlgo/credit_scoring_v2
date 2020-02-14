@@ -36,14 +36,14 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 						approveRate, approveTotal, interest,
 						verifyComment, approveComment,
 						creditGrade, creditRisk, riskLevel, matrixIndex,
-						suggest, suggestScore, suggestGiveScore,
+						suggest, suggestW, suggestScore, suggestGiveScore,
 
 						income, loan, debtPerMonth, totalDebt, saving, mortgageSecurities,
 						age, job, edu, timeJob, freChangeName, timeOfPhoneNumber, timeOfNameInHouseParticular, payDebtHistory, statusInHouseParticular,
 						incomePerDebt, totalDebtPerYearIncome, savingPerLoan, mortgageSecuritiesPerLoan,
 						haveGuarantor, iamGuarantor, incomeTrend, loanObject, provinceCode,
 
-						incomeW, loanW, debtPerMonthW, totalDebtW, savingW, mortgageSecurities,
+						incomeW, loanW, debtPerMonthW, totalDebtW, savingW, mortgageSecuritiesW,
 						ageW, jobW, eduW, timeJobW, freChangeNameW, timeOfPhoneNumberW, timeOfNameInHouseParticularW, payDebtHistoryW, statusInHouseParticular,
 						incomePerDebtW, totalDebtPerYearIncomeW, savingPerLoanW, mortgageSecuritiesPerLoanW,
 						haveGuarantorW, iamGuarantorW, incomeTrendW, loanObjectW, provinceCodeW
@@ -62,7 +62,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 		&qn.ApproveRate, &qn.ApproveTotal, &qn.Interest,
 		&qn.VerifyComment, &qn.ApproveComment,
 		&res.CreditGrade, &res.CreditRisk, &res.RiskLevel, &res.MatrixIndex,
-		&res.Suggest, &res.SuggestScore, &res.SuggestGiveScore,
+		&res.Suggest, &res.SuggestW, &res.SuggestScore, &res.SuggestGiveScore,
 
 		&res.IncomeInput, &res.LoanInput, &res.DebtPerMonthInput, &res.TotalDebtInput, &res.SavingInput, &res.MortgageSecuritiesInput,
 		&res.AgeCode, &res.JobCode, &res.EduCode, &res.TimeJobCode, &res.FreChangeNameCode, &res.TimeOfPhoneNumberCode, &res.TimeOfNameInHouseParticularCode, &res.PayDebtHistoryCode, &res.StatusInHouseParticularCode,
@@ -212,7 +212,8 @@ func (req *QuestionnaireStruct) updateByWorker(ctx context.Context) (err error) 
 			matrixIndex =  $32,
 
 			verifyComment = $33,
-			statusID = $34
+			statusID = $34,
+			suggestW = $35
 
 		where loanerID = $1
 	`, req.LoanerID, req.WorkerID,                                                                                                                                                                                       //1-2
@@ -222,7 +223,7 @@ func (req *QuestionnaireStruct) updateByWorker(ctx context.Context) (err error) 
 		req.IncomePerDebtW, req.TotalDebtPerYearIncomeW, req.SavingPerLoanW, req.MortgageSecuritiesPerLoanW,                                                                                                             //20-23
 		req.HaveGuarantorCodeW, req.IamGuarantorCodeW, req.IncomeTrendCodeW, req.LoanObjectCodeW, req.ProvinceCodeW,                                                                                                     //24-28
 		req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex,                                                                                                                                                 //
-		req.VerifyComment, req.StatusID)
+		req.VerifyComment, req.StatusID, req.SuggestW)
 	return
 }
 

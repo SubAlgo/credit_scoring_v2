@@ -34,6 +34,7 @@ type QuestionnaireStruct struct {
 
 	// -- ข้อมูลผู้แนะนำ
 	Suggest          string `json:"suggest"`
+	SuggestW         string `json:"suggestW"`
 	SuggestScore     int    `json:"suggestScore"`
 	SuggestGiveScore int    `json:"suggestGiveScore"`
 
