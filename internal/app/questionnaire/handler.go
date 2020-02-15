@@ -35,6 +35,8 @@ func Handler() http.Handler {
 
 	mux.HandleFunc("/get_approve_result", questionnaireGetApproveResultHandler)
 
+	mux.HandleFunc("/send_back_to_verify", sendBackToVerifyHandler)
+
 	return mux
 }
 
@@ -189,5 +191,16 @@ func questionnaireGetApproveResultHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	res, err := questionnaireGetApproveResult(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func sendBackToVerifyHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req sendBackToVerifyRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := sendBackToVerify(ctx, req)
 	t.EncodeResult(w, res, err)
 }

@@ -108,18 +108,20 @@ var (
 
 // get list
 var (
-	ErrQuestionnaireGetListNewLoaner = errors.New("questionnaire get list new loaner")
+	ErrQuestionnaireGetListNewLoaner   = errors.New("questionnaire get list new loaner")
+	ErrSendBackToVerifyUpdateDB        = errors.New("questionnaireSendBackToVerify: update database error")
+	ErrSendBackToVerifyLoanerIDRequest = errors.New("questionnaireSendBackToVerify: request loaner id")
 )
 
 func errorToStatusCode(err error) int {
 	switch err {
 	case ErrIncomeMustBeNumber, ErrLoanMustBeNumber, ErrDebtPerMonthMustBeNumber, ErrTotalDebtMustBeNumber, ErrSavingMustBeNumber, ErrMortgageSecuritiesMustBeNumber, ErrQuestionnaireSelectDataMissingLoanerID:
 		return http.StatusBadRequest
-	case ErrIsNilIncomeInput, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput, ErrQuestionnaireStatusIDNotAvailable, ErrApproveRateNotAvailable, ErrQuestionnaireInterestNotAvailable:
+	case ErrIsNilIncomeInput, ErrSendBackToVerifyLoanerIDRequest, ErrIsNilLoanInput, ErrIsNilDebtPerMonthInput, ErrIsNilTotalDebtInput, ErrIsNilSavingInput, ErrIsNilMortgageSecuritiesInput, ErrQuestionnaireStatusIDNotAvailable, ErrApproveRateNotAvailable, ErrQuestionnaireInterestNotAvailable:
 		return http.StatusBadRequest
 	case ErrSignInRequired, ErrPermissionDeny:
 		return http.StatusUnauthorized
-	case ErrGetLoanerAge, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData, ErrQuestionnaireGetStatus:
+	case ErrGetLoanerAge, ErrSendBackToVerifyUpdateDB, ErrQuestionnaireLoanerUpdate, ErrQuestionnaireWorkerVerifyUpdate, ErrQuestionnaireSelectData, ErrQuestionnaireGetStatus:
 		return http.StatusInternalServerError
 	case ErrYourAgeCanNotLowerThan20:
 		return http.StatusBadRequest
@@ -231,6 +233,8 @@ func errorToMessage(err error) string {
 		return "internal server error (get questionnaire status)"
 	case ErrQuestionnaireGetApproveResultDB:
 		return "internal server error (get approve result db)"
+	case ErrSendBackToVerifyLoanerIDRequest:
+		return "ท่านไม่ได้ระบุรหัสผู้กู้"
 	case ErrYourAgeCanNotLowerThan20:
 		return "ไม่สามารถอนุมัติสินเชื่อให้ผู้มีอายุต่ำกว่า 20ปีได้"
 	default:
