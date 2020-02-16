@@ -71,6 +71,13 @@ var (
 	ErrQuestionnaireGetStatus = errors.New("questionnaireCheckStatus: get status error")
 )
 
+// questionnaireCountList
+var (
+	ErrGetTotalNewLoaner         = errors.New("questionnaireCountList: get total new loaner")
+	ErrGetTotalVerifyLoaner      = errors.New("questionnaireCountList: get total on verify loaner")
+	ErrGetTotalWaitApproveLoaner = errors.New("questionnaireCountList: get total wait approve loaner")
+)
+
 // error get score from DB
 var (
 	ErrGetAgeScoreFromDB                         = errors.New("error get age score from DB")
@@ -125,6 +132,8 @@ func errorToStatusCode(err error) int {
 		return http.StatusInternalServerError
 	case ErrYourAgeCanNotLowerThan20:
 		return http.StatusBadRequest
+	case ErrGetTotalNewLoaner, ErrGetTotalVerifyLoaner, ErrGetTotalWaitApproveLoaner:
+		return http.StatusInternalServerError
 	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
 		return http.StatusNotAcceptable
 
@@ -237,6 +246,12 @@ func errorToMessage(err error) string {
 		return "ท่านไม่ได้ระบุรหัสผู้กู้"
 	case ErrYourAgeCanNotLowerThan20:
 		return "ไม่สามารถอนุมัติสินเชื่อให้ผู้มีอายุต่ำกว่า 20ปีได้"
+	case ErrGetTotalNewLoaner:
+		return "เกิดข้อผิดพลาดในการนับจำนวนผู้กู้ (รายชื่อใหม่)"
+	case ErrGetTotalVerifyLoaner:
+		return "เกิดข้อผิดพลาดในการนับจำนวนผู้กู้ (รายชื่อที่อยู่ระหว่างการตรวจสอบ)"
+	case ErrGetTotalWaitApproveLoaner:
+		return "เกิดข้อผิดพลาดในการนับจำนวนผู้กู้ (รายชื่อที่รอการพิจารณาอนุมัติ)"
 	default:
 		return "internal server error"
 	}

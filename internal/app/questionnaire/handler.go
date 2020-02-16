@@ -36,7 +36,7 @@ func Handler() http.Handler {
 	mux.HandleFunc("/get_approve_result", questionnaireGetApproveResultHandler)
 
 	mux.HandleFunc("/send_back_to_verify", sendBackToVerifyHandler)
-
+	mux.HandleFunc("/count_total_questionnaire", questionnaireCountListHandler)
 	return mux
 }
 
@@ -202,5 +202,16 @@ func sendBackToVerifyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := sendBackToVerify(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireCountListHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req questionnaireCountListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireCountList(ctx, req)
 	t.EncodeResult(w, res, err)
 }
