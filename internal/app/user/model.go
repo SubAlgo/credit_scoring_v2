@@ -142,7 +142,7 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 		case "05":
 			monthText = "พฤษภาคม"
 		case "06":
-			monthText = "มิถุนาคม"
+			monthText = "มิถุนายน"
 		case "07":
 			monthText = "กรกฎาคม"
 		case "08":
