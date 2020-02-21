@@ -158,6 +158,5 @@ func (u *UserStruct) getProfile(ctx context.Context, userID int64) (err error) {
 		}
 		u.BirthdayTH = bDay[0] + " " + monthText + " " + yearStr
 	}
-
 	return
 }
