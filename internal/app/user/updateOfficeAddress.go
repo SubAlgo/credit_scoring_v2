@@ -47,7 +47,7 @@ func updateOfficeAddress(ctx context.Context, req UserStruct) (res processRespon
 	}
 
 	if req.ZipCodeOffice == "" {
-		return res, ErrZipcodeOfficeRequired
+		//return res, ErrZipcodeOfficeRequired
 	}
 
 	err = req.updateOfficeAddress(ctx)
