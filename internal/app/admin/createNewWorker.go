@@ -3,10 +3,10 @@ package admin
 import (
 	"context"
 	"fmt"
+	"github.com/acoshift/pgsql"
 	"github.com/asaskevich/govalidator"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/password"
-	"github.com/subalgo/credit_scoring_v2/internal/pkg/user"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -15,6 +15,7 @@ import (
 type createNewWorkerRequest struct {
 	Name            string `json:"name"`
 	Surname         string `json:"surname"`
+	CitizenID       string `json:"citizenID"`
 	Email           string `json:"email"`
 	Phone           string `json:"phone"`
 	Password        string `json:"password"`
@@ -30,22 +31,67 @@ type processResponse struct {
 }
 
 func createNewWorker(ctx context.Context, req createNewWorkerRequest) (res processResponse, err error) {
-	userRole := auth.GetUserRole(ctx)
+
 	req.MarriedStatusID = 1
-	
-	if userRole != 1 {
-		return res, ErrPermissionNotAllow
+
+	// check role is superAdmin
+	{
+		userRole := auth.GetUserRole(ctx)
+		if userRole != 1 {
+			return res, ErrPermissionNotAllow
+		}
 	}
 
-	req.Email = strings.TrimSpace(req.Email)
-	req.Email = strings.ToLower(req.Email)
-
-	if req.Email == "" {
-		return res, ErrEmailRequired
+	// Check input (name)
+	{
+		req.Name = strings.TrimSpace(req.Name)
+		if req.Name == "" {
+			return res, ErrNameRequired
+		}
 	}
 
-	if !govalidator.IsEmail(req.Email) {
-		return res, ErrEmailInvalid
+	// Check input (surname)
+	{
+		req.Surname = strings.TrimSpace(req.Surname)
+		if req.Surname == "" {
+			return res, ErrSurNameRequired
+		}
+	}
+
+	// Check input (citizen id)
+	{
+		req.CitizenID = strings.TrimSpace(req.CitizenID)
+		if req.CitizenID == "" {
+			return res, ErrCitizenIDRequired
+		}
+
+		if len(req.CitizenID) != 13 {
+			return res, ErrCitizenIDInvalid
+		}
+	}
+
+	{
+		req.Email = strings.TrimSpace(req.Email)
+		req.Email = strings.ToLower(req.Email)
+
+		if !govalidator.IsEmail(req.Email) {
+			return res, ErrEmailInvalid
+		}
+
+		if req.Email == "" {
+			return res, ErrEmailRequired
+		}
+	}
+
+	{
+		req.Phone = strings.TrimSpace(req.Phone)
+		if n := utf8.RuneCountInString(req.Phone); n != 10 {
+			return res, ErrPhoneLength
+		}
+		_, err = strconv.ParseInt(req.Phone, 10, 64)
+		if err != nil {
+			return res, ErrPhoneMustBeInt
+		}
 	}
 
 	if req.Password == "" {
@@ -60,49 +106,17 @@ func createNewWorker(ctx context.Context, req createNewWorkerRequest) (res proce
 		return res, ErrHashPassword
 	}
 
-	req.Name = strings.TrimSpace(req.Name)
-	req.Surname = strings.TrimSpace(req.Surname)
-	req.Phone = strings.TrimSpace(req.Phone)
+	_, err = req.insert(ctx, hashedPassword)
 
-	if req.Name == "" {
-		return res, ErrNameRequired
-	}
-	if req.Surname == "" {
-		return res, ErrSurNameRequired
+	if pgsql.IsUniqueViolation(err, "users_citizenid_idx") {
+		return res, ErrCitizenIDDuplicated
 	}
 
-	if n := utf8.RuneCountInString(req.Phone); n != 10 {
-		return res, ErrPhoneLength
-	}
-	_, err = strconv.ParseInt(req.Phone, 10, 64)
-	if err != nil {
-		return res, ErrPhoneMustBeInt
-	}
-
-	arg := user.SignUpArgs{
-		Name:            req.Name,
-		Surname:         req.Surname,
-		Email:           req.Email,
-		Phone:           req.Phone,
-		HashPassword:    hashedPassword,
-		Birthday:        req.Birthday,
-		GenderID:        req.GenderID,
-		MarriedStatusID: req.MarriedStatusID,
-		Religion:        req.Religion,
-		RoleId:          req.RoleID}
-
-	_, err = user.Insert(ctx, &arg)
-	if err == user.ErrEmailDuplicated {
-		return res, ErrEmailNotAvailable
-	}
-
-	if err == user.ErrPhoneDuplicated {
-		return res, ErrPhoneNotAvailable
-	}
 	if err != nil {
 		fmt.Println(err)
 		return res, ErrSomething
 	}
+
 	res.Message = "สร้างบัญชีพนักงานสำเร็จ"
 
 	return

@@ -70,3 +70,14 @@ X-Token: ukbLM9p4-VVWaqfjc8kDIOEty1U_23c6Blut4bJVovg
 }
 
 ###
+
+
+## Get loaner list in status wait approve
+POST http://localhost:8000/questionnaire/count_total_questionnaire
+Content-Type: application/json
+X-Token: 1qDFrWcAdXMQe-Av63fvEEDtP2cZ6zBugx5Rhm8Tfys
+
+{
+}
+
+###

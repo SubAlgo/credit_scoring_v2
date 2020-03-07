@@ -22,13 +22,15 @@ var (
 	ErrSomething          = errors.New("admin: error something")
 	ErrTokenRequired      = errors.New("admin: token required")
 	ErrNotSignIn          = errors.New("admin: not sign in")
+	ErrCitizenIDRequired  = errors.New("admin: citizen id required")
+	ErrCitizenIDInvalid   = errors.New("admin: citizen id invalid")
 
-	ErrUsernameRequired   = errors.New("admin: required email or phone number")
-	ErrPermissionNotAllow = errors.New("admin: permission not allow")
-	ErrParamMissing       = errors.New("admin: param missing")
-	ErrUpdateUserRole     = errors.New("admin: update user role")
-
-	ErrGetListEmployee = errors.New("admin: get list employee")
+	ErrUsernameRequired    = errors.New("admin: required email or phone number")
+	ErrPermissionNotAllow  = errors.New("admin: permission not allow")
+	ErrParamMissing        = errors.New("admin: param missing")
+	ErrUpdateUserRole      = errors.New("admin: update user role")
+	ErrCitizenIDDuplicated = errors.New("admin: citizen id duplicated")
+	ErrGetListEmployee     = errors.New("admin: get list employee")
 
 	ErrGetWorkerRole          = errors.New("admin: error get worker")
 	ErrDisableDeleteSuperUser = errors.New("admin: can not delete super user")
@@ -40,7 +42,9 @@ func errorToStatusCode(err error) int {
 	case ErrEmailRequired, ErrEmailInvalid, ErrPasswordRequires, ErrPasswordInvalid, ErrNameRequired, ErrSurNameRequired, ErrPhoneLength, ErrPhoneMustBeInt, ErrEmailNotAvailable, ErrPhoneNotAvailable:
 		return http.StatusBadRequest
 
-	case ErrUsernameRequired, ErrTokenRequired, ErrParamMissing:
+	case ErrUsernameRequired, ErrTokenRequired, ErrParamMissing, ErrCitizenIDRequired, ErrCitizenIDInvalid:
+		return http.StatusBadRequest
+	case ErrCitizenIDDuplicated:
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
@@ -61,11 +65,15 @@ func errorToMessage(err error) string {
 		return "กรุณากำหนดระหัสผ่าน"
 	case ErrPasswordInvalid:
 		return "พาสเวิร์ดต้องมีความยาว 6 - 20 ตัวอักษร"
+	case ErrCitizenIDRequired:
+		return "กรุณาระบุรหัสบัตรประชาชนของพนักงาน"
+	case ErrCitizenIDInvalid:
+		return "รหัสบัตรประชาชนต้องเป็นตัวเลข ความยาว 13 ตัว"
 
 	case ErrNameRequired:
-		return "กรุณาระบุชื่อของท่าน"
+		return "กรุณาระบุชื่อ"
 	case ErrSurNameRequired:
-		return "กรุณาระบุนามสกุลของท่าน"
+		return "กรุณาระบุนามสกุล"
 	case ErrPhoneLength:
 		return "เบอร์โทรต้องมีความยาว 10 ตัว"
 	case ErrPhoneMustBeInt:
@@ -81,6 +89,8 @@ func errorToMessage(err error) string {
 		return "อีเมลหรือหมายเลขโทรศัพท์ที่คุณป้อนไม่ตรงกับบัญชีผู้ใช้ใดๆ"
 	case ErrTokenRequired:
 		return "token required"
+	case ErrCitizenIDDuplicated:
+		return "รหัสบัตรประชาชนนี้มีผู้ใช้แล้ว"
 	case ErrNotSignIn:
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
 
