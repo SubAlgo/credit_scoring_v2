@@ -60,6 +60,8 @@ func errorToMessage(err error) string {
 	switch err {
 	case ErrFormatCitizenID:
 		return "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
+	case ErrPasswordRequired:
+		return "กรุณากรอกรหัสผ่าน"
 	case ErrUsernameRequired:
 		return "กรุณาระบุ อีเมล หรือ เบอร์โทรศัพท์"
 	case ErrEmailInvalid:
