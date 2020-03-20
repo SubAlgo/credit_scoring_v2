@@ -89,3 +89,15 @@ X-Token: UYVsyg_VOwlcuuDvOr0xniWfoN1NVwmAvBjXjDoX4ig
 }
 
 ###
+
+## get_profile_by_id
+POST http://localhost:8000/user/change_forgot_password_question
+Content-Type: application/json
+X-Token: UYVsyg_VOwlcuuDvOr0xniWfoN1NVwmAvBjXjDoX4ig
+
+{
+  "questionID": 0,
+  "answer": "ไก่ทอด"
+}
+
+###

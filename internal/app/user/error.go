@@ -54,6 +54,14 @@ var (
 	ErrPkgGetAge        = errors.New("getProfile: package user.GetAge")
 )
 
+// set new forgot password
+var (
+	ErrQuestionIDRequired                    = errors.New("forgotPasswordQuestion: question id required")
+	ErrForgotPasswordAnswer                  = errors.New("forgotPasswordQuestion: question answer required")
+	ErrUpdateForgotPasswordQuestion          = errors.New("forgotPasswordQuestion: update to database")
+	ErrSelectForgotPasswordQuestionAndAnswer = errors.New("forgotPasswordQuestion: select question and answer")
+)
+
 func errorToStatusCode(err error) int {
 	switch err {
 	case ErrUserNotLogin:
@@ -72,6 +80,10 @@ func errorToStatusCode(err error) int {
 		return http.StatusBadRequest
 	case ErrNotPermission:
 		return http.StatusNotAcceptable
+	case ErrQuestionIDRequired, ErrForgotPasswordAnswer:
+		return http.StatusBadRequest
+	case ErrUpdateForgotPasswordQuestion, ErrSelectForgotPasswordQuestionAndAnswer:
+		return http.StatusInternalServerError
 	default:
 		return http.StatusInternalServerError
 	}
@@ -112,6 +124,14 @@ func errorToMessage(err error) string {
 		return "ไม่พบข้อมูลของผู้ใช้รายนี้"
 	case ErrNotPermission:
 		return "ท่านไม่สามารถใช้ฟังค์ชั่นนี้ได้"
+	case ErrQuestionIDRequired:
+		return "กรุณาระบุคำถามสำหรับกู้รหัสผ่าน"
+	case ErrForgotPasswordAnswer:
+		return "กรุณาระบุคำตอบสำหรับกู้รหัสผ่าน"
+	case ErrUpdateForgotPasswordQuestion:
+		return "internal server error (change forgot password question)"
+	case ErrSelectForgotPasswordQuestionAndAnswer:
+		return "internal server error (select forgot password question and answer)"
 	default:
 		return "internal server error"
 	}

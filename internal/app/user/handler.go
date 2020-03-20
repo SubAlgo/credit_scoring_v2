@@ -21,6 +21,8 @@ func Handler() http.Handler {
 	mux.HandleFunc("/change_password", changePasswordHandler)
 	mux.HandleFunc("/get_profile", getProfileHandler)
 	mux.HandleFunc("/get_profile_by_id", getProfileByIDHandler)
+	mux.HandleFunc("/change_forgot_password_question", changeForgotPasswordQuestionHandler)
+	mux.HandleFunc("/get_old_forgot_password_and_answer", getOldForgotPasswordAndAnswerHandler)
 
 	return mux
 
@@ -89,5 +91,27 @@ func getProfileByIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := getProfileByID(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func changeForgotPasswordQuestionHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req changeForgotPasswordQuestionRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := changeForgotPasswordQuestion(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func getOldForgotPasswordAndAnswerHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getOldForgotPasswordAndAnswerRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := getOldForgotPasswordAndAnswer(ctx, req)
 	t.EncodeResult(w, res, err)
 }
