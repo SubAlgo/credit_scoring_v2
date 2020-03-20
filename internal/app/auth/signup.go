@@ -15,22 +15,24 @@ import (
 )
 
 type signUpRequest struct {
-	CitizenID       string `json:"citizenID"`
-	Email           string `json:"email"`
-	Password        string `json:"password"`
-	PasswordConfirm string `json:"passwordConfirm"`
-	Name            string `json:"name"`
-	Surname         string `json:"surname"`
-	Phone           string `json:"phone"`
-	Birthday        string `json:"birth"` //format 01/01/1990
-	GenderID        int    `json:"genderID"`
-	MarriedStatusID int    `json:"marriedStatusID"`
-	Religion        string `json:"religion"`
-	Address         string `json:"address"`
-	SubDistrict     string `json:"subDistrict"`
-	District        string `json:"district"`
-	ProvinceCode    string `json:"provinceCode"`
-	Zipcode         string `json:"zipcode"`
+	CitizenID             string `json:"citizenID"`
+	Email                 string `json:"email"`
+	Password              string `json:"password"`
+	PasswordConfirm       string `json:"passwordConfirm"`
+	Name                  string `json:"name"`
+	Surname               string `json:"surname"`
+	Phone                 string `json:"phone"`
+	Birthday              string `json:"birth"` //format 01/01/1990
+	ForgotPasswordQuestID int    `json:"forgotPasswordQuestID"`
+	ForgotPasswordAns     string `json:"forgotPasswordAns"`
+	GenderID              int    `json:"genderID"`
+	MarriedStatusID       int    `json:"marriedStatusID"`
+	Religion              string `json:"religion"`
+	Address               string `json:"address"`
+	SubDistrict           string `json:"subDistrict"`
+	District              string `json:"district"`
+	ProvinceCode          string `json:"provinceCode"`
+	Zipcode               string `json:"zipcode"`
 }
 
 type signUpResponse struct {
@@ -140,6 +142,12 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 	if r := strings.TrimSpace(req.Zipcode); r == "" {
 		//return res, ErrZipcodeRequired
 	}
+	if req.ForgotPasswordQuestID == 0 {
+		return res, ErrForgotPasswordQuestIDRequired
+	}
+	if r := strings.TrimSpace(req.ForgotPasswordAns); r == "" {
+		return res, ErrForgotPasswordAnsRequired
+	}
 
 	// insert to DB
 
@@ -157,19 +165,19 @@ func signUp(ctx context.Context, req signUpRequest) (res signUpResponse, err err
 				birthday, phone, genderId , marriedId, religion, 
 				child, facebook, ig, line, address1_home, 
 				address2_home, subDistrict_home, district_home, provinceCode_home, zipCode_home, 
-				roleId)
+				forgotPasswordQuestionID, forgotPasswordAns, roleId)
 			values
 				($1, $2, $3, $4, $5, 
 				$6, $7, $8, $9, $10, 
 				$11, $12, $13, $14, $15, 
 				$16, $17, $18, $19, $20,
-				$21)
+				$21, $22, $23)
 			returning id
 			`, req.CitizenID, req.Email, hashedPassword, req.Name, req.Surname,
 				req.Birthday, req.Phone, req.GenderID, req.MarriedStatusID, req.Religion,
 				child, facebook, ig, line, req.Address,
 				addressNull, req.SubDistrict, req.District, req.ProvinceCode, req.Zipcode,
-				roleID).Scan(&res.ID)
+				req.ForgotPasswordQuestID, req.ForgotPasswordAns, roleID).Scan(&res.ID)
 		}
 
 		if pgsql.IsUniqueViolation(err, "users_email_idx") {

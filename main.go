@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/subalgo/credit_scoring_v2/internal/app/admin"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
+	"github.com/subalgo/credit_scoring_v2/internal/app/forgotPassword"
 	"github.com/subalgo/credit_scoring_v2/internal/app/location"
 	"github.com/subalgo/credit_scoring_v2/internal/app/permissionSetting"
 	"github.com/subalgo/credit_scoring_v2/internal/app/province"
@@ -35,7 +36,7 @@ func main() {
 
 	redisAddr := os.Getenv("REDIS_ADDR")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
-	
+
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
 	}
@@ -58,6 +59,7 @@ func main() {
 	mux.Handle("/questionnaireOption/", http.StripPrefix("/questionnaireOption", questionnaireOption.Handler()))
 	mux.Handle("/location/", http.StripPrefix("/location", location.Handler()))
 	mux.Handle("/province/", http.StripPrefix("/province", province.Handler()))
+	mux.Handle("/forgot_password/", http.StripPrefix("/forgot_password", forgotPassword.Handler()))
 
 	h := chain(
 		dbctx.Middleware(db),

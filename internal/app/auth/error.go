@@ -6,36 +6,38 @@ import (
 )
 
 var (
-	ErrFormatCitizenID        = errors.New("sign up: citizen id format ")
-	ErrEmailRequired          = errors.New("auth: email required")
-	ErrPasswordRequires       = errors.New("auth: password required")
-	ErrPasswordNotMatch       = errors.New("auth: password not match")
-	ErrInvalidCredentials     = errors.New("auth: invalid credentials")
-	ErrEmailInvalid           = errors.New("auth: email invalid")
-	ErrPasswordInvalid        = errors.New("auth: password invalid")
-	ErrPasswordRequired       = errors.New("auth: password required")
-	ErrHashPassword           = errors.New("auth: hash password has problem")
-	ErrNameRequired           = errors.New("auth: name required")
-	ErrSurNameRequired        = errors.New("auth: surname required")
-	ErrPhoneLength            = errors.New("auth: phone number length not equal 10")
-	ErrPhoneMustBeInt         = errors.New("auth: phone number must be integer")
-	ErrEmailNotAvailable      = errors.New("auth: email not available")
-	ErrEmailDuplicated        = errors.New("auth: email duplicated")
-	ErrPhoneDuplicated        = errors.New("auth: phone duplicated")
-	ErrPhoneNotAvailable      = errors.New("auth: phone not available")
-	ErrSomething              = errors.New("auth: error something")
-	ErrTokenRequired          = errors.New("auth: token required")
-	ErrNotSignIn              = errors.New("auth: not sign in")
-	ErrSubDistrictRequired    = errors.New("auth: subDistrict required")
-	ErrDistrictRequired       = errors.New("auth: district required")
-	ErrProvinceCodeRequired   = errors.New("auth: province required")
-	ErrGenderIDInvalid        = errors.New("auth: gender id invalid")
-	ErrMarriedStatusIDInvalid = errors.New("auth: married status id invalid")
-	ErrZipcodeRequired        = errors.New("auth: zipcode required")
-	ErrProvinceCodeInvalid    = errors.New("auth: province code invalid")
-	ErrUsernameRequired       = errors.New("auth: required email or phone number")
-	ErrBirthdayFormat         = errors.New("auth: birthday format error")
-	ErrInsertUserData         = errors.New("auth: insert user data to database")
+	ErrFormatCitizenID               = errors.New("sign up: citizen id format ")
+	ErrEmailRequired                 = errors.New("auth: email required")
+	ErrPasswordRequires              = errors.New("auth: password required")
+	ErrPasswordNotMatch              = errors.New("auth: password not match")
+	ErrInvalidCredentials            = errors.New("auth: invalid credentials")
+	ErrEmailInvalid                  = errors.New("auth: email invalid")
+	ErrPasswordInvalid               = errors.New("auth: password invalid")
+	ErrPasswordRequired              = errors.New("auth: password required")
+	ErrHashPassword                  = errors.New("auth: hash password has problem")
+	ErrNameRequired                  = errors.New("auth: name required")
+	ErrSurNameRequired               = errors.New("auth: surname required")
+	ErrPhoneLength                   = errors.New("auth: phone number length not equal 10")
+	ErrPhoneMustBeInt                = errors.New("auth: phone number must be integer")
+	ErrEmailNotAvailable             = errors.New("auth: email not available")
+	ErrEmailDuplicated               = errors.New("auth: email duplicated")
+	ErrPhoneDuplicated               = errors.New("auth: phone duplicated")
+	ErrPhoneNotAvailable             = errors.New("auth: phone not available")
+	ErrSomething                     = errors.New("auth: error something")
+	ErrTokenRequired                 = errors.New("auth: token required")
+	ErrNotSignIn                     = errors.New("auth: not sign in")
+	ErrSubDistrictRequired           = errors.New("auth: subDistrict required")
+	ErrDistrictRequired              = errors.New("auth: district required")
+	ErrProvinceCodeRequired          = errors.New("auth: province required")
+	ErrGenderIDInvalid               = errors.New("auth: gender id invalid")
+	ErrMarriedStatusIDInvalid        = errors.New("auth: married status id invalid")
+	ErrZipcodeRequired               = errors.New("auth: zipcode required")
+	ErrProvinceCodeInvalid           = errors.New("auth: province code invalid")
+	ErrUsernameRequired              = errors.New("auth: required email or phone number")
+	ErrBirthdayFormat                = errors.New("auth: birthday format error")
+	ErrInsertUserData                = errors.New("auth: insert user data to database")
+	ErrForgotPasswordAnsRequired     = errors.New("auth: forgot password answer required")
+	ErrForgotPasswordQuestIDRequired = errors.New("auth: forgot password question id required")
 )
 
 func errorToStatusCode(err error) int {
@@ -45,7 +47,7 @@ func errorToStatusCode(err error) int {
 
 	case ErrUsernameRequired, ErrTokenRequired, ErrPasswordNotMatch, ErrEmailDuplicated, ErrPhoneDuplicated, ErrSubDistrictRequired, ErrDistrictRequired, ErrProvinceCodeRequired, ErrGenderIDInvalid:
 		return http.StatusBadRequest
-	case ErrMarriedStatusIDInvalid, ErrZipcodeRequired, ErrProvinceCodeInvalid, ErrBirthdayFormat:
+	case ErrMarriedStatusIDInvalid, ErrZipcodeRequired, ErrProvinceCodeInvalid, ErrBirthdayFormat, ErrForgotPasswordAnsRequired, ErrForgotPasswordQuestIDRequired:
 		return http.StatusBadRequest
 	case ErrInvalidCredentials, ErrNotSignIn:
 		return http.StatusUnauthorized
@@ -115,6 +117,10 @@ func errorToMessage(err error) string {
 		return "ท่านยังไม่ได้เข้าสู่ระบบ"
 	case ErrInsertUserData:
 		return "เกิดข้อผิดพลาดในการบันทึกข้อมูลการสมัครใช้บริการ"
+	case ErrForgotPasswordAnsRequired:
+		return "กรุณาระบุคำตอบสำหรับกู้รหัสผ่าน"
+	case ErrForgotPasswordQuestIDRequired:
+		return "กรุณาเลือกคำถามสำหรับกู้รหัสผ่าน"
 
 	case ErrSomething:
 		return "Internal server error"
