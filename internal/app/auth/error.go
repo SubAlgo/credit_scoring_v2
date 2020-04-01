@@ -38,13 +38,13 @@ var (
 	ErrInsertUserData                = errors.New("auth: insert user data to database")
 	ErrForgotPasswordAnsRequired     = errors.New("auth: forgot password answer required")
 	ErrForgotPasswordQuestIDRequired = errors.New("auth: forgot password question id required")
+	ErrLoginFailed                   = errors.New("auth: login failed")
 )
 
 func errorToStatusCode(err error) int {
 	switch err {
 	case ErrFormatCitizenID, ErrEmailRequired, ErrEmailInvalid, ErrPasswordRequires, ErrPasswordInvalid, ErrNameRequired, ErrSurNameRequired, ErrPhoneLength, ErrPhoneMustBeInt, ErrEmailNotAvailable, ErrPhoneNotAvailable:
 		return http.StatusBadRequest
-
 	case ErrUsernameRequired, ErrTokenRequired, ErrPasswordNotMatch, ErrEmailDuplicated, ErrPhoneDuplicated, ErrSubDistrictRequired, ErrDistrictRequired, ErrProvinceCodeRequired, ErrGenderIDInvalid:
 		return http.StatusBadRequest
 	case ErrMarriedStatusIDInvalid, ErrZipcodeRequired, ErrProvinceCodeInvalid, ErrBirthdayFormat, ErrForgotPasswordAnsRequired, ErrForgotPasswordQuestIDRequired:
@@ -53,6 +53,8 @@ func errorToStatusCode(err error) int {
 		return http.StatusUnauthorized
 	case ErrHashPassword, ErrSomething, ErrInsertUserData:
 		return http.StatusInternalServerError
+	case ErrLoginFailed:
+		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
 	}
@@ -99,7 +101,7 @@ func errorToMessage(err error) string {
 	case ErrEmailRequired:
 		return "กรุณาระบุ อีเมล์ หรือ เบอร์โทรศัพท์ เพื่อเข้าสู่ระบบ"
 	case ErrInvalidCredentials:
-		return "อีเมลหรือหมายเลขโทรศัพท์ที่คุณป้อนไม่ตรงกับบัญชีผู้ใช้ใดๆ"
+		return "อีเมล หรือ หมายเลขโทรศัพท์ ที่คุณระบุไม่ตรงกับบัญชีผู้ใช้ใดๆ"
 	case ErrGenderIDInvalid:
 		return "กรุณาระบุเพศของท่าน"
 	case ErrMarriedStatusIDInvalid:
@@ -110,7 +112,8 @@ func errorToMessage(err error) string {
 		return "ท่านระบุข้อมูลจังหวัดไม่ถูกต้อง"
 	case ErrBirthdayFormat:
 		return "format birthday not available [dd/mm/yyyy]"
-
+	case ErrLoginFailed:
+		return "รหัสผ่านไม่ถูกต้อง"
 	case ErrTokenRequired:
 		return "token required"
 	case ErrNotSignIn:
