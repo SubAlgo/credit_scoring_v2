@@ -132,7 +132,7 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 		return res, ErrQuestionnaireInsert
 	}
 
-	res.Message = "บันทึกข้อมูลสำเร็จ"
+	res.Message = "'แบบประเมินขออนุมัติสินเชื่อของท่านได้ถูกบันทึกเรียบร้อยแล้ว กรุณาตรวจสอบความถูกต้องของข้อมูล เพื่อส่งแบบประเมินขออนุมัติสินเชื่อแก่เจ้าหน้าที่ ในหน้าถัดไป'"
 
 	return
 }
