@@ -29,6 +29,7 @@ func Handler() http.Handler {
 
 	mux.HandleFunc("/get_questionnaire_data", questionnaireGetDataHandler)
 
+	mux.HandleFunc("/get_list_new_loaner_not_make", questionnaireGetListNewLoanerNotMakeQuestionnaireHandler)
 	mux.HandleFunc("/get_list_new_loaner", questionnaireGetListNewLoanerHandler)
 	mux.HandleFunc("/get_list_in_verify", questionnaireGetListInVerifyHandler)
 	mux.HandleFunc("/get_list_wait_approve", questionnaireGetListWaitApproveHandler)
@@ -213,5 +214,16 @@ func questionnaireCountListHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res, err := questionnaireCountList(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListNewLoanerNotMakeQuestionnaireHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListNewLoanerNotMakeQuestionnaire(ctx, req)
 	t.EncodeResult(w, res, err)
 }

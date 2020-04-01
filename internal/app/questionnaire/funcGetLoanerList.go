@@ -10,6 +10,7 @@ type loanerData struct {
 	LoanerID      int64  `json:"loanerID"`
 	Name          string `json:"name"`
 	Surname       string `json:"surname"`
+	Email         string `json:"email"`
 	SendAt        string `json:"sendAt"`
 	UpdatedAt     string `json:"updatedAt"`
 	UpdatedByID   int64  `json:"updatedByID"`
