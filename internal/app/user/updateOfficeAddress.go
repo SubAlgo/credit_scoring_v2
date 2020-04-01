@@ -56,6 +56,10 @@ func updateOfficeAddress(ctx context.Context, req UserStruct) (res processRespon
 		return res, ErrProvinceCodeInvalid
 	}
 
+	if pgsql.IsForeignKeyViolation(err, "users_provincecode_office_fkey") {
+		return res, ErrProvinceCodeInvalid
+	}
+
 	if err != nil {
 		fmt.Println(err)
 		return res, ErrUpdateDataBaseOfficeAddress
