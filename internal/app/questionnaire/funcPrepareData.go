@@ -353,18 +353,33 @@ func (p *prepareArgs) prepareData(ctx context.Context) (err error) {
 
 	//cal credit grade
 	{
-		if totalCriteriaScore >= 800 && totalCriteriaScore <= 1000 {
+		if totalCriteriaScore >= 800 {
 			p.creditGrade = "A"
-		} else if totalCriteriaScore >= 700 && totalCriteriaScore <= 799 {
+		} else if totalCriteriaScore >= 700 && totalCriteriaScore < 800 {
 			p.creditGrade = "B"
-		} else if totalCriteriaScore >= 600 && totalCriteriaScore <= 699 {
+		} else if totalCriteriaScore >= 600 && totalCriteriaScore < 700 {
 			p.creditGrade = "C"
-		} else if totalCriteriaScore >= 500 && totalCriteriaScore <= 599 {
+		} else if totalCriteriaScore >= 500 && totalCriteriaScore < 600 {
 			p.creditGrade = "D"
-		} else if totalCriteriaScore <= 499 {
+		} else if totalCriteriaScore < 500 {
 			p.creditGrade = "F"
 		}
 	}
+	/*
+		{
+			if totalCriteriaScore >= 800 && totalCriteriaScore <= 1000 {
+				p.creditGrade = "A"
+			} else if totalCriteriaScore >= 700 && totalCriteriaScore <= 799 {
+				p.creditGrade = "B"
+			} else if totalCriteriaScore >= 600 && totalCriteriaScore <= 699 {
+				p.creditGrade = "C"
+			} else if totalCriteriaScore >= 500 && totalCriteriaScore <= 599 {
+				p.creditGrade = "D"
+			} else if totalCriteriaScore <= 499 {
+				p.creditGrade = "F"
+			}
+		}
+	*/
 
 	//cal credit risk
 	{
