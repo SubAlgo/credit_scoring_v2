@@ -53,7 +53,7 @@ func signIn(ctx context.Context, req signInRequest) (res signInResponse, err err
 	}
 
 	if !password.Compare(hashedPassword, req.Password) {
-		return res, ErrInvalidCredentials
+		return res, ErrLoginFailed
 	}
 
 	token, err := generateToken()
