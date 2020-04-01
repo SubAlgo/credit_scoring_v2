@@ -13,17 +13,19 @@ import (
 )
 
 type createNewWorkerRequest struct {
-	Name            string `json:"name"`
-	Surname         string `json:"surname"`
-	CitizenID       string `json:"citizenID"`
-	Email           string `json:"email"`
-	Phone           string `json:"phone"`
-	Password        string `json:"password"`
-	Birthday        string `json:"birth"`
-	GenderID        int    `json:"genderID"`
-	MarriedStatusID int    `json:"marriedStatusID"`
-	Religion        string `json:"religion"`
-	RoleID          int    `json:"roleID"`
+	Name                     string `json:"name"`
+	Surname                  string `json:"surname"`
+	CitizenID                string `json:"citizenID"`
+	Email                    string `json:"email"`
+	Phone                    string `json:"phone"`
+	Password                 string `json:"password"`
+	Birthday                 string `json:"birth"`
+	GenderID                 int    `json:"genderID"`
+	MarriedStatusID          int    `json:"marriedStatusID"`
+	Religion                 string `json:"religion"`
+	ForgotPasswordQuestionID int    `json:"forgotPasswordQuestionID"`
+	ForgotPasswordAns        string `json:"forgotPasswordAns"`
+	RoleID                   int    `json:"roleID"`
 }
 
 type processResponse struct {
@@ -31,7 +33,7 @@ type processResponse struct {
 }
 
 func createNewWorker(ctx context.Context, req createNewWorkerRequest) (res processResponse, err error) {
-
+	//fmt.Println(req.RoleID)
 	req.MarriedStatusID = 1
 
 	// check role is superAdmin
