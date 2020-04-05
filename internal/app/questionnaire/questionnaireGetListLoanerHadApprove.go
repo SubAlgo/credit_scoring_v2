@@ -2,15 +2,11 @@ package questionnaire
 
 import (
 	"context"
+	"fmt"
 	"github.com/subalgo/credit_scoring_v2/internal/app/auth"
 )
 
-type getQuestionnaireListRequest struct {
-	Name    string `json:"name"`
-	Surname string `json:"surname"`
-}
-
-func questionnaireGetListNewLoaner(ctx context.Context, req getQuestionnaireListRequest) (res loanerList, err error) {
+func questionnaireGetListLoanerHadApprove(ctx context.Context, req getQuestionnaireListRequest) (res loanerList, err error) {
 
 	// check permission access
 	{
@@ -29,11 +25,12 @@ func questionnaireGetListNewLoaner(ctx context.Context, req getQuestionnaireList
 		}
 	}
 
-	statusID := 2
+	statusID := 5
 	getListParam := getLoanerListRequest{statusID: statusID, name: req.Name, surname: req.Surname}
 	res, err = getLoanerList(ctx, getListParam)
 
 	if err != nil {
+		fmt.Println(err)
 		return res, ErrQuestionnaireGetListNewLoaner
 	}
 

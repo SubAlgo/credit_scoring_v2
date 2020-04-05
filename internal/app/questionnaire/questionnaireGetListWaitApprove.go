@@ -24,7 +24,8 @@ func questionnaireGetListWaitApprove(ctx context.Context, req getQuestionnaireLi
 	}
 
 	statusID := 4
-	res, err = getLoanerList(ctx, statusID)
+	getListParam := getLoanerListRequest{statusID: statusID, name: req.Name, surname: req.Surname}
+	res, err = getLoanerList(ctx, getListParam)
 
 	if err != nil {
 		return res, ErrQuestionnaireGetListNewLoaner

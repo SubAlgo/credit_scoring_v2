@@ -2,6 +2,7 @@ package questionnaire
 
 import (
 	"context"
+	"fmt"
 	"github.com/subalgo/credit_scoring_v2/internal/pkg/dbctx"
 )
 
@@ -22,29 +23,46 @@ type loanerList struct {
 	List  []*loanerData `json:"list"`
 }
 
-func getLoanerList(ctx context.Context, statusID int) (res loanerList, err error) {
+type getLoanerListRequest struct {
+	statusID int
+	name     string
+	surname  string
+}
+
+func getLoanerList(ctx context.Context, req getLoanerListRequest) (res loanerList, err error) {
 	rows, err := dbctx.Query(ctx, `
-			select 	users.id, users.name, users.surname, 
+			SELECT 	users.id, users.name, users.surname, 
 					to_char(q.sendAt, 'DD Mon YYYY เวลา HH:MM:SS') as sendAT,
 					to_char(q.updatedAt, 'DD Mon YYYY เวลา HH:MM:SS') as updatedAT,
 					q.updatedBy as updatedByID,
 					(select users.name as updated_by from users where users.id = q.updatedBy) as updatedByName
-			from users
-			left join questionnaire as q on users.id = q.loanerID
-			where q.statusID = $1
-			order by updatedAt asc
-		`, statusID)
+			FROM users
+			LEFT JOIN questionnaire AS q ON users.id = q.loanerID
+			WHERE 
+				q.statusID = $1 
+				AND 
+				users.name LIKE $2 || '%'
+				AND
+				users.surname LIKE $3 || '%'
+			ORDER BY updatedAt ASC
+		`, req.statusID, req.name, req.surname)
 
 	if err != nil {
+		fmt.Println(err)
 		return res, err
 	}
 
 	err = dbctx.QueryRow(ctx, `
-			select count(users.id)
-			from users
-			left join questionnaire on users.id = questionnaire.loanerID
-			where questionnaire.statusID = $1
-		`, statusID).Scan(&res.Total)
+			SELECT 	count(users.id)
+			FROM users
+			LEFT JOIN questionnaire AS q ON users.id = q.loanerID
+			WHERE 
+				q.statusID = $1 
+				AND 
+				users.name LIKE $2 || '%'
+				AND
+				users.surname LIKE $3 || '%'
+		`, req.statusID, req.name, req.surname).Scan(&res.Total)
 
 	if err != nil {
 		return res, err

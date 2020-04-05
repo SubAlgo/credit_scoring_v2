@@ -27,24 +27,37 @@ func questionnaireGetListNewLoanerNotMakeQuestionnaire(ctx context.Context, req 
 	}
 
 	rows, err := dbctx.Query(ctx, `
-			select 
+			SELECT 
 				id, name, surname, email
-			from 
+			FROM 
 				users 
-			where id not in (select q.loanerID from questionnaire q) and roleID = 4;
-		`)
+			WHERE 
+				id NOT IN (select q.loanerID from questionnaire q where q.statusID > 1) 
+				AND 
+					roleID = 4
+				AND 
+					name LIKE $1 || '%'
+				AND 
+					surname LIKE $2 || '%'
+		`, req.Name, req.Surname)
 	if err != nil {
-		fmt.Println(err)
 		return res, err
 	}
 
 	err = dbctx.QueryRow(ctx, `
-			select 
+			SELECT 
 				count(id)
-			from 
+			FROM 
 				users 
-			where id not in (select q.loanerID from questionnaire q) and roleID = 4;
-		`).Scan(&res.Total)
+			WHERE 
+				id NOT IN (select q.loanerID from questionnaire q where q.statusID > 1) 
+				AND 
+				roleID = 4
+			AND 
+				name LIKE $1 || '%'
+			AND 
+				surname LIKE $2 || '%'
+		`, req.Name, req.Surname).Scan(&res.Total)
 	if err != nil {
 		fmt.Println(err)
 		return res, err

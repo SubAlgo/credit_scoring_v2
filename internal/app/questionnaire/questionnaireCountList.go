@@ -9,21 +9,36 @@ type questionnaireCountListRequest struct {
 }
 
 type questionnaireCountListResponse struct {
+	TotalCustomer          int `json:"totalCustomer"`
 	TotalLoanerNotMake     int `json:"totalLoanerNotMake"`
 	TotalNewLoaner         int `json:"totalNewLoaner"`
 	TotalInVerifyLoaner    int `json:"totalInVerifyLoaner"`
 	TotalWaitApproveLoaner int `json:"totalWaitApproveLoaner"`
-	TotalLoanerHasApprove  int `json:"totalLoanerHasApprove"`
-	TotalLoanerHasDeny     int `json:"totalLoanerHasDeny"`
+	TotalLoanerHadApprove  int `json:"totalLoanerHadApprove"`
+	TotalLoanerHadDeny     int `json:"totalLoanerHadDeny"`
 }
 
 func questionnaireCountList(ctx context.Context, req questionnaireCountListRequest) (res questionnaireCountListResponse, err error) {
-
 	{
 		err = dbctx.QueryRow(ctx, `
-			select count(id) 
-			from users 
-			where id not in (select q.loanerID from questionnaire q) and roleID = 4;
+			select 
+				count(id)
+			from 
+				users 
+			where roleID = 4;
+		`).Scan(&res.TotalCustomer)
+
+		if err != nil {
+			return res, ErrGetTotalCustomer
+		}
+	}
+	{
+		err = dbctx.QueryRow(ctx, `
+			select 
+				count(id)
+			from 
+				users 
+			where id not in (select q.loanerID from questionnaire q where q.statusID > 1) and roleID = 4;
 		`).Scan(&res.TotalLoanerNotMake)
 
 		if err != nil {
@@ -64,7 +79,7 @@ func questionnaireCountList(ctx context.Context, req questionnaireCountListReque
 	{
 		err = dbctx.QueryRow(ctx, `
 			select count(id) from questionnaire where statusID = 5;
-		`).Scan(&res.TotalLoanerHasApprove)
+		`).Scan(&res.TotalLoanerHadApprove)
 
 		if err != nil {
 			return res, ErrGetLoanerHasApprove
@@ -74,7 +89,7 @@ func questionnaireCountList(ctx context.Context, req questionnaireCountListReque
 	{
 		err = dbctx.QueryRow(ctx, `
 			select count(id) from questionnaire where statusID = 6;
-		`).Scan(&res.TotalLoanerHasDeny)
+		`).Scan(&res.TotalLoanerHadDeny)
 
 		if err != nil {
 			return res, ErrGetLoanerHasDeny

@@ -33,6 +33,8 @@ func Handler() http.Handler {
 	mux.HandleFunc("/get_list_new_loaner", questionnaireGetListNewLoanerHandler)
 	mux.HandleFunc("/get_list_in_verify", questionnaireGetListInVerifyHandler)
 	mux.HandleFunc("/get_list_wait_approve", questionnaireGetListWaitApproveHandler)
+	mux.HandleFunc("/get_list_loaner_had_approve", questionnaireGetListLoanerHadApproveHandler)
+	mux.HandleFunc("/get_list_loaner_had_deny", questionnaireGetListLoanerHadDenyHandler)
 
 	mux.HandleFunc("/get_approve_result", questionnaireGetApproveResultHandler)
 
@@ -225,5 +227,27 @@ func questionnaireGetListNewLoanerNotMakeQuestionnaireHandler(w http.ResponseWri
 		return
 	}
 	res, err := questionnaireGetListNewLoanerNotMakeQuestionnaire(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListLoanerHadApproveHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListLoanerHadApprove(ctx, req)
+	t.EncodeResult(w, res, err)
+}
+
+func questionnaireGetListLoanerHadDenyHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var req getQuestionnaireListRequest
+	err := t.DecodeRequest(w, r, &req)
+	if err != nil {
+		return
+	}
+	res, err := questionnaireGetListLoanerHadDeny(ctx, req)
 	t.EncodeResult(w, res, err)
 }

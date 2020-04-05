@@ -25,7 +25,8 @@ func questionnaireGetListInVerify(ctx context.Context, req getQuestionnaireListR
 	}
 
 	statusID := 3
-	res, err = getLoanerList(ctx, statusID)
+	getListParam := getLoanerListRequest{statusID: statusID, name: req.Name, surname: req.Surname}
+	res, err = getLoanerList(ctx, getListParam)
 
 	if err != nil {
 		return res, ErrQuestionnaireGetListNewLoaner

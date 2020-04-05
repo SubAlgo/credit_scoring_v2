@@ -73,6 +73,7 @@ var (
 
 // questionnaireCountList
 var (
+	ErrGetTotalCustomer          = errors.New("questionnaireCountList: get total customer")
 	ErrGetTotalLoanerNotMake     = errors.New("questionnaireCountList: get total loaner not make")
 	ErrGetTotalNewLoaner         = errors.New("questionnaireCountList: get total new loaner")
 	ErrGetTotalVerifyLoaner      = errors.New("questionnaireCountList: get total on verify loaner")
@@ -135,7 +136,7 @@ func errorToStatusCode(err error) int {
 		return http.StatusInternalServerError
 	case ErrYourAgeCanNotLowerThan20:
 		return http.StatusBadRequest
-	case ErrGetTotalLoanerNotMake, ErrGetTotalNewLoaner, ErrGetTotalVerifyLoaner, ErrGetTotalWaitApproveLoaner, ErrGetLoanerHasApprove, ErrGetLoanerHasDeny:
+	case ErrGetTotalCustomer, ErrGetTotalLoanerNotMake, ErrGetTotalNewLoaner, ErrGetTotalVerifyLoaner, ErrGetTotalWaitApproveLoaner, ErrGetLoanerHasApprove, ErrGetLoanerHasDeny:
 		return http.StatusInternalServerError
 	case ErrThisStatusCanNotUpdate, ErrThisStatusCanNotBeSend:
 		return http.StatusNotAcceptable
@@ -255,6 +256,8 @@ func errorToMessage(err error) string {
 		return "เกิดข้อผิดพลาดในการนับจำนวนผู้กู้ (รายชื่อที่อยู่ระหว่างการตรวจสอบ)"
 	case ErrGetTotalWaitApproveLoaner:
 		return "เกิดข้อผิดพลาดในการนับจำนวนผู้กู้ (รายชื่อที่รอการพิจารณาอนุมัติ)"
+	case ErrGetTotalCustomer:
+		return "internal server error (count total customer"
 	case ErrGetTotalLoanerNotMake:
 		return "internal server error (count total loaner not make)"
 	case ErrGetLoanerHasApprove:
