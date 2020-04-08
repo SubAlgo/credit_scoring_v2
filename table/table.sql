@@ -702,5 +702,20 @@ update users set forgotPasswordAns = '';
 alter table users alter column forgotPasswordAns set not null;
 
 
+//** **/
+alter table permissionaccess add column accessShowLoanerHadApproveListAdmin boolean;
+alter table permissionaccess add column accessShowLoanerHadApproveListWorker boolean;
+
+alter table permissionaccess add column accessShowLoanerHadDenyListAdmin boolean;
+alter table permissionaccess add column accessShowLoanerHadDenyListWorker boolean;
+
+update permissionaccess
+    set
+        accessShowLoanerHadApproveListAdmin = false,
+        accessShowLoanerHadApproveListWorker = false,
+        accessShowLoanerHadDenyListAdmin = false,
+        accessShowLoanerHadDenyListWorker = false;
+
+
 
 

@@ -31,7 +31,7 @@ func FetchAuth(h http.Handler) http.Handler {
 			return
 		}
 		// set new redis expire
-		err = RedisClient.Expire(key, 1*24*time.Hour).Err()
+		err = RedisClient.Expire(key, 7*24*time.Hour).Err()
 		if err != nil {
 			h.ServeHTTP(w, r)
 			return
