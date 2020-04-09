@@ -10,7 +10,9 @@ type getAccessPermissionRequest struct {
 
 func getAccessPermission(ctx context.Context, req getAccessPermissionRequest) (res accessPermissionArgs, err error) {
 	err = dbctx.QueryRow(ctx, `
-			select 	accessShowLoanerNewListAdmin, 
+			select 	accessShowLoanerNotMakeListAdmin,
+					accessShowLoanerNotMakeListWorker,
+					accessShowLoanerNewListAdmin, 
 					accessShowLoanerNewListWorker, 
 					accessShowLoanerInVerifyListAdmin,
 					accessShowLoanerInVerifyListWorker,
@@ -25,7 +27,9 @@ func getAccessPermission(ctx context.Context, req getAccessPermissionRequest) (r
 					sendToApproveByAdmin,
 					sendToApproveByWorker
 			from permissionAccess
-	`).Scan(&res.AccessShowLoanerNewListAdmin,
+	`).Scan(&res.AccessShowLoanerNotMakeListAdmin,
+		&res.AccessShowLoanerNotMakeListWorker,
+		&res.AccessShowLoanerNewListAdmin,
 		&res.AccessShowLoanerNewListWorker,
 		&res.AccessShowLoanerInVerifyListAdmin,
 		&res.AccessShowLoanerInVerifyListWorker,

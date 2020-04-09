@@ -717,5 +717,11 @@ update permissionaccess
         accessShowLoanerHadDenyListWorker = false;
 
 
+alter table permissionaccess add column accessShowLoanerNotMakeListAdmin boolean;
+alter table permissionaccess add column accessShowLoanerNotMakeListWorker boolean;
 
+update permissionaccess
+    set
+        accessShowLoanerNotMakeListAdmin = false,
+        accessShowLoanerNotMakeListWorker = false;
 

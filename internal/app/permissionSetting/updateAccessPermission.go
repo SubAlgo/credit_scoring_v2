@@ -7,6 +7,8 @@ import (
 )
 
 type accessPermissionArgs struct {
+	AccessShowLoanerNotMakeListAdmin      bool `json:"accessShowLoanerNotMakeListAdmin"`
+	AccessShowLoanerNotMakeListWorker     bool `json:"accessShowLoanerNotMakeListWorker"`
 	AccessShowLoanerNewListAdmin          bool `json:"accessShowLoanerNewListAdmin"`
 	AccessShowLoanerNewListWorker         bool `json:"accessShowLoanerNewListWorker"`
 	AccessShowLoanerInVerifyListAdmin     bool `json:"accessShowLoanerInVerifyListAdmin"`
@@ -41,14 +43,16 @@ func updateAccessPermission(ctx context.Context, req accessPermissionArgs) (res 
 
 	_, err = dbctx.Exec(ctx, `
 			update permissionAccess
-				set accessShowLoanerNewListAdmin = $1, accessShowLoanerNewListWorker = $2,
-					accessShowLoanerInVerifyListAdmin = $3, accessShowLoanerInVerifyListWorker = $4,
-					accessShowLoanerWaitApproveListAdmin = $5, accessShowLoanerWaitApproveListWorker = $6,
-					accessShowLoanerHadApproveListAdmin = $7, accessShowLoanerHadApproveListWorker = $8,
-					accessShowLoanerHadDenyListAdmin = $9, accessShowLoanerHadDenyListWorker = $10,
-					verifyQuestionnaireByAdmin = $11, verifyQuestionnaireByWorker = $12,
-					sendToApproveByAdmin = $13, sendToApproveByWorker = $14
-	`, req.AccessShowLoanerNewListAdmin, req.AccessShowLoanerNewListWorker,
+				set accessShowLoanerNotMakeListAdmin = $1, accessShowLoanerNotMakeListWorker = $2,
+					accessShowLoanerNewListAdmin = $3, accessShowLoanerNewListWorker = $4,
+					accessShowLoanerInVerifyListAdmin = $5, accessShowLoanerInVerifyListWorker = $6,
+					accessShowLoanerWaitApproveListAdmin = $7, accessShowLoanerWaitApproveListWorker = $8,
+					accessShowLoanerHadApproveListAdmin = $9, accessShowLoanerHadApproveListWorker = $10,
+					accessShowLoanerHadDenyListAdmin = $11, accessShowLoanerHadDenyListWorker = $12,
+					verifyQuestionnaireByAdmin = $13, verifyQuestionnaireByWorker = $14,
+					sendToApproveByAdmin = $15, sendToApproveByWorker = $16
+	`, req.AccessShowLoanerNotMakeListAdmin, req.AccessShowLoanerNotMakeListWorker,
+		req.AccessShowLoanerNewListAdmin, req.AccessShowLoanerNewListWorker,
 		req.AccessShowLoanerInVerifyListAdmin, req.AccessShowLoanerInVerifyListWorker,
 		req.AccessShowLoanerWaitApproveListAdmin, req.AccessShowLoanerWaitApproveListWorker,
 		req.AccessShowLoanerHadApproveListAdmin, req.AccessShowLoanerHadApproveListWorker,
