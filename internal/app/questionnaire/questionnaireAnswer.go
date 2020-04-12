@@ -98,7 +98,7 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 				creditGrade, creditRisk, riskLevel, matrixIndex,
 				statusID, updatedAt, sendAt,
 				approveRate, approveTotal, interest,
-				verifyComment, approveComment
+				verifyComment, approveComment, changeResultComment
 				)
 				values
 				($1, $1,
@@ -116,7 +116,7 @@ func questionnaireAnswer(ctx context.Context, req *QuestionnaireStruct) (res pro
 				$29, $30, $31, $32,
 				$33, $34, $34,
 				$35, $35, $35,
-				$36, $36)
+				$36, $36, $36)
 				returning id
 				`, req.LoanerID, req.Suggest, req.SuggestScore, req.SuggestGiveScore,
 		req.Income, req.Loan, req.DebtPerMonth, req.TotalDebt, req.Saving, req.MortgageSecurities,

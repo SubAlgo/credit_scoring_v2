@@ -725,3 +725,80 @@ update permissionaccess
         accessShowLoanerNotMakeListAdmin = false,
         accessShowLoanerNotMakeListWorker = false;
 
+-- provinces
+update provinces
+    set title = 'กำแพงเพชร'
+    where id = 11;
+
+update provinces
+    set title = 'เพชรบุรี'
+    where id = 63;
+
+-- timejoboption
+update timejoboption
+    set title = 'น้อยกว่า 1 ปี'
+    where id = 2;
+
+update timejoboption
+    set title = 'ระหว่าง 1-2 ปี'
+    where id = 3;
+
+update timejoboption
+    set title = 'ระหว่าง 3-4 ปี'
+    where id = 4;
+
+update timejoboption
+    set title = 'ระหว่าง 5-6 ปี'
+    where id = 5;
+
+update timejoboption
+    set title = 'มากกว่า 6 ปี'
+    where id = 6;
+
+-- paydebthistoryoption
+
+update paydebthistoryoption
+    set title = 'มีประวัติค้างชำระ,เบี้ยวหนี้, พฤติกรรมไม่โปร่งใส มากกว่า 3ครั้ง ภายในระยะเวลา 3 ปี'
+    where id = 2;
+
+update paydebthistoryoption
+    set title = 'มีประวัติค้างชำระ,เบี้ยวหนี้, พฤติกรรมไม่โปร่งใส 3ครั้ง ภายในระยะเวลา 3 ปี'
+    where id = 3;
+
+update paydebthistoryoption
+    set title = 'มีประวัติค้างชำระ,เบี้ยวหนี้, พฤติกรรมไม่โปร่งใส 2ครั้ง ภายในระยะเวลา 3 ปี'
+    where id = 4;
+
+update paydebthistoryoption
+    set title = 'มีประวัติค้างชำระ,เบี้ยวหนี้, พฤติกรรมไม่โปร่งใส 1ครั้ง ภายในระยะเวลา 3 ปี'
+    where id = 5;
+
+update paydebthistoryoption
+    set title = 'ไม่มี ประวัติค้างชำระ,เบี้ยวหนี้, พฤติกรรมไม่โปร่งใส ภายในระยะเวลา 3 ปี '
+    where id = 6;
+
+-- incometrendoption
+
+update incometrendoption
+    set title = 'รายได้ลดลง มากกว่า 9% ต่อปี'
+    where id = 2;
+
+update incometrendoption
+    set title = 'รายได้ลดลง 1-9% ต่อปี'
+    where id = 3;
+
+update incometrendoption
+    set title = 'รายได้คงเดิม'
+    where id = 4;
+
+update incometrendoption
+    set title = 'รายได้เพิ่มขึ้น 1-9% ต่อปี'
+    where id = 5;
+
+update incometrendoption
+    set title = 'รายได้เพิ่มขึ้น มากกว่า 9% ต่อปี'
+    where id = 6;
+
+-- questionnaire add column changeResultComment
+alter table questionnaire add column changeResultComment varchar;
+update questionnaire set changeResultComment = '';

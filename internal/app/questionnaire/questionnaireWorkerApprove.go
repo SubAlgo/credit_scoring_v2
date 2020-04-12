@@ -18,6 +18,7 @@ type approveArgs struct {
 	InterestRate          float64 `json:"interestRate"`
 	LoanerPayback         float64
 	ApproveComment        string `json:"approveComment"`
+	ChangeResultComment   string `json:"changeResultComment"`
 }
 
 func questionnaireWorkerApprove(ctx context.Context, req *approveArgs) (res processResponse, err error) {
@@ -75,7 +76,7 @@ func questionnaireWorkerApprove(ctx context.Context, req *approveArgs) (res proc
 	req.LoanerPayback = req.ApproveTotal + (req.ApproveTotal * (req.InterestRate / 100))
 
 	err = req.setApproveResult(ctx)
-	
+
 	if err != nil {
 		return res, ErrQuestionnaireApprove
 	}

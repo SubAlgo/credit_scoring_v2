@@ -27,7 +27,7 @@ func questionnaireGetListLoanerHadApprove(ctx context.Context, req getQuestionna
 
 	statusID := 5
 	getListParam := getLoanerListRequest{statusID: statusID, name: req.Name, surname: req.Surname}
-	res, err = getLoanerList(ctx, getListParam)
+	res, err = getLoanerListDesc(ctx, getListParam)
 
 	if err != nil {
 		fmt.Println(err)

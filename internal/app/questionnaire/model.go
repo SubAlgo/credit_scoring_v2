@@ -34,7 +34,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 
 						creditGrade, creditRisk, riskLevel, matrixIndex,
 						approveRate, approveTotal, interest,
-						verifyComment, approveComment,
+						verifyComment, approveComment, changeResultComment,
 						creditGrade, creditRisk, riskLevel, matrixIndex,
 						suggest, suggestW, suggestScore, suggestGiveScore,
 
@@ -60,7 +60,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 
 		&res.CreditGrade, &res.CreditRisk, &res.RiskLevel, &res.MatrixIndex,
 		&qn.ApproveRate, &qn.ApproveTotal, &qn.Interest,
-		&qn.VerifyComment, &qn.ApproveComment,
+		&qn.VerifyComment, &qn.ApproveComment, &qn.ChangeResultComment,
 		&res.CreditGrade, &res.CreditRisk, &res.RiskLevel, &res.MatrixIndex,
 		&res.Suggest, &res.SuggestW, &res.SuggestScore, &res.SuggestGiveScore,
 
@@ -86,6 +86,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 	res.Interest = qn.Interest.Float64
 	res.VerifyComment = qn.VerifyComment.String
 	res.ApproveComment = qn.ApproveComment.String
+	res.ChangeResultComment = qn.ChangeResultComment.String
 
 	return
 }
@@ -236,9 +237,12 @@ func (ap *approveArgs) setApproveResult(ctx context.Context) (err error) {
 				approveTotal = $5,
 				approveComment = $6,
 				interest = $7,
-				loanerPayback = $8
+				loanerPayback = $8,
+				changeResultComment = $9
 			where loanerID = $1
-		`, ap.LoanerID, ap.WorkerID, ap.QuestionnaireStatusID, ap.ApproveRate, ap.ApproveTotal, ap.ApproveComment, ap.InterestRate, ap.LoanerPayback)
+		`, ap.LoanerID, ap.WorkerID, ap.QuestionnaireStatusID, ap.ApproveRate,
+		ap.ApproveTotal, ap.ApproveComment, ap.InterestRate, ap.LoanerPayback,
+		ap.ChangeResultComment)
 
 	return
 }

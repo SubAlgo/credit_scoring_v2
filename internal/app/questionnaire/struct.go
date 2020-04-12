@@ -24,8 +24,9 @@ type QuestionnaireStruct struct {
 	ApproveTotal float64 `json:"approveTotal"`
 	Interest     float64 `json:"interest"`
 
-	VerifyComment  string `json:"verifyComment"`
-	ApproveComment string `json:"approveComment"`
+	VerifyComment       string `json:"verifyComment"`
+	ApproveComment      string `json:"approveComment"`
+	ChangeResultComment string `json:"changeResultComment"`
 
 	CreditGrade string `json:"creditGrade"`
 	CreditRisk  string `json:"creditRisk"`
@@ -130,8 +131,9 @@ type questionnaireCheckNull struct {
 	ApproveTotal NullFloat64
 	Interest     NullFloat64
 
-	VerifyComment  NullString
-	ApproveComment NullString
+	VerifyComment       NullString
+	ApproveComment      NullString
+	ChangeResultComment NullString
 
 	CreditGrade NullString
 	CreditRisk  NullString

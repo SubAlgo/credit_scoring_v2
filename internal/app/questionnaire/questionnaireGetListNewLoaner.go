@@ -31,7 +31,7 @@ func questionnaireGetListNewLoaner(ctx context.Context, req getQuestionnaireList
 
 	statusID := 2
 	getListParam := getLoanerListRequest{statusID: statusID, name: req.Name, surname: req.Surname}
-	res, err = getLoanerList(ctx, getListParam)
+	res, err = getLoanerListDesc(ctx, getListParam)
 
 	if err != nil {
 		return res, ErrQuestionnaireGetListNewLoaner
