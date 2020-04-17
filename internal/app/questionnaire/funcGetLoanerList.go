@@ -42,9 +42,9 @@ func getLoanerList(ctx context.Context, req getLoanerListRequest) (res loanerLis
 			WHERE 
 				q.statusID = $1 
 				AND 
-				users.name LIKE $2 || '%'
+				users.name LIKE '%' || $2 || '%'
 				AND
-				users.surname LIKE $3 || '%'
+				users.surname LIKE '%' || $3 || '%'
 			ORDER BY updatedAt ASC
 		`, req.statusID, req.name, req.surname)
 
@@ -60,9 +60,9 @@ func getLoanerList(ctx context.Context, req getLoanerListRequest) (res loanerLis
 			WHERE 
 				q.statusID = $1 
 				AND 
-				users.name LIKE $2 || '%'
+				users.name LIKE '%' || $2 || '%'
 				AND
-				users.surname LIKE $3 || '%'
+				users.surname LIKE '%' || $3 || '%'
 		`, req.statusID, req.name, req.surname).Scan(&res.Total)
 
 	if err != nil {
@@ -84,7 +84,7 @@ func getLoanerList(ctx context.Context, req getLoanerListRequest) (res loanerLis
 
 		x.No = i
 		i = i + 1
-		
+
 		x.SendAt = setDateThaiFormat(x.SendAt)
 		x.UpdatedAt = setDateThaiFormat(x.UpdatedAt)
 
@@ -109,9 +109,9 @@ func getLoanerListDesc(ctx context.Context, req getLoanerListRequest) (res loane
 			WHERE 
 				q.statusID = $1 
 				AND 
-				users.name LIKE $2 || '%'
+				users.name LIKE '%' || $2 || '%'
 				AND
-				users.surname LIKE $3 || '%'
+				users.surname LIKE '%' || $3 || '%'
 			ORDER BY updatedAt DESC
 		`, req.statusID, req.name, req.surname)
 
@@ -127,9 +127,9 @@ func getLoanerListDesc(ctx context.Context, req getLoanerListRequest) (res loane
 			WHERE 
 				q.statusID = $1 
 				AND 
-				users.name LIKE $2 || '%'
+				users.name LIKE '%' || $2 || '%'
 				AND
-				users.surname LIKE $3 || '%'
+				users.surname LIKE '%' || $3 || '%'
 		`, req.statusID, req.name, req.surname).Scan(&res.Total)
 
 	if err != nil {
