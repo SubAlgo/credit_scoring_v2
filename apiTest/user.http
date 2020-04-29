@@ -72,7 +72,7 @@ X-Token: XTqc_R-WowISvqZC01JU8BD-ysCpBaD9yA8iqdFOXBQ
 ## get_profile
 POST http://localhost:8000/user/get_profile
 Content-Type: application/json
-X-Token: a-vmT6KyTwwYFKyfOYHW7-hJoKMdlRIV5sg8uPl4ghA
+X-Token: 1wRHm9ZQvS9HOlfwh17FqQltdUgSI9bTA7Wr1EhudkM
 
 {
 }

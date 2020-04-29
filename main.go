@@ -23,7 +23,7 @@ import (
 func main() {
 	// connStr := "postgres://dbUser:dbPassword@dbHost/dbName?sslmode=<verify-full | disable>"
 
-	dbURL := os.Getenv("DB_URL")
+	dbURL := os.Getenv("CREDIT_SCORING_DB_URL")
 
 	if dbURL == "" {
 		dbURL = "postgres://localhost:5432/credit_scoring_v2?sslmode=disable"
@@ -34,8 +34,8 @@ func main() {
 	}
 	defer db.Close()
 
-	redisAddr := os.Getenv("REDIS_ADDR")
-	redisPassword := os.Getenv("REDIS_PASSWORD")
+	redisAddr := os.Getenv("CREDIT_SCORING_REDIS_ADDR")
+	redisPassword := os.Getenv("CREDIT_SCORING_REDIS_PASSWORD")
 
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"

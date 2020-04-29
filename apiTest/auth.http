@@ -34,8 +34,8 @@ POST http://localhost:8000/auth/signin
 Content-Type: application/json
 
 {
-  "username": "a@gmail.com",
-  "password": "tnUA0mzJcM"
+  "username": "superadmin@gmail.com",
+  "password": "12345678"
 }
 
 ###
