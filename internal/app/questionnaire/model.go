@@ -21,8 +21,13 @@ func checkQuestionnaireStatus(ctx context.Context, loanerID int64) (questionnair
 	return
 }
 
+type handleNull struct {
+	updateByName NullStringFromUpdateBy
+}
+
 func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loanerID int64) (err error) {
 	var qn questionnaireCheckNull
+	var hd handleNull
 
 	err = dbctx.QueryRow(ctx, `
 				select 	q.id as questionnaireID, statusID,
@@ -53,7 +58,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 				where loanerID = $1;
 			`, loanerID).Scan(&res.ID, &res.StatusID,
 		&res.LoanerID, &res.LoanerName,
-		&res.UpdatedBy, &res.UpdatedByName,
+		&res.UpdatedBy, &hd.updateByName, //&res.UpdatedByName,
 		&qn.ApproveBy, &qn.ApproveName,
 		&res.UpdateAtStr,
 		&res.SendAtStr,
@@ -78,7 +83,7 @@ func (res *QuestionnaireStruct) getQuestionnaireData(ctx context.Context, loaner
 		fmt.Println(err)
 		return ErrQuestionnaireSelectData
 	}
-
+	res.UpdatedByName = hd.updateByName.String
 	res.ApproveBy = qn.ApproveBy.Int64
 	res.ApproveName = qn.ApproveName.String
 	res.ApproveRate = qn.ApproveRate.Float64
@@ -217,13 +222,13 @@ func (req *QuestionnaireStruct) updateByWorker(ctx context.Context) (err error) 
 			suggestW = $35
 
 		where loanerID = $1
-	`, req.LoanerID, req.WorkerID,                                                                                                                                                                                       //1-2
-		req.SuggestScore, req.SuggestGiveScore,                                                                                                                                                                          //3-4
-		req.IncomeW, req.LoanW, req.DebtPerMonthW, req.TotalDebtW, req.SavingW, req.MortgageSecuritiesW,                                                                                                                 //5-10
+	`, req.LoanerID, req.WorkerID, //1-2
+		req.SuggestScore, req.SuggestGiveScore, //3-4
+		req.IncomeW, req.LoanW, req.DebtPerMonthW, req.TotalDebtW, req.SavingW, req.MortgageSecuritiesW, //5-10
 		req.AgeCodeW, req.JobCodeW, req.EduCodeW, req.TimeJobCodeW, req.FreChangeNameCodeW, req.TimeOfPhoneNumberCodeW, req.TimeOfNameInHouseParticularCodeW, req.PayDebtHistoryCodeW, req.StatusInHouseParticularCodeW, //11-19
-		req.IncomePerDebtW, req.TotalDebtPerYearIncomeW, req.SavingPerLoanW, req.MortgageSecuritiesPerLoanW,                                                                                                             //20-23
-		req.HaveGuarantorCodeW, req.IamGuarantorCodeW, req.IncomeTrendCodeW, req.LoanObjectCodeW, req.ProvinceCodeW,                                                                                                     //24-28
-		req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex,                                                                                                                                                 //
+		req.IncomePerDebtW, req.TotalDebtPerYearIncomeW, req.SavingPerLoanW, req.MortgageSecuritiesPerLoanW, //20-23
+		req.HaveGuarantorCodeW, req.IamGuarantorCodeW, req.IncomeTrendCodeW, req.LoanObjectCodeW, req.ProvinceCodeW, //24-28
+		req.CreditGrade, req.CreditRisk, req.RiskLevel, req.MatrixIndex, //
 		req.VerifyComment, req.StatusID, req.SuggestW)
 	return
 }

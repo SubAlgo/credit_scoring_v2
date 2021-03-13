@@ -72,15 +72,20 @@ func getLoanerList(ctx context.Context, req getLoanerListRequest) (res loanerLis
 	i := 1
 
 	defer rows.Close()
+	type handleNull struct {
+		updateByName NullStringFromUpdateBy
+	}
 	for rows.Next() {
 		var x loanerData
+		var hd handleNull
 		err = rows.Scan(
-			&x.LoanerID, &x.Name, &x.Surname, &x.SendAt, &x.UpdatedAt, &x.UpdatedByID, &x.UpdatedByName,
+			&x.LoanerID, &x.Name, &x.Surname, &x.SendAt, &x.UpdatedAt, &x.UpdatedByID, &hd.updateByName,
 		)
 
 		if err != nil {
 			return res, err
 		}
+		x.UpdatedByName = hd.updateByName.String
 
 		x.No = i
 		i = i + 1
