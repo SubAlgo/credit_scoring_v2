@@ -138,17 +138,25 @@ func getLoanerListDesc(ctx context.Context, req getLoanerListRequest) (res loane
 	res.List = make([]*loanerData, 0)
 	i := 1
 
+	type loanerDataHandleNull struct {
+		updateByName NullStringFromUpdateBy
+	}
+
 	defer rows.Close()
 	for rows.Next() {
 		var x loanerData
+		var hd loanerDataHandleNull
+
 		err = rows.Scan(
-			&x.LoanerID, &x.Name, &x.Surname, &x.SendAt, &x.UpdatedAt, &x.UpdatedByID, &x.UpdatedByName,
+			&x.LoanerID, &x.Name, &x.Surname, &x.SendAt, &x.UpdatedAt, &x.UpdatedByID, &hd.updateByName,
 		)
 		if err != nil {
+			fmt.Println(err)
 			return res, err
 		}
 		x.SendAt = setDateThaiFormat(x.SendAt)
 		x.UpdatedAt = setDateThaiFormat(x.UpdatedAt)
+		x.UpdatedByName = hd.updateByName.String
 
 		x.No = i
 		i = i + 1

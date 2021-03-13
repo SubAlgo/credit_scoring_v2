@@ -10,6 +10,22 @@ type NullString sql.NullString
 type NullInt sql.NullInt64
 type NullFloat64 sql.NullFloat64
 type NullTime sql.NullTime
+type NullStringFromUpdateBy sql.NullString
+
+func (n *NullStringFromUpdateBy) Scan(value interface{}) error {
+	var s sql.NullString
+	if err := s.Scan(value); err != nil {
+		return err
+	}
+
+	if reflect.TypeOf(value) == nil {
+		//n.String, n.Valid = "-", true
+		*n = NullStringFromUpdateBy{"อดีตพนักงาน", true}
+	} else {
+		*n = NullStringFromUpdateBy{s.String, true}
+	}
+	return nil
+}
 
 func (n *NullString) Scan(value interface{}) error {
 	var s sql.NullString
